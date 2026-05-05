@@ -1,0 +1,10 @@
+/cliente/node_modules
+/cliente/package-lock.json
+/cliente/.env
+
+/servidor/node_modules
+/servidor/package-lock.json
+/servidor/.env
+/servidor/generated/prisma
+
+.env

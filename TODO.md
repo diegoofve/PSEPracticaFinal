@@ -1,10 +1,33 @@
 Cosas a hacer:
 
+Cambiar en `package.json` el script de entrada de servidor(`npm run server`) esta apuntado a `/index.ts`. Cambiar según movamos/creemos el index.
+
+**SCHEMA PRISMA**
+
+## Paquetes de node
+Ver que falta de cada cosa
+Revisar si las dependencias de dev estan bien puestas tambien
+### Cliente
+- vite
+
+### Servidor
+- Express
+- Nodemon
+- Path
+- CORS
+- Typescript
+- Prisma
+- pg
+- Dotenv
+- passportjwt
+- jsonwebtoken
+- bcryptjs
+
 ## GENERAL
 - [ ] Registro de usuarios
 - [ ] Inicio de sesion
 - [ ] Eliminacion de cuenta propia  
-  *Ver si conviene borrar las cuentas de la BD o simplemente no dejar iniciar sesion al usuario*
+  Al borrar cuentas de usuario, settear el correo (y cualquier otro campo unique) a null
 - [ ] Modificacion de perfil de usuario **(opcional)**
 - [ ] Integracion de loggin y especificacion OpenAPI **(opcional)**
 
