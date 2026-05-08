@@ -5,10 +5,129 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+enum TipoUsuario {
+  CLIENTE
+  GESTORA
+}
+
+model RegistroEmail {
+  email String @id
+  baneado Boolean @default(false)
+  tipo TipoUsuario
+
+  @@map("registro_emails")
+}
+
+model Cliente {
+  id Int @id @default(autoincrement())
+  email String
+  password String
+  dni String
+  nombre String
+  apellidos String
+  fechaNacimiento DateTime
+  telefono String
+  fechaBaja DateTime? //null = activo, con fecha = baja voluntaria
+  creadoEn DateTime @default(now())
+
+  ventas Venta[]
+
+  @@map("clientes")
+}
+
+enum EstadoGestora {
+  PENDIENTE //Recién registrada, pendiente de verificación
+  VERIFICADA //Aprobada por el administrador
+  RESTRINGIDA //Bloqueada por el administrador
+}
+
+model Empresa {
+  id Int @id @default(autoincrement())
+  email String
+  password String
+  razonSocial String
+  cif String
+  domicilioSocial String
+  nombreContacto String
+  telefonoContacto String
+  estado EstadoGestora @default(PENDIENTE)
+  fechaBaja DateTime? //null = activo, con fecha = baja voluntaria
+  creadoEn DateTime @default(now())
+
+  festivales Festival[]
+
+  @@map("empresas")
+}
+
+model Festival {
+  id Int @id @default(autoincrement())
+  empresaId Int
+  empresa Empresa @relation(fields: [empresaId], references: [id])
+  nombre String
+  descripcion String?
+  ubicacion String
+  fechaInicio DateTime
+  fechaFin DateTime
+  imagen String?
+  activo Boolean  @default(true)
+  creadoEn DateTime @default(now())
+
+  abonos Abono[]
+
+  @@map("festivales")
+}
+
+model Abono {
+  id Int @id @default(autoincrement())
+  festivalId Int
+  festival Festival @relation(fields: [festivalId], references: [id], onDelete: Cascade)
+  nombre String
+  descripcion String?
+  precio Decimal @db.Decimal(10, 2)
+  stock Int
+  creadoEn DateTime @default(now())
+
+  ventasAbonos VentaAbono[]
+
+  @@map("abonos")
+}
+
+enum EstadoVenta {
+  PENDIENTE
+  PAGADA
+  CANCELADA
+  REEMBOLSADA
+}
+
+model Venta {
+  id Int @id @default(autoincrement())
+  clienteId Int
+  cliente Cliente @relation(fields: [clienteId], references: [id])
+  total Decimal @db.Decimal(10, 2)
+  estado EstadoVenta @default(PENDIENTE)
+  creadoEn DateTime @default(now())
+
+  ventasAbonos VentaAbono[]
+
+  @@map("ventas")
+}
+
+model VentaAbono {
+  id Int @id @default(autoincrement())
+  ventaId Int
+  venta Venta @relation(fields: [ventaId], references: [id], onDelete: Cascade)
+  abonoId Int
+  abono Abono @relation(fields: [abonoId], references: [id])
+  cantidad Int
+  precioUnit Decimal @db.Decimal(10, 2) // Precio en el momento de la compra
+
+  @@map("venta_abono")
 }
