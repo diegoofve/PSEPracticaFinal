@@ -1,8 +1,6 @@
 Cosas a hacer:
 
-Cambiar en `package.json` el script de entrada de servidor(`npm run server`) esta apuntado a `/index.ts`. Cambiar según movamos/creemos el index.
-
-**SCHEMA PRISMA**
+Revisar que el schema de prisma este bien
 
 ## Paquetes de node
 Ver que falta de cada cosa
