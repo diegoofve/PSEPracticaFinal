@@ -2,6 +2,11 @@ Cosas a hacer:
 
 Revisar que el schema de prisma este bien
 
+mirar como funciona swagger con zod porque ahora mismo no genera los dtos automaticamente, solo funcionan los comentarios como en la practica anterior
+
+revisar los regex de el auth.dto.ts porque no me fio de claude y ver si quiza no seria mejor hacer las validaciones con funciones aparte o algo para devolver errores mejor
+
+escribir la funcion `esMayorDeEdad` en util
 ## Paquetes de node
 Ver que falta de cada cosa
 Revisar si las dependencias de dev estan bien puestas tambien
