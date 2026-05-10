@@ -2,19 +2,13 @@ Cosas a hacer:
 
 Revisar que el schema de prisma este bien
 
-mirar como funciona swagger con zod porque ahora mismo no genera los dtos automaticamente, solo funcionan los comentarios como en la practica anterior
+ver si tiene sentido separar la ruta de /register en 2 para mejor claridad y documentacion (de momento chill q funciona bien)
 
 revisar los regex de el auth.dto.ts porque no me fio de claude y ver si quiza no seria mejor hacer las validaciones con funciones aparte o algo para devolver errores mejor
 
-service auth
-
 errorHandler (ver todos los TODO:err para ver donde hay que sustituir errores)
 
-cambios:
-- escrita la funcion esmayordeedad en util
-- controller auth
-- logger
-
+buySchema en payment.dto para mandar los datos a la api de pagos desde el front
 
 ## GENERAL
 - [ ] Registro de usuarios
