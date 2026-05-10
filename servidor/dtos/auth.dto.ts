@@ -12,7 +12,7 @@ export const LoginSchema = z.object({
 export const RegisterClienteSchema = z.object({
     nombre: z.string().openapi({ example: 'Pepe'}),
     apellidos: z.string().openapi({ example: 'Garcia Ejemplo'}),
-    fechaNacimiento: z.date().refine(esMayorDeEdad, 'Debes ser mayor de edad para registrarte.'),
+    fechaNacimiento: z.coerce.date().refine(esMayorDeEdad, 'Debes ser mayor de edad para registrarte.'),
     dni: z.string().regex(/^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKE]$/i, 'DNI no válido.').openapi({ example: '00000000T'}),
     telefono: z.string().regex(/^(\+34|0034|34)?[6789]\d{8}$/, 'Teléfono no válido.'),
     email: z.email().openapi({ example: 'test@test.com'}),

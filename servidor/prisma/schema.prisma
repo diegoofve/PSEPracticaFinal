@@ -15,7 +15,7 @@ datasource db {
 
 enum TipoUsuario {
   CLIENTE
-  GESTORA
+  EMPRESA
 }
 
 model RegistroEmail {

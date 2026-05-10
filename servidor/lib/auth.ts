@@ -8,14 +8,31 @@ const options: StrategyOptions = {
 };
 
 export const JWTStrategy = new Strategy(options, async (payload, done) => {
+
     try {
-        const user = await prisma.user.findUnique({
-            where: { id: payload.sub },
-            select: { id: true, email: true, role: true }
-        });
-        if (user) return done(null, user); //validado
-        return done(null, false); //fallo
+        if (payload.rol === "ADMIN") {
+            return done(null, { rol: "ADMIN" })
+        }
+
+        if (payload.rol === "CLIENTE") {
+            const cliente = await prisma.cliente.findFirst({
+                where: { id: payload.id, fechaBaja: null }
+            })
+            if (!cliente) return done(null, false)
+            return done(null, { ...cliente, rol: "CLIENTE" })
+        }
+
+        if (payload.rol === "EMPRESA") {
+            const empresa = await prisma.empresa.findFirst({
+                where: { id: payload.id, fechaBaja: null }
+            })
+            if (!empresa) return done(null, false)
+            return done(null, { ...empresa, rol: "EMPRESA" })
+        }
+
+        return done(null, false)
+
     } catch (error) {
-        return done(null, payload);
+        return done(error, false)
     }
-});
+})

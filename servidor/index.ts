@@ -1,12 +1,12 @@
 import express from 'express';
 import cors from 'cors';
-import {Request, Response} from 'express';
 import passport from 'passport';
 import { JWTStrategy } from './lib/auth.ts';//ruta del auth con el prisma (deberíamos ponerlo en lib/auth.ts);
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './middlewares/swaggerConfig.ts';
-import routerPublico from './middlewares/routerPublico.ts';//da error porque no hay nada dentro
+import routerPublico from './middlewares/routerPublico.ts';
 import routerPrivado from './middlewares/routerPrivado.ts';
+import { errorHandler } from './middlewares/errorHandler.ts';
 
 const PORT = 3000;
 
@@ -23,6 +23,9 @@ app.use(passport.initialize());
 //aquí deberíamos poner las rutas protegidas y las no protegidas
 app.use(routerPublico);
 app.use(routerPrivado);
+
+//app.use(errorHandler);
+
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en el puerto ${PORT}`);
 })

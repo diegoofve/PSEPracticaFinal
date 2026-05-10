@@ -6,5 +6,11 @@ export const isValidEmail = (email: string): boolean => {
 };
 
 export const esMayorDeEdad = (fecha: Date): boolean => {
-    return true; //TODO: hacer la funcion
+    const hoy = new Date();
+
+    if (hoy.getTime() - fecha.getTime() <= 18 * 365 * 24 * 60 * 60 * 1000){
+        return false;
+    }
+
+    return true;
 }

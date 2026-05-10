@@ -6,25 +6,15 @@ mirar como funciona swagger con zod porque ahora mismo no genera los dtos automa
 
 revisar los regex de el auth.dto.ts porque no me fio de claude y ver si quiza no seria mejor hacer las validaciones con funciones aparte o algo para devolver errores mejor
 
-escribir la funcion `esMayorDeEdad` en util
-## Paquetes de node
-Ver que falta de cada cosa
-Revisar si las dependencias de dev estan bien puestas tambien
-### Cliente
-- vite
+service auth
 
-### Servidor
-- Express
-- Nodemon
-- Path
-- CORS
-- Typescript
-- Prisma
-- pg
-- Dotenv
-- passportjwt
-- jsonwebtoken
-- bcryptjs
+errorHandler (ver todos los TODO:err para ver donde hay que sustituir errores)
+
+cambios:
+- escrita la funcion esmayordeedad en util
+- controller auth
+- logger
+
 
 ## GENERAL
 - [ ] Registro de usuarios

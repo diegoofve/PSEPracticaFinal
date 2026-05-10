@@ -8,3 +8,4 @@
 /servidor/generated/prisma
 
 .env
+/servidor/logs
