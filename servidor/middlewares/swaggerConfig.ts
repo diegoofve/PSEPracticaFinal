@@ -1,6 +1,7 @@
 import { OpenAPIRegistry, OpenApiGeneratorV3 } from "@asteasolutions/zod-to-openapi"
 import { LoginSchema, RegisterClienteSchema, RegisterEmpresaSchema } from "../dtos/auth.dto"
 import { z } from "zod"
+import { NewFestivalSchema } from "../dtos/festival.dto"
 
 export const registry = new OpenAPIRegistry()
 
@@ -15,6 +16,7 @@ registry.registerComponent("securitySchemes", "bearerAuth", {
 registry.register("LoginDto", LoginSchema)
 registry.register("RegisterClienteDto", RegisterClienteSchema)
 registry.register("RegisterEmpresaDto", RegisterEmpresaSchema)
+registry.register("NewFestivalDto", NewFestivalSchema)
 
 //endpoints
 registry.registerPath({

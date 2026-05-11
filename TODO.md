@@ -1,6 +1,6 @@
 Cosas a hacer:
 
-Revisar que el schema de prisma este bien
+Revisar que el schema de prisma este bien, cuanto antes mejor porque ya he visto un par de cosas que no pusimos
 
 ver si tiene sentido separar la ruta de /register en 2 para mejor claridad y documentacion (de momento chill q funciona bien)
 
@@ -10,9 +10,13 @@ errorHandler (ver todos los TODO:err para ver donde hay que sustituir errores)
 
 buySchema en payment.dto para mandar los datos a la api de pagos desde el front
 
+acabar todo el apartado de festivales (controller, service, dtos)
+
 ## GENERAL
-- [ ] Registro de usuarios
-- [ ] Inicio de sesion
+- [ x ] Registro de usuarios ruta api
+- [ ] Front registro de usuarios
+- [ x ] Inicio de sesion
+- [ ] Front inicio de sesion
 - [ ] Eliminacion de cuenta propia  
   Al borrar cuentas de usuario, settear el correo (y cualquier otro campo unique) a null
 - [ ] Modificacion de perfil de usuario **(opcional)**
@@ -23,7 +27,8 @@ buySchema en payment.dto para mandar los datos a la api de pagos desde el front
 - [ ] Las organizadoras no verificadas no pueden operar en la plataforma **(opcional)**
 
 ## GESTION DE FESTIVALES
-- [ ] Alta de festivales
+- [ x ] Alta de festivales
+- [ ] Front de alta de festis
 - [ ] Listado de festivales propios
 - [ ] Edicion de festivales si quedan mas de 3 dias
 - [ ] Cancelacion de festis
