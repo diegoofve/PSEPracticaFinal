@@ -8,7 +8,7 @@ import routerPublico from './middlewares/routerPublico.ts';
 import routerPrivado from './middlewares/routerPrivado.ts';
 import { errorHandler } from './middlewares/errorHandler.ts';
 
-const PORT = 3000;
+const PORT = 3001;
 
 const app = express();
 

@@ -32,12 +32,12 @@ const register = async (req: Request, res: Response): Promise<void> => {
 
         if(clienteValidation.success){
             await AuthService.registerCliente(clienteValidation.data);
-            res.status(201).json({result: ''});
+            res.status(201).json({});
         }
 
         if(empresaValidation.success){
             await AuthService.registerEmpresa(empresaValidation.data);
-            res.status(201)
+            res.status(201).json({})
         }
 
     }catch(err){

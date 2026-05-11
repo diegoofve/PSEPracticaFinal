@@ -18,7 +18,7 @@ const crearFestival = async (req: Request, res: Response) => {
         const empresaId = user.rol === "ADMIN" ? empresaIdReq : user.id;
 
         await FestivalService.crearFestival(empresaId, festivalData);
-        res.status(201);
+        res.status(201).json({});
 
     }catch(err){
         console.log(err);
