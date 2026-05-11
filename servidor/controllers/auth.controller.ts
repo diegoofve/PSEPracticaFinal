@@ -110,7 +110,7 @@ const deleteCliente = async (req: Request, res: Response): Promise<void> => {
         const clienteId = (req.user as any).id
 
         await AuthService.deleteCliente(clienteId);
-        res.status(204);
+        res.status(204).send();
     }catch(err){
         console.log(err)
         res.status(500).json({ error: 'Error interno del servidor' })
@@ -122,7 +122,7 @@ const deleteEmpresa = async (req: Request, res: Response): Promise<void> => {
         const empresaId = (req.user as any).id
 
         await AuthService.deleteCliente(empresaId);
-        res.status(204);
+        res.status(204).send();
     }catch(err){
         console.log(err)
         res.status(500).json({ error: 'Error interno del servidor' })

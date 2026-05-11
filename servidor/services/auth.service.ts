@@ -125,7 +125,7 @@ const registerEmpresa = async (data: RegisterEmpresaDto): Promise<void> => {
 }
 
 const updateCliente = async (clienteId: number, data: UpdateClienteDto): Promise<void> => {
-    const result = prisma.cliente.findUnique({
+    const result = await prisma.cliente.findUnique({
         where: {id: clienteId}
     })
 
@@ -133,14 +133,14 @@ const updateCliente = async (clienteId: number, data: UpdateClienteDto): Promise
         throw new Error("cliente inexistente") //TODO:err
     }
 
-    prisma.cliente.update({
+    await prisma.cliente.update({
         where: {id: clienteId},
         data: data
     })
 }
 
 const updateEmpresa = async (empresaId: number, data: UpdateEmpresaDto): Promise<void> => {
-    const result = prisma.empresa.findUnique({
+    const result = await prisma.empresa.findUnique({
         where: {id: empresaId}
     })
 
@@ -148,14 +148,14 @@ const updateEmpresa = async (empresaId: number, data: UpdateEmpresaDto): Promise
         throw new Error("empresa inexistente") //TODO:err
     }
 
-    prisma.empresa.update({
+    await prisma.empresa.update({
         where: {id: empresaId},
         data: data
     })
 }
 
 const deleteCliente = async (clienteId: number): Promise<void> => {
-    const result = prisma.cliente.findUnique({
+    const result = await prisma.cliente.findUnique({
         where: {id: clienteId}
     })
 
@@ -163,13 +163,13 @@ const deleteCliente = async (clienteId: number): Promise<void> => {
         throw new Error("cliente inexistente") //TODO:err
     }
 
-    prisma.cliente.delete({
+    await prisma.cliente.delete({
         where: {id: clienteId}
     })
 }
 
 const deleteEmpresa = async (empresaId: number): Promise<void> => {
-    const result = prisma.empresa.findUnique({
+    const result = await prisma.empresa.findUnique({
         where: {id: empresaId}
     })
 
@@ -177,7 +177,7 @@ const deleteEmpresa = async (empresaId: number): Promise<void> => {
         throw new Error("empresa inexistente") //TODO:err
     }
 
-    prisma.empresa.delete({
+    await prisma.empresa.delete({
         where: {id: empresaId},
     })
 }

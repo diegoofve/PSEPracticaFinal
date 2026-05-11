@@ -1,5 +1,5 @@
 import { OpenAPIRegistry, OpenApiGeneratorV3 } from "@asteasolutions/zod-to-openapi"
-import { LoginSchema, RegisterClienteSchema, RegisterEmpresaSchema } from "../dtos/auth.dto"
+import { LoginSchema, RegisterClienteSchema, RegisterEmpresaSchema, UpdateClienteDto, UpdateClienteSchema, UpdateEmpresaSchema } from "../dtos/auth.dto"
 import { z } from "zod"
 import { NewFestivalSchema } from "../dtos/festival.dto"
 
@@ -17,6 +17,10 @@ registry.register("LoginDto", LoginSchema)
 registry.register("RegisterClienteDto", RegisterClienteSchema)
 registry.register("RegisterEmpresaDto", RegisterEmpresaSchema)
 registry.register("NewFestivalDto", NewFestivalSchema)
+registry.register("UpdateClienteDto", UpdateClienteSchema)
+registry.register("UpdateEmpresaDto", UpdateEmpresaSchema)
+
+//TODO: actualizar register y añadir los endpoints privados
 
 //endpoints
 registry.registerPath({
