@@ -1,6 +1,7 @@
 import { Router } from 'express';
-import passport, { authorize } from 'passport';
+import passport from 'passport';
 import { FestivalController } from '../controllers/festival.controller';
+import { authorize } from './auth';
 
 const routerPrivado = Router();
 
