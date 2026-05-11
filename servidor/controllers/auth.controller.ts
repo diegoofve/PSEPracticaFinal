@@ -37,6 +37,7 @@ const register = async (req: Request, res: Response): Promise<void> => {
 
         if(empresaValidation.success){
             await AuthService.registerEmpresa(empresaValidation.data);
+            res.status(201)
         }
 
     }catch(err){
