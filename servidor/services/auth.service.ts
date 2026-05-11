@@ -1,4 +1,4 @@
-import type { LoginDto, RegisterClienteDto, RegisterEmpresaDto } from "../dtos/auth.dto"
+import type { LoginDto, RegisterClienteDto, RegisterEmpresaDto, UpdateClienteDto, UpdateEmpresaDto } from "../dtos/auth.dto"
 import { prisma } from '../lib/db';
 import bcrypt from 'bcryptjs';
 import jwt from "jsonwebtoken";
@@ -124,8 +124,70 @@ const registerEmpresa = async (data: RegisterEmpresaDto): Promise<void> => {
     })
 }
 
+const updateCliente = async (clienteId: number, data: UpdateClienteDto): Promise<void> => {
+    const result = prisma.cliente.findUnique({
+        where: {id: clienteId}
+    })
+
+    if(!result){
+        throw new Error("cliente inexistente") //TODO:err
+    }
+
+    prisma.cliente.update({
+        where: {id: clienteId},
+        data: data
+    })
+}
+
+const updateEmpresa = async (empresaId: number, data: UpdateEmpresaDto): Promise<void> => {
+    const result = prisma.empresa.findUnique({
+        where: {id: empresaId}
+    })
+
+    if(!result){
+        throw new Error("empresa inexistente") //TODO:err
+    }
+
+    prisma.empresa.update({
+        where: {id: empresaId},
+        data: data
+    })
+}
+
+const deleteCliente = async (clienteId: number): Promise<void> => {
+    const result = prisma.cliente.findUnique({
+        where: {id: clienteId}
+    })
+
+    if(!result){
+        throw new Error("cliente inexistente") //TODO:err
+    }
+
+    prisma.cliente.delete({
+        where: {id: clienteId}
+    })
+}
+
+const deleteEmpresa = async (empresaId: number): Promise<void> => {
+    const result = prisma.empresa.findUnique({
+        where: {id: empresaId}
+    })
+
+    if(!result){
+        throw new Error("empresa inexistente") //TODO:err
+    }
+
+    prisma.empresa.delete({
+        where: {id: empresaId},
+    })
+}
+
 export const AuthService = {
     login,
     registerCliente,
-    registerEmpresa
+    registerEmpresa,
+    updateCliente,
+    updateEmpresa,
+    deleteCliente,
+    deleteEmpresa
 }

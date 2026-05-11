@@ -14,3 +14,7 @@ export const esMayorDeEdad = (fecha: Date): boolean => {
 
     return true;
 }
+
+export const isEmptyObject = (args: unknown): boolean => {
+  return JSON.stringify(args) === '{}';
+};

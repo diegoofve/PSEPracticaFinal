@@ -5,6 +5,7 @@ const routerPublico = Router();
 
 routerPublico.post('/login', AuthController.login);
 
-routerPublico.post('/register', AuthController.register);
+routerPublico.post('/register/cliente', AuthController.registerCliente);
+routerPublico.post('/register/empresa', AuthController.registerEmpresa);
 
 export default routerPublico;

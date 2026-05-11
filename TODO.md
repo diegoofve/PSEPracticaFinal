@@ -13,13 +13,13 @@ buySchema en payment.dto para mandar los datos a la api de pagos desde el front
 acabar todo el apartado de festivales (controller, service, dtos)
 
 ## GENERAL
-- [ x ] Registro de usuarios ruta api
+- [x] Registro de usuarios ruta api
 - [ ] Front registro de usuarios
-- [ x ] Inicio de sesion
+- [x] Inicio de sesion
 - [ ] Front inicio de sesion
-- [ ] Eliminacion de cuenta propia  
+- [x] Eliminacion de cuenta propia  
   Al borrar cuentas de usuario, settear el correo (y cualquier otro campo unique) a null
-- [ ] Modificacion de perfil de usuario **(opcional)**
+- [x] Modificacion de perfil de usuario **(opcional)**
 - [ ] Integracion de loggin y especificacion OpenAPI **(opcional)**
 
 ## ADMINISTRACION

@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
-import { LoginSchema, RegisterClienteSchema, RegisterEmpresaSchema, type RegisterClienteDto, type RegisterEmpresaDto } from '../dtos/auth.dto';
+import { LoginSchema, RegisterClienteSchema, RegisterEmpresaSchema, UpdateClienteSchema, UpdateEmpresaSchema } from '../dtos/auth.dto';
 import { AuthService } from '../services/auth.service';
+import { isEmptyObject } from '../lib/util';
 
 const login = async (req: Request, res: Response): Promise<void> => {
     try{
@@ -20,26 +21,108 @@ const login = async (req: Request, res: Response): Promise<void> => {
     }
 }
 
-const register = async (req: Request, res: Response): Promise<void> => {
+const registerCliente = async (req: Request, res: Response): Promise<void> => {
     try{
-        const clienteValidation = RegisterClienteSchema.safeParse(req.body);
-        const empresaValidation = RegisterEmpresaSchema.safeParse(req.body);
+        const validation = RegisterClienteSchema.safeParse(req.body);
 
-        if(!clienteValidation.success && !empresaValidation.success){
-            res.status(400).json({error: 'Request con datos no válidos'});
+        if(!validation.success){
+            res.status(400).json({error: 'Request con datos no válidos'})//TODO:err ?
             return;
         }
 
-        if(clienteValidation.success){
-            await AuthService.registerCliente(clienteValidation.data);
-            res.status(201).json({});
+        await AuthService.registerCliente(validation.data);
+        res.status(201).json({})
+    }catch(err){
+        console.log(err)
+        res.status(500).json({ error: 'Error interno del servidor' })
+    }
+}
+
+const registerEmpresa = async (req: Request, res: Response): Promise<void> => {
+    try{
+        const validation = RegisterEmpresaSchema.safeParse(req.body);
+
+        if(!validation.success){
+            res.status(400).json({error: 'Request con datos no válidos'})//TODO:err ?
+            return;
         }
 
-        if(empresaValidation.success){
-            await AuthService.registerEmpresa(empresaValidation.data);
-            res.status(201).json({})
+        await AuthService.registerEmpresa(validation.data);
+        res.status(201).json({})
+    }catch(err){
+        console.log(err)
+        res.status(500).json({ error: 'Error interno del servidor' })
+    }
+}
+
+const updateCliente = async (req: Request, res: Response): Promise<void> => {
+    try{
+        const validation = UpdateClienteSchema.safeParse(req.body);
+
+        if(!validation.success){
+            res.status(400).json({error: 'Request con datos no válidos'})//TODO:err ?
+            return;
         }
 
+        if(isEmptyObject(validation.data)){
+            res.status(400).json({error: 'Tienes que proporcionar datos a actualizar'})//TODO:err ?
+            return;
+        }
+
+        const clienteId = (req.user as any).id
+
+        await AuthService.updateCliente(clienteId, validation.data);
+        res.status(200).json({ result: "actualizado correctamente "});
+
+    }catch(err){
+        console.log(err)
+        res.status(500).json({ error: 'Error interno del servidor' })
+    }
+}
+
+const updateEmpresa = async (req: Request, res: Response): Promise<void> => {
+    try{
+        const validation = UpdateEmpresaSchema.safeParse(req.body);
+
+        if(!validation.success){
+            res.status(400).json({error: 'Request con datos no válidos'})//TODO:err ?
+            return;
+        }
+
+        if(isEmptyObject(validation.data)){
+            res.status(400).json({error: 'Tienes que proporcionar datos a actualizar'})//TODO:err ?
+            return;
+        }
+
+        const empresaId = (req.user as any).id
+
+        await AuthService.updateEmpresa(empresaId, validation.data);
+        res.status(200).json({ result: "actualizado correctamente "});
+
+    }catch(err){
+        console.log(err)
+        res.status(500).json({ error: 'Error interno del servidor' })
+    }
+}
+
+const deleteCliente = async (req: Request, res: Response): Promise<void> => {
+    try{
+        const clienteId = (req.user as any).id
+
+        await AuthService.deleteCliente(clienteId);
+        res.status(204);
+    }catch(err){
+        console.log(err)
+        res.status(500).json({ error: 'Error interno del servidor' })
+    }
+}
+
+const deleteEmpresa = async (req: Request, res: Response): Promise<void> => {
+    try{
+        const empresaId = (req.user as any).id
+
+        await AuthService.deleteCliente(empresaId);
+        res.status(204);
     }catch(err){
         console.log(err)
         res.status(500).json({ error: 'Error interno del servidor' })
@@ -48,5 +131,10 @@ const register = async (req: Request, res: Response): Promise<void> => {
 
 export const AuthController = {
     login,
-    register
+    registerCliente,
+    registerEmpresa,
+    updateCliente,
+    updateEmpresa,
+    deleteCliente,
+    deleteEmpresa
 };
