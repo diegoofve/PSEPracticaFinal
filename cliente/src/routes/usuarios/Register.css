@@ -1,0 +1,38 @@
+.fest-field .MuiOutlinedInput-root {
+  border-radius: 10px !important;
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff !important;
+  transition: all 0.3s ease;
+}
+
+.fest-field .MuiOutlinedInput-root fieldset {
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  transition: all 0.3s ease;
+}
+
+.fest-field .MuiOutlinedInput-root:hover fieldset {
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.fest-field .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: rgba(255, 60, 120, 0.6) !important;
+  border-width: 1px !important;
+}
+
+.fest-field .MuiInputLabel-root {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.fest-field .MuiInputLabel-root.Mui-focused {
+  color: #FF3C78 !important;
+}
+
+.fest-field .MuiFormHelperText-root {
+  color: #FF6B6B !important;
+}
+
+/* Color automático para los iconos dentro del TextField */
+.fest-field .MuiInputAdornment-root svg {
+  color: rgba(255, 255, 255, 0.35) !important;
+  font-size: 20px !important;
+}
