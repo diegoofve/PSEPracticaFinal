@@ -17,7 +17,8 @@ import {Register} from './routes/usuarios/Register'
 import {ModificarPerfil} from './routes/usuarios/ModificarPerfil'
 
 //import {FestivalesList} from './routes/festivales/FestivalesList' //poder filtrar por lista festivales entero/festivales propios + dar de alta un festival + modificarlo y eliminarlo
-//import {ModificarFestival} from './routes/festivales/ModificarFestival'
+import {ModificarFestival} from './routes/festivales/ModificarFestival'
+//import { GestionAbonos } from './routes/festivales/GestionAbonos.tsx';
 
 const theme = createTheme({ //esto lo ha generado el completar del visual, toca cambiarlo y hacer estéticamente más bonito
   palette: {
@@ -39,10 +40,11 @@ createRoot(document.getElementById('root')!).render(
       <AuthProvider>
         <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Layout><App /></Layout>} />
+          <Route path="/" element={<App />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/modificar-perfil" element={<Layout><ModificarPerfil /></Layout>} />
+          <Route path="/modificar-festival" element={<Layout><ModificarFestival /></Layout>} />
         </Routes>
       </BrowserRouter>
       </AuthProvider>
@@ -51,7 +53,10 @@ createRoot(document.getElementById('root')!).render(
 )
 
 /*
+
           <Route path="/FestivalesList" element={<Layout><FestivalesList /></Layout>} />
           <Route path="/modificar-festival" element={<Layout><ModificarFestival /></Layout>} />
           <Route path="/AdminPanel" element={<Layout><AdminPanel /></Layout>} />
+          <Route path="/gestion-abonos" element={<Layout><GestionAbonos /></Layout>} />
+
 */

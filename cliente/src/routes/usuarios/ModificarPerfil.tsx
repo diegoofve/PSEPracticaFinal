@@ -1,10 +1,8 @@
 //incluir aqui historico abonos + modificar perfil + delete perfil
 
 import { useState, useEffect } from 'react';
-import { 
-  Box, Typography, TextField, Button, CircularProgress, Alert, Grid, Paper, InputAdornment,
-  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle 
-} from '@mui/material';
+import { Box, Typography, TextField, Button, CircularProgress, Alert, Grid, Paper, InputAdornment,
+Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 import PersonIcon from '@mui/icons-material/Person';
@@ -16,13 +14,13 @@ import BusinessIcon from '@mui/icons-material/Business';
 import HomeIcon from '@mui/icons-material/Home';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 
-//import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import { api } from '../../lib/api.ts';
-//import '../usuarios/registers.css'; idk if this is the correct css, might have to look it after
+//import '../usuarios/registers.css'; //idk if this is the correct css, might have to look it after
 
 export const ModificarPerfil = () => {
   const navigate = useNavigate();
-  //const { logout } = useAuth();
+  const { logout } = useAuth();
 
   const [loadingInitial, setLoadingInitial] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -30,12 +28,12 @@ export const ModificarPerfil = () => {
   const [userType, setUserType] = useState<'cliente' | 'empresa' | null>(null);
   const [formData, setFormData] = useState<any>({});
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const [deleting, setDeleting] = useState(false);
+  const [deleting, setDeleting] = useState(false);//esto??
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await api.get('/perfil'); 
+        const response = await api.get('/');//endpoint para ver mis datos??
         const userData = response.data;
 
         if (userData.cif) {
@@ -44,14 +42,13 @@ export const ModificarPerfil = () => {
           setUserType('cliente');
         }
 
-        setFormData({ ...userData, password: '' });
+        setFormData({ ...userData, password: ''});//no cargamos la contraseña(privacidad)
       } catch (error: any) {
         setMessage({ type: 'error', text: 'Error al cargar los datos del perfil.' });
       } finally {
         setLoadingInitial(false);
       }
     };
-
     fetchProfile();
   }, []);
 
@@ -69,9 +66,11 @@ export const ModificarPerfil = () => {
       if (!payload.password) {
         delete payload.password;
       }
+      
+      const endpointUpdate = userType === 'cliente' ? '/updatecliente' : '/updateempresa';
 
-      await api.put('/updatecliente', payload);//la dirección de la api esta bien?
-      setMessage({ type: 'success', text: 'Perfil actualizado correctamente.' });
+      await api.put(endpointUpdate, payload);//la dirección de la api esta bien?
+      setMessage({ type: 'success', text: 'Perfil actualizado.' });
     } catch (error: any) {
       setMessage({ type: 'error', text: error.response?.data?.message || 'Error al actualizar el perfil' });
     } finally {
@@ -82,7 +81,8 @@ export const ModificarPerfil = () => {
   const handleDelete = async () => {
     setDeleting(true);
     try {
-      await api.delete('/deletecliente'); //hay que ajustar el endpoint
+      const endpointDelete = userType === 'cliente' ? '/deletecliente' : '/deleteempresa';
+      await api.delete(endpointDelete); //hay que ajustar el endpoint
       //logout();
       navigate('/login');
     } catch (error: any) {
@@ -118,7 +118,7 @@ export const ModificarPerfil = () => {
                 Mi Perfil
               </Typography>
               <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' }}>
-                {userType === 'cliente' ? 'Datos de Asistente' : 'Datos de Promotor'}
+                {userType === 'cliente' ? 'Datos del cliente' : 'Datos de Promotor'}
               </Typography>
             </Box>
           </Box>
@@ -134,7 +134,7 @@ export const ModificarPerfil = () => {
                   <TextField className="fest-field" label="Nombre" name="nombre" value={formData.nombre || ''} onChange={handleChange} fullWidth slotProps={{ input: { startAdornment: <InputAdornment position="start"><PersonIcon /></InputAdornment> } }} />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
-                  <TextField className="fest-field" label="Apellidos" name="apellidos" value={formData.apellidos || ''} onChange={handleChange} fullWidth />
+                  <TextField className="fest-field" label="Apellidos" name="apellidos" value={formData.apellidos || ''} onChange={handleChange} fullWidth slotProps={{ input: { startAdornment: <InputAdornment position="start"><PersonIcon /></InputAdornment> } }} />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <TextField className="fest-field" label="DNI" name="dni" value={formData.dni || ''} onChange={handleChange} fullWidth disabled slotProps={{ input: { startAdornment: <InputAdornment position="start"><BadgeIcon /></InputAdornment> } }} helperText="El DNI no se puede modificar" />
@@ -169,21 +169,21 @@ export const ModificarPerfil = () => {
               <TextField className="fest-field" label="Email" type="email" name="email" value={formData.email || ''} onChange={handleChange} fullWidth disabled slotProps={{ input: { startAdornment: <InputAdornment position="start"><EmailIcon /></InputAdornment> } }} helperText="El email no se puede cambiar" />
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
-              <TextField className="fest-field" label="Nueva Contraseña" type="password" name="password" value={formData.password || ''} onChange={handleChange} fullWidth slotProps={{ input: { startAdornment: <InputAdornment position="start"><LockIcon /></InputAdornment> } }} helperText="Déjalo en blanco para no cambiarla" />
+              <TextField className="fest-field" label="Nueva Contraseña" type="password" name="password" value={formData.password || ''} onChange={handleChange} fullWidth slotProps={{ input: { startAdornment: <InputAdornment position="start"><LockIcon /></InputAdornment> } }}/>
             </Grid>
           </Grid>
 
           <Button type="submit" fullWidth disabled={saving} sx={{ mt: 4, p: 1.5, borderRadius: 2, background: 'linear-gradient(90deg, #FF3C78 0%, #A020F0 100%)', color: 'white', fontWeight: 'bold', fontSize: '1.1rem', textTransform: 'none', transition: 'all 0.2s', '&:hover': { transform: 'translateY(-2px)' } }}>
-            {saving ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Guardar Cambios'}
+            {saving ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Guardar cambios'}
           </Button>
         </Paper>
 
         <Box sx={{ mt: 4, p: 3, border: '1px solid rgba(255, 60, 60, 0.3)', borderRadius: 4, bgcolor: 'rgba(255, 60, 60, 0.05)', textAlign: 'center' }}>
           <Typography variant="h6" sx={{ color: '#FF6B6B', mb: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
-            <WarningAmberIcon /> Zona de Peligro
+            <WarningAmberIcon /> Eliminar la cuenta.
           </Typography>
           <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.6)', mb: 3 }}>
-            Una vez que elimines tu cuenta, no hay vuelta atrás. Por favor, asegúrate bien.
+            Una vez que elimines tu cuenta no podrás volver a iniciar sesión.
           </Typography>
           <Button variant="outlined" color="error" onClick={() => setOpenDeleteModal(true)} sx={{ borderRadius: 2, textTransform: 'none', fontWeight: 'bold', borderColor: 'rgba(255, 60, 60, 0.5)', '&:hover': { bgcolor: 'rgba(255, 60, 60, 0.1)' } }}>
             Eliminar mi cuenta definitivamente
@@ -200,13 +200,13 @@ export const ModificarPerfil = () => {
         <DialogTitle sx={{ color: '#FF6B6B' }}>¿Estás seguro?</DialogTitle>
         <DialogContent>
           <DialogContentText sx={{ color: 'rgba(255,255,255,0.7)' }}>
-            Esta acción eliminará permanentemente tu cuenta y todos los datos asociados a ella de nuestros servidores. Esta acción no se puede deshacer.
+            Esta acción eliminará permanentemente tu cuenta y te inhabilitara de poder iniciar sesión más veces.
           </DialogContentText>
         </DialogContent>
         <DialogActions sx={{ p: 2, pt: 0 }}>
           <Button onClick={() => setOpenDeleteModal(false)} sx={{ color: 'rgba(255,255,255,0.6)' }}>Cancelar</Button>
           <Button onClick={handleDelete} color="error" variant="contained" disabled={deleting} sx={{ borderRadius: 2, fontWeight: 'bold' }}>
-            {deleting ? <CircularProgress size={20} color="inherit" /> : 'Sí, eliminar cuenta'}
+            {deleting ? <CircularProgress size={20} color="inherit" /> : 'Sí, eliminarla'}
           </Button>
         </DialogActions>
       </Dialog>

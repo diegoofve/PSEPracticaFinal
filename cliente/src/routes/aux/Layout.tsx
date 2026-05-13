@@ -1,5 +1,6 @@
 import { Box, Typography } from '@mui/material';
 import { Navbar } from './Navbar.tsx';
+import "./Layout.css";
 
 interface LayoutProps {
   children: React.ReactNode;

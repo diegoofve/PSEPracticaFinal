@@ -11,6 +11,7 @@ export const NewFestivalSchema = z.object({
     artistas: z.array(z.string()).optional().openapi({ example: ["Mora", "Rosalía"]}),
     fechaInicio: z.coerce.date().openapi({ example: "2025-05-01" }),
     fechaFin: z.coerce.date().openapi({ example: "2025-05-02"}),
+    precioAbono: z.number().positive().openapi({ example: 70}),//hay que añadir euro/dolar??...
     imagen: z.string().url().optional().openapi({ example: "https://ejemplo.com/primavera.jpg" }),
     empresaId: z.number().int().optional().openapi({ example: 2})
 }).strict().openapi("NewFestivalDto");

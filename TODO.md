@@ -12,6 +12,8 @@ buySchema en payment.dto para mandar los datos a la api de pagos desde el front
 
 acabar todo el apartado de festivales (controller, service, dtos)
 
+endpoint para ver mis datos (datos de usuario-empresa/usuario-cliente)
+
 ## GENERAL
 - [x] Registro de usuarios ruta api
 - [x] Front registro de usuarios
@@ -28,10 +30,11 @@ acabar todo el apartado de festivales (controller, service, dtos)
 
 ## GESTION DE FESTIVALES
 - [x] Alta de festivales
-- [ ] Front de alta de festis
+- [x] Front de alta de festis
 - [ ] Listado de festivales propios
-- [ ] Edicion de festivales si quedan mas de 3 dias
+- [x] Edicion de festivales si quedan mas de 3 dias
 - [ ] Cancelacion de festis
+- [x] Front cancelación festis
 - [ ] Visualizar informacion de ventas propia
 - [ ] Integracion de API musical en el detalle de los festivales, pudiendo obtener infromacion de cada artista **(opcional)**
 - [ ] Multiples tipos de abono por festival **(opcional)**
