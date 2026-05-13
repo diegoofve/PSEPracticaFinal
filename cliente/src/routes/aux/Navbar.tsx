@@ -1,3 +1,5 @@
+//change all navbar to include a full guide of all routes (home, festivales, admin panel, login/logout)
+
 import { useState } from 'react';
 import { AppBar, Toolbar, Typography, Button, Box, IconButton, Menu, MenuItem } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';

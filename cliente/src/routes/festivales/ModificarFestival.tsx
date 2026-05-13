@@ -11,7 +11,7 @@ eliminarlos festivales??
 
 
 
-falta terminar de poner el eliminar festival
+falta terminar de poner el eliminar festival (poner que si esta viendo/modificando un festival puedas modificarlo, si lo estas creando no)
 */
 
 import { useState, useEffect } from 'react';
