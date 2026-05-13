@@ -64,7 +64,7 @@ export const ModificarFestival = () => {
     descripcion: '',
     fechaInicio: '',
     fechaFin: '',
-    precioAbono: '',
+    precioAbono: 0,
     imagen: '',
     empresaId: undefined as number | undefined
   });
@@ -85,7 +85,7 @@ export const ModificarFestival = () => {
             descripcion: data.descripcion || '',
             fechaInicio: data.fechaInicio ? data.fechaInicio.split('T')[0] : '',
             fechaFin: data.fechaFin ? data.fechaFin.split('T')[0] : '',
-            precioAbono: data.precioAbono || '',
+            precioAbono: data.precioAbono || 100000, //punish user for no price
             imagen: data.imagen || '',
             empresaId: data.empresaId
           });
@@ -116,7 +116,9 @@ export const ModificarFestival = () => {
     const { name, value } = e.target;
     setFormData({ 
       ...formData, 
-      [name]: name === 'aforo' ? parseInt(value) || 0 : value 
+      [name]: name === 'aforo' || name === 'precioAbono' 
+            ? parseFloat(value) || 0 
+            : value 
     });
   };
   const addArtista = () => {

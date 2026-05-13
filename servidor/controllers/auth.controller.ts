@@ -1,9 +1,9 @@
-import type { Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 import { LoginSchema, RegisterClienteSchema, RegisterEmpresaSchema, UpdateClienteSchema, UpdateEmpresaSchema } from '../dtos/auth.dto';
 import { AuthService } from '../services/auth.service';
 import { isEmptyObject } from '../lib/util';
 
-const login = async (req: Request, res: Response): Promise<void> => {
+const login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try{
         const validation = LoginSchema.safeParse(req.body);
 
@@ -13,9 +13,10 @@ const login = async (req: Request, res: Response): Promise<void> => {
         }
 
         const result = await AuthService.login(validation.data);
-        res.status(200).json(result)
+        res.status(200).json({token: result})
 
     }catch(err){
+        next(err);
         console.log(err);
         res.status(500).json({ error: 'Error interno del servidor'} );
     }

@@ -1,6 +1,6 @@
 import axios from 'axios';
 export const api = axios.create({
-    baseURL: ''//tendríamos que elegir base para la api (en la guiada estaba el puerto 3000)
+    baseURL: 'http://localhost:3000'//tendríamos que elegir base para la api (en la guiada estaba el puerto 3000)
 });
 
 api.interceptors.request.use((config) => {

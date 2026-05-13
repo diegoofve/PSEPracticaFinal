@@ -11,7 +11,7 @@ const crearFestival = async (empresaId: number, data: NewFestivalDto) => {
     }
 
     if (empresa.estado !== "VERIFICADA"){
-        throw new Error("La empresa no está verificada")//TODO:err
+        //throw new Error("La empresa no está verificada")//TODO:err
     }
 
     if (data.fechaFin <= data.fechaInicio){

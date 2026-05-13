@@ -18,7 +18,7 @@ import './Register.css';
 
   export const Register = () => {
     const navigate = useNavigate();
-    const { login } = useAuth();
+    const {login} = useAuth();
 
     const [formType, setFormType] = useState<'cliente' | 'empresa'>('cliente');
     const [loading, setLoading] = useState(false);
@@ -106,6 +106,14 @@ import './Register.css';
     try {
       const endpoint = formType === 'cliente' ? '/register/cliente' : '/register/empresa'; //esto hay que cambiar las rutas de para coincidir cn la api (creo q están bien)
       const payload = formType === 'cliente' ? dataCliente : dataEmpresa;
+
+      await api.post(endpoint, payload);
+      const loginResponse = await api.post('/login', { 
+          email: payload.email, 
+          password: payload.password 
+      });
+      
+      login(loginResponse.data.token)
       navigate('/FestivalesList');
     } catch (error: any) {
       setErrors({ api: error.response?.data?.message || 'Error al registrar la cuenta del cliente' });

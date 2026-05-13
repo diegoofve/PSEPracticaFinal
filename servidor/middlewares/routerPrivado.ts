@@ -6,7 +6,7 @@ import { AuthController } from '../controllers/auth.controller';
 
 const routerPrivado = Router();
 
-routerPrivado.post('/festivales', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA", "ADMIN"]), 
+routerPrivado.post('/festivales', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
 FestivalController.crearFestival)
 
 routerPrivado.put('/register/cliente', passport.authenticate('jwt', { session: false }), authorize(["CLIENTE"]),

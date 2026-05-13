@@ -2,6 +2,7 @@ import type { LoginDto, RegisterClienteDto, RegisterEmpresaDto, UpdateClienteDto
 import { prisma } from '../lib/db';
 import bcrypt from 'bcryptjs';
 import jwt from "jsonwebtoken";
+import { BadRequestError, FatalError, GonePermanentlyError, UnauthorizedError } from "../lib/errors";
 
 const JWT_SECRET = process.env.JWT_SECRET || "mi_clave_super_secreta"
 
@@ -17,22 +18,22 @@ const login = async (data: LoginDto): Promise<string> => {
         where: { email: data.email }
     })
 
-    if (!registro){//TODO:err
-        throw new Error("Credenciales incorrectas");
+    if (!registro){
+        throw new UnauthorizedError("Credenciales incorrectas");
     }
 
-    if (registro.baneado){//TODO:err
-        throw new Error("Cuenta suspendida permanentemente");
+    if (registro.baneado){
+        throw new GonePermanentlyError("Cuenta suspendida permanentemente");
     }
 
     if (registro.tipo === "CLIENTE") {
         const cliente = await prisma.cliente.findFirst({
             where: { email: data.email, fechaBaja: null }
         })
-        if (!cliente) throw new Error("Credenciales incorrectas")//TODO:err
+        if (!cliente) throw new UnauthorizedError("Credenciales incorrectas")
 
         const passwordCorrecta = await bcrypt.compare(data.password, cliente.password)
-        if (!passwordCorrecta) throw new Error("Credenciales incorrectas")//TODO:err
+        if (!passwordCorrecta) throw new UnauthorizedError("Credenciales incorrectas")
 
         return jwt.sign({ id: cliente.id, rol: "CLIENTE" }, JWT_SECRET, { expiresIn: "8h" })
     }
@@ -41,15 +42,15 @@ const login = async (data: LoginDto): Promise<string> => {
         const empresa = await prisma.empresa.findFirst({
             where: { email: data.email, fechaBaja: null }
         })
-        if (!empresa) throw new Error("Credenciales incorrectas")//TODO:err
+        if (!empresa) throw new UnauthorizedError("Credenciales incorrectas")
 
         const passwordCorrecta = await bcrypt.compare(data.password, empresa.password)
-        if (!passwordCorrecta) throw new Error("Credenciales incorrectas")//TODO:err
+        if (!passwordCorrecta) throw new UnauthorizedError("Credenciales incorrectas")
 
         return jwt.sign({ id: empresa.id, rol: "EMPRESA", estado: empresa.estado }, JWT_SECRET, { expiresIn: "8h" })
     }
 
-    throw Error("") //para que typescript no llore, siempre va a ser CLIENTE o EMPRESA
+    throw new FatalError() //para que typescript no llore, siempre va a ser CLIENTE o EMPRESA
 }
 
 const registerCliente = async (data: RegisterClienteDto): Promise<void> => {

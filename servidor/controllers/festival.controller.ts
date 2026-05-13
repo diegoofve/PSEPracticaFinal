@@ -5,6 +5,7 @@ import 'passport' //para req.user
 
 const crearFestival = async (req: Request, res: Response) => {
     try{
+        console.log(req.body)
         const validation = NewFestivalSchema.safeParse(req.body);
 
         if(!validation.success){
@@ -15,7 +16,7 @@ const crearFestival = async (req: Request, res: Response) => {
         const { empresaId: empresaIdReq, ...festivalData } = validation.data
 
         const user = (req.user) as any;
-        const empresaId = user.rol === "ADMIN" ? empresaIdReq : user.id;
+        const empresaId = user.id;
 
         await FestivalService.crearFestival(empresaId, festivalData);
         res.status(201).json({});

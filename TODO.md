@@ -1,6 +1,13 @@
 Cosas a hacer:
 
-Revisar que el schema de prisma este bien, cuanto antes mejor porque ya he visto un par de cosas que no pusimos
+# EN GRANDE PORQUE TIENE QUE SER LO PRIMERO A ARREGLAR MAÑANA POR LA MAÑANA
+poner todos los errores para el error handler 
+ARREGLAR LO DE LOS ABONOS EN AÑADIR FESTIVALES
+ARREGLAR LOS DELETE QUE SE ESTAN SALTANDO TODA LA LOGICA QUE HEMOS PUESTO!!! borran los clientes en vez de poner fecha de baja y no borran mails de emails_registrados
+no es un bug como tal pero comprobar que funcione bien el login automatico del front
+ENDPOINT PARA COGER DATOS DE PERFIL
+
+## BACK
 
 registrar las rutas y dtos nuevos en swagger
 
@@ -8,13 +15,17 @@ revisar los regex de el auth.dto.ts porque no me fio de claude y ver si quiza no
 
 errorHandler (ver todos los TODO:err para ver donde hay que sustituir errores)
 
-buySchema en payment.dto para mandar los datos a la api de pagos desde el front
-
 acabar todo el apartado de festivales (controller, service, dtos)
 
 endpoint para ver mis datos (datos de usuario-empresa/usuario-cliente)
 
+cositas de admin
+
+## FRONT
+
 comprobación festivales antes de 3 dias para poder modificarlo
+
+panel de admin
 
 ## GENERAL
 - [x] Registro de usuarios ruta api
