@@ -14,9 +14,9 @@ acabar todo el apartado de festivales (controller, service, dtos)
 
 ## GENERAL
 - [x] Registro de usuarios ruta api
-- [ ] Front registro de usuarios
+- [x] Front registro de usuarios
 - [x] Inicio de sesion
-- [ ] Front inicio de sesion
+- [x] Front inicio de sesion
 - [x] Eliminacion de cuenta propia  
   Al borrar cuentas de usuario, settear el correo (y cualquier otro campo unique) a null
 - [x] Modificacion de perfil de usuario **(opcional)**

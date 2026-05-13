@@ -33,7 +33,7 @@ function App() {
         </button>
         <button className="app-btn-primary" onClick={() => navigate('/register')}>
           <PersonAddIcon sx={{ fontSize: 16 }} />
-          Registrarse
+          Crear cuenta
         </button>
       </div>
     </nav>
@@ -42,12 +42,12 @@ function App() {
 
       <div className="app-hero-badge">
         <span className="app-dot pulse" />
-        Temporada 2026 — Entradas disponibles
+        Tu mejor plataforma para gestionar tus festivales
       </div>
 
       <h1 className="app-hero-title">
-        Tu acceso a los<br />
-        <span className="app-hero-highlight">mejores festivales</span>
+        Tu mejor aliado<br />
+        <span className="app-hero-highlight">para administrar tu diversión</span>
       </h1>
 
       <p className="app-hero-subtitle">
@@ -58,7 +58,7 @@ function App() {
       <div className="app-hero-cta">
         <button className="app-cta-primary" onClick={() => navigate('/register')}>
           <PersonAddIcon sx={{ fontSize: 18 }} />
-          Crear cuenta gratis
+          Crear cuenta
         </button>
         <button className="app-cta-ghost" onClick={() => navigate('/login')}>
           <LoginIcon sx={{ fontSize: 18 }} />
@@ -70,7 +70,7 @@ function App() {
         {[
           { icon: <ConfirmationNumberIcon sx={{ fontSize: 24 }} />, title: 'Entradas digitales',  desc: 'Accede con tu móvil, sin colas ni papel.' },
           { icon: <HeadphonesIcon        sx={{ fontSize: 24 }} />, title: 'Lineup en directo',   desc: 'Horarios y escenarios actualizados al momento.' },
-          { icon: <EmojiEventsIcon       sx={{ fontSize: 24 }} />, title: 'Experiencia VIP',     desc: 'Accesos exclusivos y zonas premium.' },
+          { icon: <EmojiEventsIcon       sx={{ fontSize: 24 }} />, title: 'Experiencia única',     desc: 'Experiencia inolvidable en cada festival.' },
         ].map(({ icon, title, desc }) => (
           <div className="app-feature-card" key={title}>
             <div className="app-feature-icon">{icon}</div>
@@ -88,12 +88,9 @@ function App() {
         <div className="fest-dot d2" />
         <div className="fest-dot d3" />
       </div>
-      <span className="app-footer-text">© 2026 Fest.io. Todos los derechos reservados.</span>
+      <span className="app-footer-text">© 2026 Fest.io.</span>
     </footer>
 
   </div>
 );
-
-
-
 };

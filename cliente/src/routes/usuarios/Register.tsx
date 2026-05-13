@@ -104,7 +104,7 @@ import './Register.css';
 
     setLoading(true);
     try {
-      const endpoint = formType === 'cliente' ? '/register/cliente' : '/register/empresa'; //esto hay que cambiar las rutas de para coincidir cn la api
+      const endpoint = formType === 'cliente' ? '/register/cliente' : '/register/empresa'; //esto hay que cambiar las rutas de para coincidir cn la api (creo q están bien)
       const payload = formType === 'cliente' ? dataCliente : dataEmpresa;
       navigate('/FestivalesList');
     } catch (error: any) {
@@ -152,7 +152,7 @@ import './Register.css';
                   <TextField className="fest-field" label="Nombre" name="nombre" value={dataCliente.nombre} onChange={handleClienteChange} error={!!errors.nombre} helperText={errors.nombre} fullWidth slotProps={{ input: { startAdornment: <InputAdornment position="start"><PersonIcon /></InputAdornment> } }} />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
-                  <TextField className="fest-field" label="Apellidos" name="apellidos" value={dataCliente.apellidos} onChange={handleClienteChange} error={!!errors.apellidos} helperText={errors.apellidos} fullWidth />
+                  <TextField className="fest-field" label="Apellidos" name="apellidos" value={dataCliente.apellidos} onChange={handleClienteChange} error={!!errors.apellidos} helperText={errors.apellidos} fullWidth slotProps={{ input: { startAdornment: <InputAdornment position="start"><PersonIcon /></InputAdornment> } }} />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <TextField className="fest-field" label="DNI" name="dni" value={dataCliente.dni} onChange={handleClienteChange} error={!!errors.dni} helperText={errors.dni} fullWidth slotProps={{ input: { startAdornment: <InputAdornment position="start"><BadgeIcon /></InputAdornment> } }} />
@@ -186,7 +186,6 @@ import './Register.css';
               </>
             )}
 
-            {/* CAMPOS COMUNES (Email y Password) */}
             <Grid size={{ xs: 12, sm: 6 }}>
               <TextField className="fest-field" label="Email" type="email" name="email" value={formType === 'cliente' ? dataCliente.email : dataEmpresa.email} onChange={formType === 'cliente' ? handleClienteChange : handleEmpresaChange} error={!!errors.email} helperText={errors.email} fullWidth slotProps={{ input: { startAdornment: <InputAdornment position="start"><EmailIcon /></InputAdornment> } }} />
             </Grid>
@@ -196,7 +195,7 @@ import './Register.css';
           </Grid>
 
           <Button type="submit" fullWidth disabled={loading} sx={{ mt: 4, p: 1.5, borderRadius: 2, background: 'linear-gradient(90deg, #FF3C78 0%, #A020F0 100%)', color: 'white', fontWeight: 'bold', fontSize: '1.1rem', textTransform: 'none', transition: 'all 0.2s', '&:hover': { transform: 'translateY(-2px)' } }}>
-            {loading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : (formType === 'cliente' ? 'Crear Acceso' : 'Dar de Alta Empresa')}
+            {loading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : (formType === 'cliente' ? 'Crear cuenta' : 'Crear cuenta empresa')}
           </Button>
           
           <Box sx={{ textAlign: 'center', mt: 3 }}>

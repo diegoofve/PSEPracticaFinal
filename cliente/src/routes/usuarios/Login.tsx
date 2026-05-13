@@ -210,6 +210,12 @@ export const Login = () => {
         <span className="fest-tag tag-amber">Live Acts</span>
       </Box>
 
+      <Box sx={{ textAlign: 'center', mt: 3 }}>
+            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.6)' }}>
+              ¿Aún no tienes cuenta? <span onClick={() => navigate('/register')} style={{ color: '#FF3C78', cursor: 'pointer', fontWeight: 'bold' }}>Regístrate</span>
+            </Typography>
+          </Box>
+
     </Box>
   </Box>
   )};
