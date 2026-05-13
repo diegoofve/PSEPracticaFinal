@@ -1,0 +1,86 @@
+:root {
+  --font-display: 'Bebas Neue', 'Arial Narrow', 'Impact', sans-serif;
+  --font-body:    'DM Sans', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+}
+.layout-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #0D0A1A;
+  position: relative;
+  overflow-x: hidden;
+  font-family: var(--font-body);
+}
+.layout-glow {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
+.lg1 { width: 500px; height: 500px; background: rgba(255, 60, 120, 0.14); top: -100px; left: -120px; }
+.lg2 { width: 400px; height: 400px; background: rgba(120, 40, 220, 0.18); top: 40%;   right: -80px; }
+.lg3 { width: 280px; height: 280px; background: rgba(255, 184, 0, 0.08);  bottom: 80px; left: 35%;  }
+.layout-scanlines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent, transparent 3px,
+    rgba(0, 0, 0, 0.05) 3px, rgba(0, 0, 0, 0.05) 4px
+  );
+}
+.layout-main {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  padding: 5rem 1.5rem 2rem;
+}
+.layout-footer {
+  position: relative;
+  z-index: 1;
+  border-top: 0.5px solid rgba(255, 255, 255, 0.07);
+  padding: 1.25rem 2rem;
+}
+
+.layout-footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.navbar-logo-mark {
+  background: linear-gradient(135deg, #FF3C78, #A020F0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.layout-footer-dots {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.layout-footer-text {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.25);
+  font-family: var(--font-body);
+}
+.fest-dot { width: 6px; height: 6px; border-radius: 50%; animation: pulse-dot 1.8s ease-in-out infinite; }
+.d1 { background: #FF3C78; animation-delay: 0s; }
+.d2 { background: #A020F0; animation-delay: 0.3s; }
+.d3 { background: #FFB800; animation-delay: 0.6s; }
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.35); }
+}
+@media (max-width: 768px) {
+  .layout-main { padding: 4.5rem 1rem 1.5rem; }
+  .layout-footer { padding: 1rem; }
+}

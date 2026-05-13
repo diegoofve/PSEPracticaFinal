@@ -8,19 +8,19 @@ import App from './App.tsx'
 
 import './index.css'
 import { AuthProvider } from './context/AuthContext'
-import {Layourt} from './routes/aux/Layout'
+import {Layout} from './routes/aux/Layout'
 import {Navbar} from './routes/aux/Navbar'
 
 import {Login} from './routes/usuarios/Login'
 import {Register} from './routes/usuarios/Register'
-import {AdminPanel} from './routes/usuarios/AdminPanel'
+//import {AdminPanel} from './routes/usuarios/AdminPanel'
 
-import {ModificarPerfil} from './routes/usuarios/ModificarPerfil'
+//import {ModificarPerfil} from './routes/usuarios/ModificarPerfil'
 
-import {FestivalesList} from './routes/festivales/FestivalesList' //poder filtrar por lista festivales entero/festivales propios + dar de alta un festival + modificarlo y eliminarlo
-import {ModificarFestival} from './routes/festivales/ModificarFestival'
+//import {FestivalesList} from './routes/festivales/FestivalesList' //poder filtrar por lista festivales entero/festivales propios + dar de alta un festival + modificarlo y eliminarlo
+//import {ModificarFestival} from './routes/festivales/ModificarFestival'
 
-import {HistorialAbonos} from './routes/festivales/HistorialAbonos'
+//import {HistorialAbonos} from './routes/festivales/HistorialAbonos'
 
 const theme = createTheme({ //esto lo ha generado el completar del visual, toca cambiarlo y hacer estéticamente más bonito
   palette: {
@@ -42,17 +42,20 @@ createRoot(document.getElementById('root')!).render(
       <AuthProvider>
         <BrowserRouter>
         <Routes>
-          <Route path="/" element={<App />} />
+          <Route path="/" element={<Layout><App /></Layout>} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/modificar-perfil" element={<ModificarPerfil />} />
-          <Route path="/festivales-list" element={<FestivalesList />} />
-          <Route path="/modificar-festival" element={<ModificarFestival />} />
-          <Route path="/historial-abonos" element={<HistorialAbonos />} />
-          <Route path="/AdminPanel" element={<AdminPanel />} />
         </Routes>
       </BrowserRouter>
       </AuthProvider>
     </ThemeProvider>
   </StrictMode>,
 )
+
+/*
+<Route path="/modificar-perfil" element={<Layout><ModificarPerfil /></Layout>} />
+          <Route path="/FestivalesList" element={<Layout><FestivalesList /></Layout>} />
+          <Route path="/modificar-festival" element={<Layout><ModificarFestival /></Layout>} />
+          <Route path="/historial-abonos" element={<Layout><HistorialAbonos /></Layout>} />
+          <Route path="/AdminPanel" element={<Layout><AdminPanel /></Layout>} />
+          */

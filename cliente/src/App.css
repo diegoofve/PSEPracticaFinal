@@ -1,0 +1,276 @@
+:root {
+  --font-display: 'Bebas Neue', 'Arial Narrow', 'Impact', sans-serif;
+  --font-body:    'DM Sans', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+}
+.app-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #0D0A1A;
+  position: relative;
+  overflow-x: hidden;
+  font-family: var(--font-body);
+}
+.app-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
+.g1 { width: 500px; height: 500px; background: rgba(255, 60, 120, 0.18); top: -120px; left: -100px; }
+.g2 { width: 400px; height: 400px; background: rgba(120, 40, 220, 0.22); top: 200px;  right: -80px; }
+.g3 { width: 300px; height: 300px; background: rgba(255, 184, 0, 0.10);  bottom: 100px; left: 30%;  }
+.app-scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent, transparent 3px,
+    rgba(0, 0, 0, 0.06) 3px, rgba(0, 0, 0, 0.06) 4px
+  );
+}
+.app-nav {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 2rem;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+}
+
+.app-nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.app-logo-mark {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #FF3C78, #A020F0);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.app-logo-text {
+  font-family: var(--font-display);
+  font-size: 22px;
+  letter-spacing: 2px;
+  color: #ffffff;
+}
+
+.app-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.app-btn-ghost,
+.app-btn-primary,
+.app-cta-primary,
+.app-cta-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-weight: 500;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.app-btn-ghost,
+.app-btn-primary,
+.app-cta-primary,
+.app-cta-ghost {
+  &:hover  { opacity: 0.85; transform: translateY(-1px); }
+  &:active { transform: translateY(0); }
+}
+
+.app-btn-ghost {
+  padding: 8px 14px;
+  font-size: 13px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.app-btn-primary {
+  padding: 8px 16px;
+  font-size: 13px;
+  background: linear-gradient(90deg, #FF3C78, #A020F0);
+  color: #ffffff;
+}
+.app-hero {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 5rem 2rem 3rem;
+}
+
+.app-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.05);
+  border: 0.5px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  padding: 6px 14px;
+  margin-bottom: 2rem;
+}
+
+.app-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #FF3C78;
+  flex-shrink: 0;
+}
+.app-dot.pulse {
+  animation: pulse-dot 1.8s ease-in-out infinite;
+}
+
+.app-hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 8vw, 88px);
+  letter-spacing: 3px;
+  color: #ffffff;
+  line-height: 1.05;
+  margin: 0 0 1.25rem;
+}
+
+.app-hero-highlight {
+  background: linear-gradient(90deg, #FF3C78, #A020F0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.app-hero-subtitle {
+  font-size: 16px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.5);
+  max-width: 480px;
+  margin: 0 0 2.5rem;
+}
+.app-hero-cta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 4rem;
+}
+
+.app-cta-primary {
+  padding: 14px 28px;
+  font-size: 15px;
+  background: linear-gradient(90deg, #FF3C78, #A020F0);
+  color: #ffffff;
+  box-shadow: 0 4px 24px rgba(255, 60, 120, 0.25);
+}
+
+.app-cta-ghost {
+  padding: 14px 28px;
+  font-size: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 0.5px solid rgba(255, 255, 255, 0.2) !important;
+  color: rgba(255, 255, 255, 0.75);
+}
+.app-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  width: 100%;
+  max-width: 780px;
+}
+
+.app-feature-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 0.5px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 1.5rem;
+  text-align: left;
+  transition: border-color 0.2s, background 0.2s;
+}
+.app-feature-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 60, 120, 0.35);
+}
+
+.app-feature-icon {
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 60, 120, 0.12);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FF3C78;
+  margin-bottom: 1rem;
+}
+
+.app-feature-title {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+  margin: 0 0 6px;
+}
+
+.app-feature-desc {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1.6;
+  margin: 0;
+}
+.app-footer {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 1.5rem 2rem;
+  border-top: 0.5px solid rgba(255, 255, 255, 0.07);
+}
+
+.app-footer-dots { display: flex; gap: 5px; }
+.app-footer-text {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.fest-dot { width: 6px; height: 6px; border-radius: 50%; animation: pulse-dot 1.8s ease-in-out infinite; }
+.d1 { background: #FF3C78; animation-delay: 0s; }
+.d2 { background: #A020F0; animation-delay: 0.3s; }
+.d3 { background: #FFB800; animation-delay: 0.6s; }
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.35); }
+}
+
+@media (max-width: 600px) {
+  .app-nav { padding: 1rem; }
+  .app-logo-text { font-size: 18px; }
+  .app-btn-ghost { display: none; }
+  .app-hero { padding: 3rem 1.25rem 2rem; }
+  .app-features { grid-template-columns: 1fr; }
+}

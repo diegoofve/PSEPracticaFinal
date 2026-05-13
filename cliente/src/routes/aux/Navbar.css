@@ -1,0 +1,94 @@
+:root {
+  --font-display: 'Bebas Neue', 'Arial Narrow', 'Impact', sans-serif;
+  --font-body:    'DM Sans', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+}
+.navbar-root {
+  background: rgba(13, 10, 26, 0.85) !important;
+  backdrop-filter: blur(20px) !important;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.navbar-glow-line {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 60, 120, 0.5), rgba(160, 32, 240, 0.5), transparent);
+}
+
+.navbar-toolbar {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 0 1.5rem !important;
+  min-height: 60px !important;
+}
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar-logo-mark {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #FF3C78, #A020F0);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.navbar-logo-text {
+  font-family: var(--font-display);
+  font-size: 20px;
+  letter-spacing: 2px;
+  color: #ffffff;
+  line-height: 1;
+}
+.navbar-desktop {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.navbar-mobile { display: none; }
+.nav-btn-ghost,
+.nav-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.nav-btn-ghost:hover,
+.nav-btn-primary:hover  { opacity: 0.85; transform: translateY(-1px); }
+.nav-btn-ghost:active,
+.nav-btn-primary:active { transform: translateY(0); }
+
+.nav-btn-ghost {
+  background: rgba(255, 255, 255, 0.06);
+  border: 0.5px solid rgba(255, 255, 255, 0.13);
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.nav-btn-primary {
+  background: linear-gradient(90deg, #FF3C78, #A020F0);
+  color: #ffffff;
+}
+.nav-hamburger {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 0.5px solid rgba(255, 255, 255, 0.13) !important;
+  border-radius: 8px !important;
+  padding: 5px !important;
+}
+@media (max-width: 768px) {
+  .navbar-desktop { display: none; }
+  .navbar-mobile  { display: flex; }
+}
