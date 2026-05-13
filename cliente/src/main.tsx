@@ -8,7 +8,7 @@ import App from './App.tsx'
 
 import './index.css'
 import { AuthProvider } from './context/AuthContext'
-import {Layout} from './routes/aux/Layout'
+import {Layout} from './routes/aux1/Layout'
 
 import {Login} from './routes/usuarios/Login'
 import {Register} from './routes/usuarios/Register'
