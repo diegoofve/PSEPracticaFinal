@@ -6,15 +6,25 @@
   align-items: flex-start;
   padding-top: 50px;
   position: relative;
-  overflow-x: hidden;
+  overflow: visible;
+}
+
+.fest-admin-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 800px;
+  padding: 60px 20px;
+  box-sizing: border-box;
 }
 
 .fest-admin-card {
-  background: rgba(25, 25, 40, 0.6) !important;
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 20px !important;
+  background: rgba(20, 20, 30, 0.7) !important;
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 24px !important;
   padding: 40px;
+  height: auto !important;
 }
 
 .fest-admin-header {
@@ -62,22 +72,23 @@
 }
 
 .fest-bg-glow {
-  position: absolute;
+  position: fixed;
   width: 600px;
   height: 600px;
   border-radius: 50%;
   filter: blur(150px);
   z-index: 0;
+  pointer-events: none;
 }
 
 .glow-blue {
-  background: rgba(0, 194, 255, 0.15);
-  top: -100px;
-  left: -200px;
+  background: rgba(0, 194, 255, 0.12);
+  top: -10%;
+  left: -10%;
 }
 
 .glow-purple {
   background: rgba(160, 32, 240, 0.15);
-  bottom: -100px;
-  right: -200px;
+  bottom: -10%;
+  right: -10%;
 }

@@ -1,4 +1,4 @@
-//incluir aqui historico abonos + modificar perfil + delete perfil
+//modificar perfil + delete perfil
 
 import { useState, useEffect } from 'react';
 import { Box, Typography, TextField, Button, CircularProgress, Alert, Grid, Paper, InputAdornment,
@@ -16,11 +16,11 @@ import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../lib/api.ts';
-//import '../usuarios/registers.css'; //idk if this is the correct css, might have to look it after
+import './ModificarPerfil.css';
 
 export const ModificarPerfil = () => {
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout } = useAuth();//esto q es y porque es necesario??
 
   const [loadingInitial, setLoadingInitial] = useState(true);
   const [saving, setSaving] = useState(false);

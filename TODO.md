@@ -14,6 +14,8 @@ acabar todo el apartado de festivales (controller, service, dtos)
 
 endpoint para ver mis datos (datos de usuario-empresa/usuario-cliente)
 
+comprobación festivales antes de 3 dias para poder modificarlo
+
 ## GENERAL
 - [x] Registro de usuarios ruta api
 - [x] Front registro de usuarios

@@ -1,0 +1,71 @@
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0a12;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 60, 120, 0.3);
+  border-radius: 10px;
+}
+.fest-field .MuiOutlinedInput-root {
+  border-radius: 10px !important;
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff !important;
+  transition: all 0.3s ease;
+}
+.fest-field .MuiOutlinedInput-root fieldset {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  transition: all 0.3s ease;
+}
+.fest-field .MuiOutlinedInput-root:hover fieldset {
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.fest-field .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: rgba(255, 60, 120, 0.6) !important; /* Neon Pink */
+  border-width: 1px !important;
+  box-shadow: 0 0 10px rgba(255, 60, 120, 0.1);
+}
+
+.fest-field .Mui-disabled {
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.4) !important;
+  background: rgba(255, 255, 255, 0.02);
+  cursor: not-allowed;
+}
+
+.fest-field .MuiInputLabel-root {
+  color: rgba(255, 255, 255, 0.4) !important;
+  font-size: 0.9rem !important;
+}
+
+.fest-field .MuiInputLabel-root.Mui-focused {
+  color: #FF3C78 !important; /* Neon Pink */
+}
+
+.fest-field .MuiInputAdornment-root svg {
+  color: rgba(255, 255, 255, 0.35) !important;
+  font-size: 20px;
+}
+
+.fest-field .MuiFormHelperText-root {
+  color: rgba(255, 255, 255, 0.4) !important;
+  margin-left: 4px !important;
+  font-style: italic;
+}
+.fest-field .Mui-error.MuiFormHelperText-root {
+  color: #FF6B6B !important;
+}
+.MuiDialogTitle-root {
+  font-family: 'Bebas Neue', sans-serif !important;
+  letter-spacing: 1px;
+}
+
+.MuiDialogContentText-root {
+  font-size: 0.95rem !important;
+  line-height: 1.5;
+}
+@keyframes pulseGlow {
+  0% { opacity: 0.5; transform: scale(1); }
+  100% { opacity: 0.8; transform: scale(1.05); }
+}

@@ -11,17 +11,21 @@ eliminarlos festivales??
 
 
 
-CAMBIAR la distribución (demasiado grande)
+falta terminar de poner el eliminar festival
 */
 
 import { useState, useEffect } from 'react';
 import { 
   Box, Typography, TextField, Button, CircularProgress, Alert, Grid, Paper, 
-  InputAdornment, IconButton, Chip, Stack 
+  InputAdornment, IconButton, Chip, Stack, 
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions
 } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 
-// Iconos
 import FestivalIcon from '@mui/icons-material/Festival';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PeopleIcon from '@mui/icons-material/People';
@@ -36,8 +40,15 @@ import './ModificarFestival.css';
 import { useAuth } from '../../context/AuthContext';
 
 
+
+
+
 export const ModificarFestival = () => {
-  //const {login} = useAuth();
+
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [deleting, setDeleting] = useState(false);//esto??
+
+  const {login} = useAuth();
   const { id } = useParams(); // Si hay id modificamos, sino creamos.
   const navigate = useNavigate();
   const isEdit = Boolean(id); //pillas el id del fesstival a cambiar
@@ -88,6 +99,18 @@ export const ModificarFestival = () => {
       fetchFestival();
     }
   }, [id, isEdit]);
+
+  const handleDelete = async () => {
+    setDeleting(true);
+    try {
+      await api.delete(`/festivales/${id}`); //hay que ajustar el endpoint (supongo q depende del id que envies???)
+      navigate('/modificar-festival'); //ir a tus festivales
+    } catch (error: any) {
+      setMessage({ type: 'error', text: 'Error al eliminar el festival.' });
+      setOpenDeleteModal(false);
+      setDeleting(false);
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -214,7 +237,7 @@ export const ModificarFestival = () => {
               </Grid>
 
               <Grid size={{ xs: 12 }}>
-                <Button type="submit" fullWidth disabled={loading} sx={{ mt: 2, py: 1.5, borderRadius: 2, background: 'linear-gradient(90deg, #00C2FF 0%, #A020F0 100%)', color: 'white', fontWeight: 'bold', fontSize: '1.1rem', textTransform: 'none', '&:hover': { opacity: 0.9 } }}>
+                <Button type="submit" fullWidth disabled={loading} className="fest-submit-btn">
                   {loading ? <CircularProgress size={24} color="inherit" /> : (isEdit ? 'Guardar Cambios' : 'Publicar Festival')}
                 </Button>
                 <Button fullWidth onClick={() => navigate(-1)} sx={{ mt: 1, color: 'rgba(255,255,255,0.5)', textTransform: 'none' }}>
@@ -223,9 +246,22 @@ export const ModificarFestival = () => {
               </Grid>
             </Grid>
           </Box>
+
+          <Dialog 
+                open={openDeleteModal} 
+                onClose={() => setOpenDeleteModal(false)}
+                sx={{'& .MuiDialog-paper': { bgcolor: '#1a1a24', color: 'white', borderRadius: 3, border: '1px solid rgba(255,255,255,0.1)' } }}
+            >
+                <DialogTitle sx={{ color: '#FF6B6B' }}>¿Estás seguro?</DialogTitle>
+                <DialogActions sx={{ p: 2, pt: 0 }}>
+                <Button onClick={() => setOpenDeleteModal(false)} sx={{ color: 'rgba(255,255,255,0.6)' }}>Cancelar</Button>
+                <Button onClick={handleDelete} color="error" variant="contained" disabled={deleting} sx={{ borderRadius: 2, fontWeight: 'bold' }}>
+                    {deleting ? <CircularProgress size={20} color="inherit" /> : 'Sí, eliminarlo'}
+                </Button>
+                </DialogActions>
+            </Dialog>
         </Paper>
       </Box>
     </Box>
   );
-
 }
