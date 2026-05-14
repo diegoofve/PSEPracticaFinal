@@ -11,10 +11,6 @@ ENDPOINT PARA COGER DATOS DE PERFIL
 
 registrar las rutas y dtos nuevos en swagger
 
-revisar los regex de el auth.dto.ts porque no me fio de claude y ver si quiza no seria mejor hacer las validaciones con funciones aparte o algo para devolver errores mejor
-
-errorHandler (ver todos los TODO:err para ver donde hay que sustituir errores)
-
 acabar todo el apartado de festivales (controller, service, dtos)
 
 endpoint para ver mis datos (datos de usuario-empresa/usuario-cliente)
@@ -45,7 +41,7 @@ panel de admin
 - [x] Alta de festivales
 - [x] Front de alta de festis
 - [ ] Listado de festivales propios
-- [x] Edicion de festivales si quedan mas de 3 dias
+- [x] Front edicion de festivales si quedan mas de 3 dias
 - [ ] Cancelacion de festis
 - [x] Front cancelación festis
 - [ ] Visualizar informacion de ventas propia

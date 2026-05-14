@@ -1,3 +1,5 @@
+import type {  Request, Response } from 'express';
+
 // Comprueba si un string es un email válido usando una expresión regular
 export const isValidEmail = (email: string): boolean => {
     const emailRegex: RegExp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
@@ -22,3 +24,5 @@ export const isEmptyObject = (args: unknown): boolean => {
 export const isValidDate = (fecha: Date): boolean => {
     return fecha >= new Date();
 }
+
+export const tempEndpoint = (req: Request, res: Response) => {res.status(301).json({error: "WIP endpoint"})}
