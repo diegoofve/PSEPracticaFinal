@@ -1,17 +1,11 @@
 /*
-
 servicio de integración de API spotify?? --> servicio externo, no obligatorio
 -->> pulsera cashless?<<--
 
-comprar abonos a festivales (solo clientes) -> generar compra para enviar a API de pago del profe 
-    después de esto -> generar QR (la entrada) e id único
-    añadir a histórico de abonos (en modificarperfil)
-    verificar que el stock es suficiente
-    
 
+    verificar que el stock es suficiente
 */
 
-import {QrCodeSVG} from 'react-qrcode-logo';
 
 import { useEffect, useState } from 'react';
 import { Box, Container, Typography, CircularProgress, Grid } from '@mui/material';

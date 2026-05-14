@@ -1,13 +1,9 @@
 /*
-cada gestoria tiene que ver sus ventas totales + mostrar tus festivales + ingreso es solo la compra de abonos (sin contar cancelados)
-
 crear festivales (nombre festival, ubicación, aforo, descripción, fecha_ini, fecha_fin, precio por abono) --> se envia a pendiente
-
 modificar festivales (solo 3 dias antes del festival) --> hacer para solo 3 dias antes
 eliminarlos festivales?? lo mismo que cancelarlo
 
-  diferente tipo de abono para cada festival??
-
+diferente tipo de abono para cada festival??
 
 falta terminar de poner el eliminar festival (poner que si esta viendo/modificando un festival puedas modificarlo, si lo estas creando no)
 */

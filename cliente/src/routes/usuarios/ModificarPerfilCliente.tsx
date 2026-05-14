@@ -1,5 +1,3 @@
-//modificar perfil + delete perfil de cliente
-
 import { useState, useEffect } from 'react';
 import { Box, Typography, TextField, Button, CircularProgress, Alert, Grid, Paper, InputAdornment,
 Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@mui/material';
@@ -33,7 +31,7 @@ export const ModificarPerfilCliente = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await api.get('/');//endpoint para ver mis datos??
+        const response = await api.get('/cliente/{$id}');//endpoint para ver mis datos??
         const userData = response.data;
 
         if (userData.cif) {

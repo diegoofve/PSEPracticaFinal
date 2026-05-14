@@ -13,6 +13,8 @@ import {
   CreditCard, 
   ConfirmationNumber 
 } from '@mui/icons-material';
+
+import {QRCodeSVG} from 'qrcode.react';
 import { styled } from '@mui/material/styles';
 import { api } from "../../lib/api";
 
@@ -27,10 +29,10 @@ const ExpandMore = styled((props: any) => { //esto expande para mostrar los abon
   }),
 }));
 
-const 
-
 export const FestivalCard = ({ festival }: { festival: any }) => {
   const [expanded, setExpanded] = useState(false);
+  const [openQR, setOpenQR] = useState(false);
+  const [datosVenta, setDatosVenta] = useState<any>(null);
   const [openPayment, setOpenPayment] = useState(false);
   const [selectedAbono, setSelectedAbono] = useState<any>(null);
   const [paymentForm, setPaymentForm] = useState({
@@ -38,6 +40,7 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
     cardNumber: '',
     expiryDate: '',
     cvv: '',
+  
   });
 
   const [toast, setToast] = useState({ open: false, message: '', severity: 'success' as 'success' | 'error' });//para mostrar mensajes error/exito al comprar el abono
@@ -56,8 +59,14 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
         expiryDate: btoa(paymentForm.expiryDate),// en base64
         cvv: btoa(paymentForm.cvv)// en basee 64
       };
-      await api.post('/payment', payload);//falta el endpoint de compra de abono
+
+      const {data} = await api.post('/payment', payload);//falta el endpoint de compra de abono
       setToast({ open: true, message: 'Abono comprado', severity: 'success' });
+
+      setDatosVenta(data);
+      setOpenPayment(false);
+      setOpenQR(true);
+
       setOpenPayment(false);
     } catch (error) {
       setToast({ open: true, message: 'Error al procesar el pago.', severity: 'error' });
@@ -175,9 +184,44 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
         </DialogActions>
       </Dialog>
 
+      <Dialog open={openQR} onClose={() => setOpenQR(false)} className="fest-payment-dialog">
+        <DialogTitle sx={{ textAlign: 'center', fontWeight: 'bold', color: '#00C2FF' }}>
+          ¡Entrada lista!
+        </DialogTitle>
+        <DialogContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Typography variant="body2" sx={{ mb: 3, color: 'rgba(255,255,255,0.7)', textAlign: 'center' }}>
+            Presenta este código en el control de acceso del festival.
+          </Typography>
+
+          <Box sx={{ p: 2, bgcolor: 'white', borderRadius: 2, display: 'inline-block' }}>
+            <QRCodeSVG 
+              value={JSON.stringify({
+                vId: datosVenta?.ventaId,
+                cId: datosVenta?.clienteId,
+                f: festival.nombre,
+                t: selectedAbono?.tipo
+              })}
+              size={200}
+            />
+          </Box>
+
+          <Box sx={{ mt: 3, width: '100%', bgcolor: 'rgba(255,255,255,0.05)', p: 2, borderRadius: 2 }}>
+            <Typography variant="subtitle2" color="secondary">ID Transacción: #{datosVenta?.ventaId}</Typography>
+            <Typography variant="body2">Abono: {selectedAbono?.tipo}</Typography>
+            <Typography variant="body2">Fecha: {new Date().toLocaleDateString()}</Typography>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenQR(false)} fullWidth sx={{ color: 'white' }}>
+            Cerrar
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <Snackbar open={toast.open} autoHideDuration={4000} onClose={() => setToast({...toast, open: false})}>
         <Alert severity={toast.severity} variant="filled">{toast.message}</Alert>
       </Snackbar>
     </Card>
+      
   );
 };
