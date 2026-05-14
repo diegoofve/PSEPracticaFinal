@@ -11,7 +11,7 @@ import LayersIcon from '@mui/icons-material/Layers';
 import { api } from '../../lib/api';
 import './GestionAbonos.css'
 
-export const HistorialAbonos = () => {
+export const GestionAbonos = () => {
   const [compras, setCompras] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);

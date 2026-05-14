@@ -18,7 +18,7 @@ import FestivalIcon from '@mui/icons-material/Festival';
 import { api } from '../../lib/api';
 import './DatosEmpresa.css';
 
-export const StatsVentas = () => {
+export const DatosEmpresa = () => {
   const [data, setData] = useState<{ totalGanado: number; festivales: any[] } | null>(null);
   const [loading, setLoading] = useState(true);
 
