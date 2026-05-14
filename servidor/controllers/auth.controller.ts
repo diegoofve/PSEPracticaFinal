@@ -1,7 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
-import { LoginSchema, RegisterClienteSchema, RegisterEmpresaSchema, UpdateClienteSchema, UpdateEmpresaSchema } from '../dtos/auth.dto';
+import { LoginSchema, RegisterClienteSchema, RegisterEmpresaSchema } from '../dtos/auth.dto';
 import { AuthService } from '../services/auth.service';
-import { isEmptyObject } from '../lib/util';
 import { BadRequestError } from '../lib/errors';
 import 'passport' //para req.user
 import { logger } from '../lib/logger';
@@ -72,94 +71,8 @@ const registerEmpresa = async (req: Request, res: Response, next: NextFunction):
     }
 }
 
-const updateCliente = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try{
-        const validation = UpdateClienteSchema.safeParse(req.body);
-
-        if (!validation.success) {
-            const issue = validation.error.issues[0]
-            const mensaje = ERRORES_GENERICOS.includes(issue.code)
-                ? 'Request no válida'
-                : issue.message
-            throw new BadRequestError(mensaje)
-            return;
-        }
-
-        if(isEmptyObject(validation.data)){
-            throw new BadRequestError("Debes proporcionar datos a actualizar.")
-            return;
-        }
-
-        const clienteId = (req.user as any).id
-
-        await AuthService.updateCliente(clienteId, validation.data);
-        logger.info("Update de cliente exitosa.")
-        res.status(200).json({ result: "actualizado correctamente "});
-
-    }catch(err){
-        next(err)
-    }
-}
-
-const updateEmpresa = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try{
-        const validation = UpdateEmpresaSchema.safeParse(req.body);
-
-        if (!validation.success) {
-            const issue = validation.error.issues[0]
-            const mensaje = ERRORES_GENERICOS.includes(issue.code)
-                ? 'Request no válida'
-                : issue.message
-            throw new BadRequestError(mensaje)
-            return;
-        }
-
-        if(isEmptyObject(validation.data)){
-            throw new BadRequestError("Debes proporcionar datos a actualizar.")
-            return;
-        }
-
-        const empresaId = (req.user as any).id
-
-        await AuthService.updateEmpresa(empresaId, validation.data);
-        logger.info("Update de empresa exitosa.")
-        res.status(200).json({ result: "actualizado correctamente "});
-
-    }catch(err){
-        next(err)
-    }
-}
-
-const deleteCliente = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try{
-        const clienteId = (req.user as any).id
-
-        await AuthService.deleteCliente(clienteId);
-        logger.info("Cliente dado de baja exitosamente.")
-        res.status(204).send();
-    }catch(err){
-        next(err)
-    }
-}
-
-const deleteEmpresa = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try{
-        const empresaId = (req.user as any).id
-
-        await AuthService.deleteCliente(empresaId);
-        logger.info("Empresa dada de baja exitosamente.")
-        res.status(204).send();
-    }catch(err){
-        next(err)
-    }
-}
-
 export const AuthController = {
     login,
     registerCliente,
     registerEmpresa,
-    updateCliente,
-    updateEmpresa,
-    deleteCliente,
-    deleteEmpresa
 };

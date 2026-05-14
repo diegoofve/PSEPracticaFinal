@@ -1,4 +1,4 @@
-import type { LoginDto, RegisterClienteDto, RegisterEmpresaDto, UpdateClienteDto, UpdateEmpresaDto } from "../dtos/auth.dto"
+import type { LoginDto, RegisterClienteDto, RegisterEmpresaDto } from "../dtos/auth.dto"
 import { prisma } from '../lib/db';
 import bcrypt from 'bcryptjs';
 import jwt from "jsonwebtoken";
@@ -127,82 +127,8 @@ const registerEmpresa = async (data: RegisterEmpresaDto): Promise<void> => {
     ])
 }
 
-const updateCliente = async (clienteId: number, data: UpdateClienteDto): Promise<void> => {
-    const result = await prisma.cliente.findUnique({
-        where: {id: clienteId}
-    })
-
-    if(!result){
-        throw new UnauthorizedError("Credenciales incorrectas.");
-    }
-
-    await prisma.cliente.update({
-        where: {id: clienteId},
-        data: data
-    })
-}
-
-const updateEmpresa = async (empresaId: number, data: UpdateEmpresaDto): Promise<void> => {
-    const result = await prisma.empresa.findUnique({
-        where: {id: empresaId}
-    })
-
-    if(!result){
-        throw new UnauthorizedError("Credenciales incorrectas.")
-    }
-
-    await prisma.empresa.update({
-        where: {id: empresaId},
-        data: data
-    })
-}
-
-const deleteCliente = async (clienteId: number): Promise<void> => {
-    const result = await prisma.cliente.findUnique({
-        where: {id: clienteId}
-    })
-
-    if(!result){
-        throw new UnauthorizedError("Credenciales incorrectas.")
-    }
-
-    await prisma.$transaction([
-        prisma.registroEmail.delete({
-            where: {email: result.email}
-        }),
-        prisma.cliente.update({
-            where: { id: clienteId },
-            data: { fechaBaja: new Date() }
-        })
-    ])
-}
-
-const deleteEmpresa = async (empresaId: number): Promise<void> => {
-    const result = await prisma.empresa.findUnique({
-        where: {id: empresaId}
-    })
-
-    if(!result){
-        throw new UnauthorizedError("Credenciales incorrectas.")
-    }
-
-    await prisma.$transaction([
-        prisma.registroEmail.delete({
-            where: {email: result.email}
-        }),
-        prisma.empresa.update({
-            where: { id: empresaId },
-            data: { fechaBaja: new Date() }
-        })
-    ])
-}
-
 export const AuthService = {
     login,
     registerCliente,
     registerEmpresa,
-    updateCliente,
-    updateEmpresa,
-    deleteCliente,
-    deleteEmpresa
 }

@@ -1,5 +1,7 @@
 import { OpenAPIRegistry, OpenApiGeneratorV3 } from "@asteasolutions/zod-to-openapi"
-import { LoginSchema, RegisterClienteSchema, RegisterEmpresaSchema, UpdateClienteDto, UpdateClienteSchema, UpdateEmpresaSchema } from "../dtos/auth.dto"
+import { LoginSchema, RegisterClienteSchema, RegisterEmpresaSchema } from "../dtos/auth.dto"
+import { UpdateClienteSchema } from "../dtos/clientes.dto"
+import { UpdateEmpresaSchema } from "../dtos/empresa.dto"
 import { z } from "zod"
 import { NewFestivalSchema } from "../dtos/festival.dto"
 

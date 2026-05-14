@@ -17,7 +17,6 @@ export const RegisterClienteSchema = z.object({
     telefono: z.string().regex(/^(\+34|0034|34)?[6789]\d{8}$/, 'Teléfono no válido.'),
     email: z.email("Email no válido.").openapi({ example: 'test@test.com'}),
     password: z.string().min(8, "La contraseña debe tener al menos 8 caracteres.").openapi({ example: 'contraseña123'}),
-
 }).strict().openapi('RegisterClienteDto');
 
 export const RegisterEmpresaSchema = z.object({
@@ -30,24 +29,8 @@ export const RegisterEmpresaSchema = z.object({
     password: z.string().min(8, "La contraseña debe tener al menos 8 caracteres.").openapi({ example: 'contraseña123'})
 }).strict().openapi('RegisterEmpresaDto');
 
-export const UpdateClienteSchema = z.object({
-    nombre: z.string().optional().openapi({ example: 'Pepe'}),
-    apellidos: z.string().optional().openapi({ example: 'Garcia Ejemplo'}),
-    fechaNacimiento: z.coerce.date().refine(esMayorDeEdad, 'Debes ser mayor de edad para registrarte.').optional().openapi({ example: "2000-01-01"}),
-    telefono: z.string().regex(/^(\+34|0034|34)?[6789]\d{8}$/, 'Teléfono no válido.').optional().openapi({ example: "666123456"}),
-    password: z.string().min(8, "La contraseña debe tener al menos 8 caracteres.").optional().openapi({ example: 'contraseña123'}),
-}).strict().openapi('UpdateClienteDto');
-
-export const UpdateEmpresaSchema = z.object({
-    razon: z.string().optional().openapi({ example: 'Google Spain, S.L.'}),
-    domicilio: z.string().optional().openapi({ example: 'Calle Gran Vía 10, 28013 Madrid'}),
-    nombreContacto: z.string().optional().openapi({ example: 'Pepe Contacto Garcia'}),
-    telefono: z.string().regex(/^(\+34|0034|34)?[6789]\d{8}$/, 'Teléfono no válido.').optional().openapi({ example: "666123456"}),
-    password: z.string().min(8, "La contraseña debe tener al menos 8 caracteres.").optional().openapi({ example: 'contraseña123'})
-}).strict().openapi('UpdateEmpresaDto');
 
 export type LoginDto = z.infer<typeof LoginSchema>;
 export type RegisterClienteDto = z.infer<typeof RegisterClienteSchema>;
 export type RegisterEmpresaDto = z.infer<typeof RegisterEmpresaSchema>;
-export type UpdateClienteDto = z.infer<typeof UpdateClienteSchema>;
-export type UpdateEmpresaDto = z.infer<typeof UpdateEmpresaSchema>;
+

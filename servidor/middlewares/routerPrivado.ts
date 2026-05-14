@@ -3,8 +3,9 @@ import passport from 'passport';
 import { FestivalController } from '../controllers/festival.controller';
 import { authorize } from './auth';
 import { AuthController } from '../controllers/auth.controller';
-
 import { tempEndpoint } from '../lib/util';
+import { ClienteController } from '../controllers/cliente.controller';
+import { EmpresaController } from '../controllers/empresa.controller';
 
 const routerPrivado = Router();
 
@@ -20,30 +21,22 @@ tempEndpoint) //crear nuevos abonos
 routerPrivado.delete('/festivales', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
 tempEndpoint)
 
-//Admin
-routerPrivado.put('/admin', passport.authenticate('jwt', { session: false }), authorize(["ADMIN"]), 
-tempEndpoint) //verificar empresa o banear empresa o usuario
-routerPrivado.get('/empresas', passport.authenticate('jwt', { session: false }), authorize(["ADMIN"]), 
-tempEndpoint)
-routerPrivado.get('/clientes', passport.authenticate('jwt', { session: false }), authorize(["ADMIN"]), 
-tempEndpoint)
-
 //Perfil de cliente
-routerPrivado.get('/cliente', passport.authenticate('jwt', { session: false }), authorize(["CLIENTE"]),
-tempEndpoint) //devolver la info de un cliente
+routerPrivado.get('/cliente/:id', passport.authenticate('jwt', { session: false }), authorize(["CLIENTE"]),
+ClienteController.verCliente) //devolver la info de un cliente
 routerPrivado.put('/cliente', passport.authenticate('jwt', { session: false }), authorize(["CLIENTE"]),
-AuthController.updateCliente)
+ClienteController.updateCliente)
 routerPrivado.delete('/cliente', passport.authenticate('jwt', { session: false }), authorize(["CLIENTE"]),
-AuthController.deleteCliente)
+ClienteController.deleteCliente)
 
 
 //Perfil de empresa
-routerPrivado.get('/empresa', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]),
-tempEndpoint)// devolver info de una empresa
+routerPrivado.get('/empresa/:id', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]),
+EmpresaController.verEmpresa)// devolver info de una empresa
 routerPrivado.put('/empresa', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
-AuthController.updateEmpresa)
+EmpresaController.updateEmpresa)
 routerPrivado.delete('/empresa', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
-AuthController.deleteEmpresa)
+EmpresaController.deleteEmpresa)
 
 //Pagos
 routerPrivado.post('/payment', passport.authenticate('jwt', { session: false }), authorize(["CLIENTE"]), 
@@ -52,5 +45,13 @@ routerPrivado.get('/cliente/abonos', passport.authenticate('jwt', { session: fal
 tempEndpoint) //ver los abonos comprados por un cliente
 routerPrivado.get('/empresa/ventas', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
 tempEndpoint)
+
+//Admin
+routerPrivado.put('/admin', passport.authenticate('jwt', { session: false }), authorize(["ADMIN"]), 
+tempEndpoint) //verificar empresa o banear empresa o usuario
+routerPrivado.get('/empresas', passport.authenticate('jwt', { session: false }), authorize(["ADMIN"]), 
+EmpresaController.verEmpresas)
+routerPrivado.get('/clientes', passport.authenticate('jwt', { session: false }), authorize(["ADMIN"]), 
+ClienteController.verClientes)
 
 export default routerPrivado;

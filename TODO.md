@@ -4,8 +4,6 @@ Cosas a hacer:
 
 ARREGLAR LO DE LOS ABONOS EN AÑADIR FESTIVALES
 
-no es un bug como tal pero comprobar que funcione bien el login automatico del front
-ENDPOINT PARA COGER DATOS DE PERFIL
 
 ## BACK
 
@@ -14,8 +12,6 @@ pasar de codigo ascii del front que envia la tarjeta de credito a codigo normal 
 registrar las rutas y dtos nuevos en swagger
 
 acabar todo el apartado de festivales (controller, service, dtos)
-
-endpoint para ver mis datos (datos de usuario-empresa/usuario-cliente)
 
 cositas de admin
 
@@ -33,7 +29,8 @@ panel de admin
 - [x] Eliminacion de cuenta propia  
   Al borrar cuentas de usuario, settear el correo (y cualquier otro campo unique) a null
 - [x] Modificacion de perfil de usuario **(opcional)**
-- [ ] Integracion de loggin y especificacion OpenAPI **(opcional)**
+- [X] Integracion de loggin 
+- [ ] y especificacion OpenAPI **(opcional)**
 
 ## ADMINISTRACION
 - [ ] Consulta de gestoras, verificaciones y bloqueo
