@@ -16,11 +16,6 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use((req, res, next) => { //de momento dejar por debug. loguea todas las peticiones. cambiar a middleware de loggeo eventualmente
-    console.log(`${req.method} ${req.path}`)
-    next()
-})
-
 app.use('/api', swaggerUi.serve, swaggerUi.setup(generateSwaggerSpec()));
 
 passport.use('jwt', JWTStrategy);
