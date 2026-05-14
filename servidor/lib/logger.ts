@@ -25,3 +25,26 @@ export const logger = pino({
         ]
     }
 });
+
+export const requestLogger = pino({
+    transport: {
+        targets: [
+            {
+                target: 'pino-pretty',
+                level: 'info',
+                options: { colorize: true, translateTime: 'SYS: HH:MM:ss' }
+            },
+            {
+                target: 'pino-roll',
+                level: 'info',
+                options: {
+                    file: path.join(LOG_DIR, 'requests.log'),
+                    frequency: 'daily',
+                    dateFormat: 'yyyy-MM-dd',
+                    mkdir: true,
+                    size: '50m'
+                }
+            }
+        ]
+    }
+})

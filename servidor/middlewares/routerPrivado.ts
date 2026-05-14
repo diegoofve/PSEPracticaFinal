@@ -17,7 +17,7 @@ routerPrivado.put('/festivales', passport.authenticate('jwt', { session: false }
 tempEndpoint) //editar un festival
 routerPrivado.post('/festivales/nuevoAbono', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
 tempEndpoint) //crear nuevos abonos
-routerPrivado.delete(passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
+routerPrivado.delete('/festivales', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
 tempEndpoint)
 
 //Admin

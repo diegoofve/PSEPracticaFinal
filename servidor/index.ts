@@ -7,6 +7,7 @@ import { generateSwaggerSpec } from './middlewares/swaggerConfig.ts';
 import routerPublico from './middlewares/routerPublico.ts';
 import routerPrivado from './middlewares/routerPrivado.ts';
 import { errorHandler } from './middlewares/errorHandler.ts';
+import { requestLoggerMiddleware } from './middlewares/requestLogger.ts';
 
 const PORT = 3000;
 
@@ -24,6 +25,8 @@ app.use('/api', swaggerUi.serve, swaggerUi.setup(generateSwaggerSpec()));
 
 passport.use('jwt', JWTStrategy);
 app.use(passport.initialize());
+
+app.use(requestLoggerMiddleware);
 
 //aquí deberíamos poner las rutas protegidas y las no protegidas
 app.use(routerPublico);
