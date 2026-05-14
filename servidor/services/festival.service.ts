@@ -1,5 +1,6 @@
 import type { NewFestivalDto } from "../dtos/festival.dto"
 import {prisma} from "../lib/db";
+import { ForbiddenError, NotFoundError } from "../lib/errors";
 
 const crearFestival = async (empresaId: number, data: NewFestivalDto) => {
     const empresa = await prisma.empresa.findUnique({
@@ -7,19 +8,11 @@ const crearFestival = async (empresaId: number, data: NewFestivalDto) => {
     })
 
     if (!empresa){
-        throw new Error("Empresa no encontrada")//TODO:err
+        throw new NotFoundError("Empresa no encontrada.")
     }
 
     if (empresa.estado !== "VERIFICADA"){
-        //throw new Error("La empresa no está verificada")//TODO:err
-    }
-
-    if (data.fechaFin <= data.fechaInicio){
-        throw new Error("La fecha de fin debe ser posterior a la de inicio")//TODO:err
-    }
-
-    if (data.fechaInicio <= new Date){
-        throw new Error("La fecha de inicio no puede ser pasada")//TODO:err
+        throw new ForbiddenError("La empresa no está verificada.")
     }
 
     const festival = await prisma.festival.create({

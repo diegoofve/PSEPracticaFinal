@@ -1,9 +1,9 @@
 Cosas a hacer:
 
 # EN GRANDE PORQUE TIENE QUE SER LO PRIMERO A ARREGLAR MAÑANA POR LA MAÑANA
-poner todos los errores para el error handler 
+
 ARREGLAR LO DE LOS ABONOS EN AÑADIR FESTIVALES
-ARREGLAR LOS DELETE QUE SE ESTAN SALTANDO TODA LA LOGICA QUE HEMOS PUESTO!!! borran los clientes en vez de poner fecha de baja y no borran mails de emails_registrados
+
 no es un bug como tal pero comprobar que funcione bien el login automatico del front
 ENDPOINT PARA COGER DATOS DE PERFIL
 

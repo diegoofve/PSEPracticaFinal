@@ -2,7 +2,7 @@ import type { LoginDto, RegisterClienteDto, RegisterEmpresaDto, UpdateClienteDto
 import { prisma } from '../lib/db';
 import bcrypt from 'bcryptjs';
 import jwt from "jsonwebtoken";
-import { BadRequestError, FatalError, GonePermanentlyError, UnauthorizedError } from "../lib/errors";
+import {  ConflictError, FatalError, GonePermanentlyError, UnauthorizedError } from "../lib/errors";
 
 const JWT_SECRET = process.env.JWT_SECRET || "mi_clave_super_secreta"
 
@@ -10,7 +10,7 @@ const login = async (data: LoginDto): Promise<string> => {
     //comprobar primero si el ususario es el admin
     if (data.email === process.env.ADMIN_EMAIL) {
         const esAdmin = await bcrypt.compare(data.password, process.env.ADMIN_PASSWORD!)
-        if (!esAdmin) throw new Error("Credenciales incorrectas")
+        if (!esAdmin) throw new UnauthorizedError("Credenciales incorrectas.")
         return jwt.sign({ rol: "ADMIN" }, JWT_SECRET, { expiresIn: "8h" })
     }
 
@@ -19,21 +19,21 @@ const login = async (data: LoginDto): Promise<string> => {
     })
 
     if (!registro){
-        throw new UnauthorizedError("Credenciales incorrectas");
+        throw new UnauthorizedError("Credenciales incorrectas.");
     }
 
     if (registro.baneado){
-        throw new GonePermanentlyError("Cuenta suspendida permanentemente");
+        throw new GonePermanentlyError("Cuenta suspendida permanentemente.");
     }
 
     if (registro.tipo === "CLIENTE") {
         const cliente = await prisma.cliente.findFirst({
             where: { email: data.email, fechaBaja: null }
         })
-        if (!cliente) throw new UnauthorizedError("Credenciales incorrectas")
+        if (!cliente) throw new UnauthorizedError("Credenciales incorrectas.")
 
         const passwordCorrecta = await bcrypt.compare(data.password, cliente.password)
-        if (!passwordCorrecta) throw new UnauthorizedError("Credenciales incorrectas")
+        if (!passwordCorrecta) throw new UnauthorizedError("Credenciales incorrectas.")
 
         return jwt.sign({ id: cliente.id, rol: "CLIENTE" }, JWT_SECRET, { expiresIn: "8h" })
     }
@@ -42,10 +42,10 @@ const login = async (data: LoginDto): Promise<string> => {
         const empresa = await prisma.empresa.findFirst({
             where: { email: data.email, fechaBaja: null }
         })
-        if (!empresa) throw new UnauthorizedError("Credenciales incorrectas")
+        if (!empresa) throw new UnauthorizedError("Credenciales incorrectas.")
 
         const passwordCorrecta = await bcrypt.compare(data.password, empresa.password)
-        if (!passwordCorrecta) throw new UnauthorizedError("Credenciales incorrectas")
+        if (!passwordCorrecta) throw new UnauthorizedError("Credenciales incorrectas.")
 
         return jwt.sign({ id: empresa.id, rol: "EMPRESA", estado: empresa.estado }, JWT_SECRET, { expiresIn: "8h" })
     }
@@ -59,34 +59,35 @@ const registerCliente = async (data: RegisterClienteDto): Promise<void> => {
     })
 
     if (emailExiste){
-        throw new Error("El email ya está en uso");//TODO:err
+        throw new ConflictError("El email ya está en uso.");
     }
 
     const dniExiste = await prisma.cliente.findFirst({
-        where: { dni: data.dni }
+        where: { dni: data.dni, fechaBaja: null }
     })
 
     if (dniExiste){
-        throw new Error("El DNI ya está en uso");//TODO:err
+        throw new ConflictError("El DNI ya está en uso.");
     }
 
     const hash = await bcrypt.hash(data.password, 10)
 
-    await prisma.registroEmail.create({
-        data: { email: data.email, tipo: "CLIENTE" }
-    })
-
-    await prisma.cliente.create({
-        data: {
-            email: data.email,
-            password: hash,
-            nombre: data.nombre,
-            apellidos: data.apellidos,
-            fechaNacimiento: data.fechaNacimiento,
-            dni: data.dni,
-            telefono: data.telefono
-        }
-    })
+    await prisma.$transaction([
+        prisma.registroEmail.create({
+            data: { email: data.email, tipo: "CLIENTE" }
+        }), 
+        prisma.cliente.create({
+            data: {
+                email: data.email,
+                password: hash,
+                nombre: data.nombre,
+                apellidos: data.apellidos,
+                fechaNacimiento: data.fechaNacimiento,
+                dni: data.dni,
+                telefono: data.telefono
+            }
+        })
+    ])
 }
 
 const registerEmpresa = async (data: RegisterEmpresaDto): Promise<void> => {
@@ -95,34 +96,35 @@ const registerEmpresa = async (data: RegisterEmpresaDto): Promise<void> => {
     })
 
     if (emailExiste){
-        throw new Error("El email ya está en uso");//TODO:err
+        throw new ConflictError("El email ya está en uso.");
     }
 
     const cifExiste = await prisma.empresa.findFirst({
-        where: { cif: data.cif }
+        where: { cif: data.cif, fechaBaja: null }
     })
 
     if (cifExiste){
-        throw new Error("El CIF ya está en uso");//TODO:err
+        throw new ConflictError("El CIF ya está en uso.");
     }
 
     const hash = await bcrypt.hash(data.password, 10)
 
-    await prisma.registroEmail.create({
-        data: { email: data.email, tipo: "EMPRESA" }
-    })
-
-    await prisma.empresa.create({
-        data: {
-            email: data.email,
-            password: hash,
-            razonSocial: data.razon,
-            cif: data.cif,
-            domicilioSocial: data.domicilio,
-            nombreContacto: data.nombreContacto,
-            telefonoContacto: data.telefono
-        }
-    })
+    await prisma.$transaction([
+        prisma.registroEmail.create({
+            data: { email: data.email, tipo: "EMPRESA" }
+        }),
+        prisma.empresa.create({
+            data: {
+                email: data.email,
+                password: hash,
+                razonSocial: data.razon,
+                cif: data.cif,
+                domicilioSocial: data.domicilio,
+                nombreContacto: data.nombreContacto,
+                telefonoContacto: data.telefono
+            }
+        })
+    ])
 }
 
 const updateCliente = async (clienteId: number, data: UpdateClienteDto): Promise<void> => {
@@ -131,7 +133,7 @@ const updateCliente = async (clienteId: number, data: UpdateClienteDto): Promise
     })
 
     if(!result){
-        throw new Error("cliente inexistente") //TODO:err
+        throw new UnauthorizedError("Credenciales incorrectas.");
     }
 
     await prisma.cliente.update({
@@ -146,7 +148,7 @@ const updateEmpresa = async (empresaId: number, data: UpdateEmpresaDto): Promise
     })
 
     if(!result){
-        throw new Error("empresa inexistente") //TODO:err
+        throw new UnauthorizedError("Credenciales incorrectas.")
     }
 
     await prisma.empresa.update({
@@ -161,12 +163,18 @@ const deleteCliente = async (clienteId: number): Promise<void> => {
     })
 
     if(!result){
-        throw new Error("cliente inexistente") //TODO:err
+        throw new UnauthorizedError("Credenciales incorrectas.")
     }
 
-    await prisma.cliente.delete({
-        where: {id: clienteId}
-    })
+    await prisma.$transaction([
+        prisma.registroEmail.delete({
+            where: {email: result.email}
+        }),
+        prisma.cliente.update({
+            where: { id: clienteId },
+            data: { fechaBaja: new Date() }
+        })
+    ])
 }
 
 const deleteEmpresa = async (empresaId: number): Promise<void> => {
@@ -175,12 +183,18 @@ const deleteEmpresa = async (empresaId: number): Promise<void> => {
     })
 
     if(!result){
-        throw new Error("empresa inexistente") //TODO:err
+        throw new UnauthorizedError("Credenciales incorrectas.")
     }
 
-    await prisma.empresa.delete({
-        where: {id: empresaId},
-    })
+    await prisma.$transaction([
+        prisma.registroEmail.delete({
+            where: {email: result.email}
+        }),
+        prisma.empresa.update({
+            where: { id: empresaId },
+            data: { fechaBaja: new Date() }
+        })
+    ])
 }
 
 export const AuthService = {
