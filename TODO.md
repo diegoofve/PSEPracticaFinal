@@ -9,6 +9,8 @@ ENDPOINT PARA COGER DATOS DE PERFIL
 
 ## BACK
 
+pasar de codigo ascii del front que envia la tarjeta de credito a codigo normal para hacer la compra
+
 registrar las rutas y dtos nuevos en swagger
 
 acabar todo el apartado de festivales (controller, service, dtos)

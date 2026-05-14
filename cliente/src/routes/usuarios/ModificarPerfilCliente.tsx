@@ -1,4 +1,4 @@
-//modificar perfil + delete perfil
+//modificar perfil + delete perfil de cliente
 
 import { useState, useEffect } from 'react';
 import { Box, Typography, TextField, Button, CircularProgress, Alert, Grid, Paper, InputAdornment,
@@ -14,7 +14,7 @@ import BusinessIcon from '@mui/icons-material/Business';
 import HomeIcon from '@mui/icons-material/Home';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/AuthContext.tsx';
 import { api } from '../../lib/api.ts';
 import './ModificarPerfil.css';
 

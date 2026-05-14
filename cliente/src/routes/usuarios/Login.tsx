@@ -1,3 +1,5 @@
+//falta poner que si una empresa no esta validada no puede iniciar sesión
+
 import { useState } from 'react';
 import { Box, Typography, TextField, Button, CircularProgress, Alert} from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';

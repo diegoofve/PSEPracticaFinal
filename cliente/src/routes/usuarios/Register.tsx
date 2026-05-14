@@ -16,6 +16,7 @@ import { useAuth } from '../../context/AuthContext';
 import { api } from '../../lib/api.ts';
 import './Register.css';
 
+
   export const Register = () => {
     const navigate = useNavigate();
     const {login} = useAuth();

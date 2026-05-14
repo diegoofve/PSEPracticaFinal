@@ -14,7 +14,7 @@ import {Login} from './routes/usuarios/Login'
 import {Register} from './routes/usuarios/Register'
 //import {AdminPanel} from './routes/usuarios/AdminPanel'
 
-import {ModificarPerfil} from './routes/usuarios/ModificarPerfil'
+import {ModificarPerfil} from './routes/usuarios/ModificarPerfilCliente.tsx'
 
 //import {FestivalesList} from './routes/festivales/FestivalesList' //poder filtrar por lista festivales entero/festivales propios + dar de alta un festival + modificarlo y eliminarlo
 import {ModificarFestival} from './routes/festivales/ModificarFestival'

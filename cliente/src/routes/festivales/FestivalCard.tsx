@@ -27,6 +27,8 @@ const ExpandMore = styled((props: any) => { //esto expande para mostrar los abon
   }),
 }));
 
+const 
+
 export const FestivalCard = ({ festival }: { festival: any }) => {
   const [expanded, setExpanded] = useState(false);
   const [openPayment, setOpenPayment] = useState(false);
@@ -38,7 +40,7 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
     cvv: '',
   });
 
-  const [toast, setToast] = useState({ open: false, message: '', severity: 'success' as 'success' | 'error' });//para mostrar mensajes error/exito
+  const [toast, setToast] = useState({ open: false, message: '', severity: 'success' as 'success' | 'error' });//para mostrar mensajes error/exito al comprar el abono
 
   const handleConfirmPayment = async () => {
     if (!paymentForm.cardHolder || !paymentForm.cardNumber || !paymentForm.expiryDate || !paymentForm.cvv) {
@@ -49,9 +51,12 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
       const payload = {
         festivalId: festival.id,
         abonoId: selectedAbono.id,
-        ...paymentForm
+        cardHolder: paymentForm.cardHolder,// nombre de la persona sin codificar
+        cardNumber: btoa(paymentForm.cardNumber),// en base64
+        expiryDate: btoa(paymentForm.expiryDate),// en base64
+        cvv: btoa(paymentForm.cvv)// en basee 64
       };
-      await api.post('/', payload);//falta el endpoint de compra de abono
+      await api.post('/payment', payload);//falta el endpoint de compra de abono
       setToast({ open: true, message: 'Abono comprado', severity: 'success' });
       setOpenPayment(false);
     } catch (error) {
@@ -83,7 +88,7 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
         </Typography>
 
         <Typography variant="subtitle2" sx={{ color: '#00C2FF', mb: 1 }}>Line-up:</Typography>
-        <Stack direction="row" spacing={1} /*flexWrap="wrap"*/ useFlexGap sx={{ flexWrap: 'wrap', mb: 1 }}>
+        <Stack direction="row" spacing={1} /*flexWrap="wrap" me da error ns porque */ useFlexGap sx={{ flexWrap: 'wrap', mb: 1 }}>
           {festival.artistas?.map((art: string) => (
             <Chip key={art} label={art} size="small" sx={{ bgcolor: 'rgba(255,255,255,0.1)', color: 'white' }} />
           ))}
@@ -104,8 +109,7 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
           <Divider sx={{ bgcolor: 'rgba(255,255,255,0.1)', my: 2 }} />
           <Typography variant="h6" sx={{ color: 'white', mb: 2, fontSize: '1rem' }}>Selecciona tu abono:</Typography>
           <Grid container spacing={2}>
-            {/* Simulacro de abonos si el DTO no los trae explícitos */}
-            {['General', 'VIP', 'Early Bird'].map((tipo) => (
+            {['General', 'VIP'].map((tipo) => (
               <Grid size={{xs: 12}} key={tipo}>
                 <Box sx={{ 
                   display: 'flex', justifyContent: 'space-between', alignItems: 'center',

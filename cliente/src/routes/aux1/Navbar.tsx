@@ -1,4 +1,4 @@
-//change all navbar to include a full guide of all routes (home, festivales, admin panel, login/logout)
+//change all navbar to include a full guide of all routes (home, festivales, admin panel, login/logout with the necessary roles check)
 
 import { useState } from 'react';
 import { AppBar, Toolbar, Typography, Button, Box, IconButton, Menu, MenuItem } from '@mui/material';
@@ -26,12 +26,10 @@ export const Navbar = () => {
   return (
     <AppBar position="fixed" elevation={0} className="navbar-root">
 
-      {/* Subtle top glow line */}
       <div className="navbar-glow-line" />
 
       <Toolbar className="navbar-toolbar">
 
-        {/* ── Logo ── */}
         <Box className="navbar-logo" onClick={() => navigate('/')} sx={{ cursor: 'pointer' }}>
           <Box className="navbar-logo-mark">
             <MusicNoteIcon sx={{ color: '#fff', fontSize: 18 }} />
@@ -39,7 +37,6 @@ export const Navbar = () => {
           <span className="navbar-logo-text">Festival Pass</span>
         </Box>
 
-        {/* ── Desktop links ── */}
         <Box className="navbar-desktop">
           {user && (
             <button className="nav-btn-ghost" onClick={() => navigate('/FestivalesList')}>
@@ -66,7 +63,6 @@ export const Navbar = () => {
           )}
         </Box>
 
-        {/* ── Mobile hamburger ── */}
         <Box className="navbar-mobile">
           <IconButton
             className="nav-hamburger"
