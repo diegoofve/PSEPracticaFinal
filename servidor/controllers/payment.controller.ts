@@ -1,29 +1,40 @@
-import type { Request, Response } from 'express';
-import { BuyTicketDto } from '../dtos/payment.dto';
+import type { NextFunction, Request, Response } from 'express';
+import { BuyTicketSchema } from '../dtos/payment.dto';
 import { PaymentService } from '../services/payment.service';
+import 'passport';
+import { logger } from '../lib/logger';
+import { BadRequestError, UnauthorizedError } from '../lib/errors';
 
-const makePayment = async (req: Request, res: Response) => {
+const ERRORES_GENERICOS = ['unrecognized_keys', 'invalid_type'] //contiene los errores de zod que no queremos mostar por seguridad(faltan campos, tipo erroneo)
+
+
+const makePayment = async (req: Request, res: Response, next: NextFunction) => {
     try{
-        const validation = BuyTicketDto.safeParse(req.body)
+        const validation = BuyTicketSchema.safeParse(req.body)
 
-        if(!validation.success){
-            res.status(400).json({error: 'Request con datos no válidos'});
+        if (!validation.success) {
+            const issue = validation.error.issues[0]
+            const mensaje = ERRORES_GENERICOS.includes(issue.code)
+                ? 'Request no válida'
+                : issue.message
+            throw new BadRequestError(mensaje)
             return;
         }
         const clienteId = (req as any).user?.id; 
 
         if (!clienteId) {
-            res.status(401).json({ error: 'No estás autorizado para realizar esta compra' });
+            throw new UnauthorizedError("No estas autorizado para realizar la compra.")
             return;
         }
+
         const { festivalId, abonoId, cardHolder, cardNumber, expiryDate, cvv } = validation.data;
 
         const decodedCardNumber = Buffer.from(cardNumber, 'base64').toString('utf-8');
         const decodedExpiryDate = Buffer.from(expiryDate, 'base64').toString('utf-8');
         const decodedCvv = Buffer.from(cvv, 'base64').toString('utf-8');
 
-        const transaccion = await PaymentService.makePayment({
-            // hay que corregirlo clienteId,
+        await PaymentService.makePayment({
+            clienteId,
             festivalId,
             abonoId,
             cardHolder,
@@ -31,12 +42,12 @@ const makePayment = async (req: Request, res: Response) => {
             expiryDate: decodedExpiryDate,
             cvv: decodedCvv
         });
-
-        res.status(200);
+        logger.info("Pago realizado con éxito.")
+        res.status(200).json({result: "pago realizado con exito"});
+        
 
     }catch(err){
-        console.log(err);
-        res.status(500).json({error: 'Error interno del servidor'});
+        next(err);
     }
 }
 

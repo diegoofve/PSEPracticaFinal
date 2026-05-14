@@ -16,4 +16,8 @@ export const NewFestivalSchema = z.object({
     imagen: z.string().url().optional().openapi({ example: "https://ejemplo.com/primavera.jpg" }),
 }).strict().openapi("NewFestivalDto");
 
+export const NewAbonoScheme = z.object({
+    
+})
+
 export type NewFestivalDto = z.infer<typeof NewFestivalSchema>;
