@@ -64,12 +64,12 @@ export const ModificarFestival = () => {
   const [nuevoArtista, setNuevoArtista] = useState(''); //para meter artistas nuevos en el festival
 
 useEffect(() => {
-    if (!user || user.role !== 'EMPRESA') {
-      navigate(user?.role === 'CLIENTE' ? '/festivales-list' : '/login');
+    if (!user || user.rol !== 'EMPRESA') {
+      navigate(user?.rol === 'CLIENTE' ? '/festivales-list' : '/login');
     }
   }, [user, navigate]);
 
-  if (user?.role !== 'EMPRESA') return null;
+  if (user?.rol !== 'EMPRESA') return null;
 
   useEffect(() => {
     if (isEdit) {

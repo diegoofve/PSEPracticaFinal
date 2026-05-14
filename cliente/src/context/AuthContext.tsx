@@ -3,7 +3,7 @@ import {jwtDecode} from "jwt-decode";
 
 interface JwtPayload {
     sub: string;
-    role: 'CLIENTE' | 'EMPRESA' | 'ADMIN';
+    rol: 'CLIENTE' | 'EMPRESA' | 'ADMIN';
 }
 
 interface AuthContextType {

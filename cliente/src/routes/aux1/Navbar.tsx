@@ -44,7 +44,7 @@ export const Navbar = () => {
 
         <Box className="navbar-desktop">
           
-          {user?.role === 'CLIENTE' && (
+          {user?.rol === 'CLIENTE' && (
             <>
               <button className="nav-btn-ghost" onClick={() => navigate('/festivales-list')}>
                 <FestivalIcon sx={{ fontSize: 15 }} /> Festivales
@@ -58,7 +58,7 @@ export const Navbar = () => {
             </>
           )}
 
-          {user?.role === 'EMPRESA' && (
+          {user?.rol === 'EMPRESA' && (
             <>
               <button className="nav-btn-ghost" onClick={() => navigate('/datos-empresa')}>
                 <BarChartIcon sx={{ fontSize: 15 }} /> Dashboard
@@ -69,7 +69,7 @@ export const Navbar = () => {
             </>
           )}
 
-          {user?.role === 'ADMIN' && (
+          {user?.rol === 'ADMIN' && (
             <button className="nav-btn-ghost" onClick={() => navigate('/admin-panel')}>
               <AdminPanelSettingsIcon sx={{ fontSize: 15 }} /> Administración
             </button>
@@ -123,7 +123,7 @@ export const Navbar = () => {
               },
             }}}
           >
-            {user?.role === 'CLIENTE' && [
+            {user?.rol === 'CLIENTE' && [
               <MenuItem key="festivales" onClick={() => { navigate('/festivales-list'); closeMenu(); }}>
                 <FestivalIcon sx={{ fontSize: 16 }} /> Festivales
               </MenuItem>,
@@ -135,7 +135,7 @@ export const Navbar = () => {
               </MenuItem>
             ]}
 
-            {user?.role === 'EMPRESA' && [
+            {user?.rol === 'EMPRESA' && [
               <MenuItem key="dashboard" onClick={() => { navigate('/datos-empresa'); closeMenu(); }}>
                 <BarChartIcon sx={{ fontSize: 16 }} /> Dashboard
               </MenuItem>,
@@ -144,7 +144,7 @@ export const Navbar = () => {
               </MenuItem>
             ]}
 
-            {user?.role === 'ADMIN' && (
+            {user?.rol === 'ADMIN' && (
               <MenuItem onClick={() => { navigate('/admin-panel'); closeMenu(); }}>
                 <AdminPanelSettingsIcon sx={{ fontSize: 16 }} /> Administración
               </MenuItem>

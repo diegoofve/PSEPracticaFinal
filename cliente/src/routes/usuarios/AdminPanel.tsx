@@ -37,10 +37,10 @@ export const AdminPanel = () => {
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
     useEffect(() => {
-        if (!user || user.role !== 'ADMIN') {
-            if (user?.role === 'EMPRESA') {
+        if (!user || user.rol !== 'ADMIN') {
+            if (user?.rol === 'EMPRESA') {
                 navigate('/modificar-festival');
-            } else if (user?.role === 'CLIENTE') {
+            } else if (user?.rol === 'CLIENTE') {
                 navigate('/festivales-list');
             } else {
                 navigate('/login');

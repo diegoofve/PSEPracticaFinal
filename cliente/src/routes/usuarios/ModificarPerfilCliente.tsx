@@ -34,10 +34,10 @@ export const ModificarPerfilCliente = () => {
   const { user } = useAuth();
 
   useEffect(() => {
-    if (!user || user.role !== 'CLIENTE') {
-      if (user?.role === 'ADMIN') {
+    if (!user || user.rol !== 'CLIENTE') {
+      if (user?.rol === 'ADMIN') {
         navigate('/AdminPanel');
-      } else if (user?.role === 'EMPRESA') {
+      } else if (user?.rol === 'EMPRESA') {
         navigate('/DatosEmpresa');
       } else {
         navigate('/login');
@@ -66,7 +66,7 @@ export const ModificarPerfilCliente = () => {
     
   }, [user, navigate]);
 
-  if (user?.role !== 'CLIENTE') return null;
+  if (user?.rol !== 'CLIENTE') return null;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

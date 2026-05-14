@@ -1,9 +1,7 @@
 /*
 servicio de integración de API spotify?? --> servicio externo, no obligatorio
-
     verificar que el stock es suficiente
 */
-
 
 import { useEffect, useState } from 'react';
 import { Box, Container, Typography, CircularProgress, Grid } from '@mui/material';
@@ -21,10 +19,11 @@ export const FestivalesList = () => {
 
     useEffect(() => {
       if (authLoading) return;
-        if (!user || user.role !== 'CLIENTE') {
-        navigate(user?.role === 'EMPRESA' ? '/ModificarFestival' : '/login');
+        if (!user || user.rol !== 'CLIENTE') {
+        navigate(user?.rol === 'EMPRESA' ? '/ModificarFestival' : '/login');
         return;
-       }
+       
+      }
         const loadFestivales = async () => {
         try {
         const response = await api.get('/festivales');
@@ -36,9 +35,9 @@ export const FestivalesList = () => {
         }
         };
         loadFestivales();
-    }  , [user,navigate]);
+    } , [user,navigate, authLoading]);
 
-    if (authLoading || (loadingData && user?.role === 'CLIENTE')) {
+    if (authLoading || (loadingData && user?.rol === 'CLIENTE')) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}>
         <CircularProgress color="secondary" />
@@ -46,7 +45,7 @@ export const FestivalesList = () => {
     );
   }
 
-    if (user?.role !== 'CLIENTE') return null;
+    if (user?.rol !== 'CLIENTE') return null;
 
   return (
     <Box className="fest-admin-root" sx={{ py: 8 }}>

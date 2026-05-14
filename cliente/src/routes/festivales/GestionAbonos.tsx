@@ -22,8 +22,8 @@ export const GestionAbonos = () => {
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
   useEffect(() => {
-    if (!user || user.role !== 'CLIENTE') {
-      navigate(user?.role === 'EMPRESA' ? '/ModificarFestival' : '/login');
+    if (!user || user.rol !== 'CLIENTE') {
+      navigate(user?.rol === 'EMPRESA' ? '/ModificarFestival' : '/login');
       return;
     }
     const fetchHistorial = async () => {
@@ -40,7 +40,7 @@ export const GestionAbonos = () => {
     fetchHistorial();
   }, [user, navigate]);
 
-  if (user?.role !== 'CLIENTE') return null;
+  if (user?.rol !== 'CLIENTE') return null;
 
   if (loading) {
     return (
