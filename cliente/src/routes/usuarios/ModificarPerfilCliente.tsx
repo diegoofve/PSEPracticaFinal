@@ -1,6 +1,5 @@
 //queda cambiar algo de la validacion
 
-
 import { useState, useEffect } from 'react';
 import { Box, Typography, TextField, Button, CircularProgress, Alert, Grid, Paper, InputAdornment,
 Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@mui/material';
@@ -16,7 +15,6 @@ import HomeIcon from '@mui/icons-material/Home';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 
 import { useAuth } from '../../context/AuthContext.tsx';
-import {useNavigate} from 'react-router-dom';
 
 import { api } from '../../lib/api.ts';
 import './ModificarPerfilCliente.css';
@@ -36,9 +34,19 @@ export const ModificarPerfilCliente = () => {
   const { user } = useAuth();
 
   useEffect(() => {
+    if (!user || user.role !== 'CLIENTE') {
+      if (user?.role === 'ADMIN') {
+        navigate('/AdminPanel');
+      } else if (user?.role === 'EMPRESA') {
+        navigate('/DatosEmpresa');
+      } else {
+        navigate('/login');
+      }
+      return; 
+    }
     const fetchProfile = async () => {
       try {
-        const response = await api.get('/cliente/{$id}');//endpoint para ver mis datos??
+        const response = await api.get('/cliente/perfil'); 
         const userData = response.data;
 
         if (userData.cif) {
@@ -46,16 +54,19 @@ export const ModificarPerfilCliente = () => {
         } else {
           setUserType('cliente');
         }
-
-        setFormData({ ...userData, password: ''});//no cargamos la contraseña(privacidad)
+        setFormData({ ...userData, password: '' });
       } catch (error: any) {
         setMessage({ type: 'error', text: 'Error al cargar los datos del perfil.' });
       } finally {
         setLoadingInitial(false);
       }
     };
+
     fetchProfile();
-  }, []);
+    
+  }, [user, navigate]);
+
+  if (user?.role !== 'CLIENTE') return null;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
