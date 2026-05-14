@@ -1,0 +1,52 @@
+.fest-dashboard-root {
+  min-height: 100vh;
+  background-color: #0a0a12;
+  position: relative;
+  overflow-x: hidden;
+}
+.stats-highlight-card {
+  background: rgba(0, 194, 255, 0.05) !important; /* Un toque azul sutil */
+  border: 1px solid rgba(0, 194, 255, 0.2) !important;
+  box-shadow: 0 0 30px rgba(0, 194, 255, 0.1) !important;
+  transition: all 0.3s ease !important;
+}
+
+.stats-highlight-card:hover {
+  border-color: rgba(0, 194, 255, 0.5) !important;
+  box-shadow: 0 0 40px rgba(0, 194, 255, 0.2) !important;
+}
+.total-amount {
+  background: linear-gradient(180deg, #FFFFFF 0%, #00C2FF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 10px rgba(0, 194, 255, 0.3));
+}
+.fest-mini-card {
+  background: rgba(255, 255, 255, 0.03) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 18px !important;
+  padding: 24px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+.fest-mini-card:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(160, 32, 240, 0.4) !important;
+  transform: translateY(-8px) scale(1.02);
+}
+.MuiChip-colorSuccess {
+  background: rgba(0, 230, 118, 0.15) !important;
+  color: #00e676 !important;
+  border: 1px solid rgba(0, 230, 118, 0.3);
+}
+
+.MuiChip-colorWarning {
+  background: rgba(255, 167, 38, 0.15) !important;
+  color: #ffa726 !important;
+  border: 1px solid rgba(255, 167, 38, 0.3);
+}
+.fest-divider {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent) !important;
+  height: 1px;
+  border: none;
+}

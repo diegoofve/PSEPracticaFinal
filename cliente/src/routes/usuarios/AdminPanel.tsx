@@ -24,7 +24,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import { api } from '../../lib/api';
-import '../festivales/ModificarFestival.css';
+import './AdminPanel.css';
 
 export const AdminPanel = () => {
     const [pendientes, setPendientes] = useState<any[]>([]);

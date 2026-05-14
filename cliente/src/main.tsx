@@ -12,13 +12,13 @@ import {Layout} from './routes/aux1/Layout'
 
 import {Login} from './routes/usuarios/Login'
 import {Register} from './routes/usuarios/Register'
-//import {AdminPanel} from './routes/usuarios/AdminPanel'
+import {AdminPanel} from './routes/usuarios/AdminPanel'
 
 import {ModificarPerfilCliente} from './routes/usuarios/ModificarPerfilCliente.tsx'
 
-//import {FestivalesList} from './routes/festivales/FestivalesList' //poder filtrar por lista festivales entero/festivales propios + dar de alta un festival + modificarlo y eliminarlo
+import {FestivalesList} from './routes/festivales/FestivalesList' //poder filtrar por lista festivales entero/festivales propios + dar de alta un festival + modificarlo y eliminarlo
 import {ModificarFestival} from './routes/festivales/ModificarFestival'
-//import { GestionAbonos } from './routes/festivales/GestionAbonos.tsx';
+import { GestionAbonos } from './routes/festivales/GestionAbonos.tsx';
 
 const theme = createTheme({ //esto lo ha generado el completar del visual, toca cambiarlo y hacer estéticamente más bonito
   palette: {
@@ -44,6 +44,9 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/register" element={<Layout><Register /></Layout>} />
           <Route path="/modificar-perfil-cliente" element={<Layout><ModificarPerfilCliente /></Layout>} />
           <Route path="/modificar-festival" element={<Layout><ModificarFestival /></Layout>} />
+          <Route path="/festivales-ist" element={<Layout><FestivalesList /></Layout>} />
+          <Route path="/admin-panel" element={<Layout><AdminPanel /></Layout>} />
+          <Route path="/gestion-abonos" element={<Layout><GestionAbonos /></Layout>} />
         </Routes>
       </BrowserRouter>
       </AuthProvider>
@@ -53,9 +56,7 @@ createRoot(document.getElementById('root')!).render(
 
 /*
 
-          <Route path="/FestivalesList" element={<Layout><FestivalesList /></Layout>} />
           <Route path="/modificar-festival" element={<Layout><ModificarFestival /></Layout>} />
-          <Route path="/AdminPanel" element={<Layout><AdminPanel /></Layout>} />
-          <Route path="/gestion-abonos" element={<Layout><GestionAbonos /></Layout>} />
+          
 
 */

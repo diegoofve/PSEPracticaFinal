@@ -1,0 +1,70 @@
+.fest-history-root {
+  min-height: 100vh;
+  background-color: #0a0a12;
+  padding: 40px 20px;
+  position: relative;
+}
+.fest-admin-card {
+  background: rgba(20, 20, 30, 0.7) !important;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 20px !important;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+.MuiTableHead-root {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.MuiTableCell-head {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: bold !important;
+  font-size: 0.8rem !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+.MuiTableCell-body {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  padding: 20px !important;
+}
+
+.MuiTableRow-root {
+  transition: background-color 0.3s ease;
+}
+
+.MuiTableRow-root:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+.fest-history-title {
+  font-family: 'Bebas Neue', sans-serif !important;
+  letter-spacing: 2px;
+  background: linear-gradient(90deg, #FFFFFF, #A020F0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 30px !important;
+}
+.fest-btn-refund {
+  background: linear-gradient(90deg, #FF9800, #FF3C78) !important;
+  box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3);
+  border-radius: 8px !important;
+}
+
+.fest-btn-refund:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 6px 20px rgba(255, 152, 0, 0.5);
+}
+.MuiChip-outlined {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  backdrop-filter: blur(5px);
+}
+
+.MuiChip-colorError {
+  background: rgba(244, 67, 54, 0.1) !important;
+  color: #ff5252 !important;
+}
+
+.MuiChip-colorSuccess {
+  background: rgba(76, 175, 80, 0.1) !important;
+  color: #69f0ae !important;
+}

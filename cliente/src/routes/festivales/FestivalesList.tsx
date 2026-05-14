@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 import { Box, Container, Typography, CircularProgress, Grid } from '@mui/material';
 import { api } from "../../lib/api";
 import { FestivalCard } from "./FestivalCard";
-//import '../festivales/ModificarFestival.css'; quiero hacer un css propio
+import './FestivalesList.css';
 import {useAuth} from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 

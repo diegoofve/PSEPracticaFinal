@@ -17,6 +17,7 @@ import {
 import {QRCodeSVG} from 'qrcode.react';
 import { styled } from '@mui/material/styles';
 import { api } from "../../lib/api";
+import './FestivalesCard.css'
 
 const ExpandMore = styled((props: any) => { //esto expande para mostrar los abonos (como son todos iguales debería ser todo bien estructurado)
   const { expand, ...other } = props;
