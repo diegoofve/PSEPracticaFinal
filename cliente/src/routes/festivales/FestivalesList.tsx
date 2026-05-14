@@ -2,7 +2,6 @@
 
 servicio de integración de API spotify?? --> servicio externo, no obligatorio
 -->> pulsera cashless?<<--
-(enviar la tarjeta en base64?)
 
 comprar abonos a festivales (solo clientes) -> generar compra para enviar a API de pago del profe 
     después de esto -> generar QR (la entrada) e id único

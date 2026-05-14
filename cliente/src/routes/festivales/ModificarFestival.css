@@ -92,3 +92,14 @@
   bottom: -10%;
   right: -10%;
 }
+
+.fest-payment-dialog .MuiDialog-paper {
+  padding: 16px;
+  max-width: 450px !important; /* Forzamos el ancho máximo */
+  background-color: rgba(20, 20, 30, 0.95) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px); /* Soporte para Safari */
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 16px !important;
+  color: white !important;
+}

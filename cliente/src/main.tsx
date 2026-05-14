@@ -14,7 +14,7 @@ import {Login} from './routes/usuarios/Login'
 import {Register} from './routes/usuarios/Register'
 //import {AdminPanel} from './routes/usuarios/AdminPanel'
 
-import {ModificarPerfil} from './routes/usuarios/ModificarPerfilCliente.tsx'
+import {ModificarPerfilCliente} from './routes/usuarios/ModificarPerfilCliente.tsx'
 
 //import {FestivalesList} from './routes/festivales/FestivalesList' //poder filtrar por lista festivales entero/festivales propios + dar de alta un festival + modificarlo y eliminarlo
 import {ModificarFestival} from './routes/festivales/ModificarFestival'
@@ -32,7 +32,6 @@ const theme = createTheme({ //esto lo ha generado el completar del visual, toca 
   },
 })
 
-
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThemeProvider theme={theme}>
@@ -41,9 +40,9 @@ createRoot(document.getElementById('root')!).render(
         <BrowserRouter>
         <Routes>
           <Route path="/" element={<App />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/modificar-perfil" element={<Layout><ModificarPerfil /></Layout>} />
+          <Route path="/login" element={<Layout><Login /></Layout>} />
+          <Route path="/register" element={<Layout><Register /></Layout>} />
+          <Route path="/modificar-perfil-cliente" element={<Layout><ModificarPerfilCliente /></Layout>} />
           <Route path="/modificar-festival" element={<Layout><ModificarFestival /></Layout>} />
         </Routes>
       </BrowserRouter>

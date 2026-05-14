@@ -16,9 +16,9 @@ import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 
 import { useAuth } from '../../context/AuthContext.tsx';
 import { api } from '../../lib/api.ts';
-import './ModificarPerfil.css';
+import './ModificarPerfilCliente.css';
 
-export const ModificarPerfil = () => {
+export const ModificarPerfilCliente = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();//esto q es y porque es necesario??
 
