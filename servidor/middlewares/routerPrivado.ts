@@ -6,6 +6,7 @@ import { AuthController } from '../controllers/auth.controller';
 import { tempEndpoint } from '../lib/util';
 import { ClienteController } from '../controllers/cliente.controller';
 import { EmpresaController } from '../controllers/empresa.controller';
+import { AdminController } from '../controllers/admin.controller';
 
 const routerPrivado = Router();
 
@@ -47,8 +48,13 @@ routerPrivado.get('/empresa/ventas', passport.authenticate('jwt', { session: fal
 tempEndpoint)
 
 //Admin
-routerPrivado.put('/admin', passport.authenticate('jwt', { session: false }), authorize(["ADMIN"]), 
-tempEndpoint) //verificar empresa o banear empresa o usuario
+routerPrivado.put('/admin/empresa/:id/banear', passport.authenticate('jwt', { session: false }), authorize(["ADMIN"]), 
+AdminController.banearEmpresa)
+routerPrivado.put('/admin/cliente/:id/banear', passport.authenticate('jwt', { session: false }), authorize(["ADMIN"]), 
+AdminController.banearCliente)
+routerPrivado.put('/admin/empresa/:id/estado', passport.authenticate('jwt', { session: false }), authorize(["ADMIN"]), 
+AdminController.cambiarEstadoEmpresa)
+
 routerPrivado.get('/empresas', passport.authenticate('jwt', { session: false }), authorize(["ADMIN"]), 
 EmpresaController.verEmpresas)
 routerPrivado.get('/clientes', passport.authenticate('jwt', { session: false }), authorize(["ADMIN"]), 
