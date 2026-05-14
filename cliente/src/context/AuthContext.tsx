@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect} from "react";
 import {jwtDecode} from "jwt-decode";
 
 interface JwtPayload {
@@ -11,6 +11,7 @@ interface AuthContextType {
     user: JwtPayload | null;
     login: (token: string) => void;
     logout: () => void;
+    loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -18,6 +19,8 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export const AuthProvider =  ({children }: {children: React.ReactNode}) => {
     const [token, setToken] = useState<string | null>
     (localStorage.getItem('token'));
+
+    const [loading, setLoading] = useState(true);
 
     //quitar cache que se peta si no
     const [user, setUser] = useState<JwtPayload | null>(() => {
@@ -28,6 +31,10 @@ export const AuthProvider =  ({children }: {children: React.ReactNode}) => {
             return null
         }
     })
+
+useEffect(() => {
+        setLoading(false);
+    }, []);
 
 const login = (newToken: string) => {
     localStorage.setItem('token', newToken);
@@ -42,7 +49,7 @@ const logout = () => {
 };
 
 return (
-    <AuthContext.Provider value={{ token, user, login, logout }}>
+    <AuthContext.Provider value={{ token, user, login, logout, loading }}>
         {children}
     </AuthContext.Provider>
 );

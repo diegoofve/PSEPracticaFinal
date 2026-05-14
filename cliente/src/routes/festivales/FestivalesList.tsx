@@ -1,7 +1,5 @@
 /*
 servicio de integración de API spotify?? --> servicio externo, no obligatorio
--->> pulsera cashless?<<--
-
 
     verificar que el stock es suficiente
 */
@@ -16,12 +14,13 @@ import {useAuth} from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 export const FestivalesList = () => {
-  const {user} = useAuth();
+  const {user, loading: authLoading} = useAuth();
   const navigate = useNavigate();
   const [festivales, setFestivales] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingData, setLoading] = useState(true);
 
     useEffect(() => {
+      if (authLoading) return;
         if (!user || user.role !== 'CLIENTE') {
         navigate(user?.role === 'EMPRESA' ? '/ModificarFestival' : '/login');
         return;
@@ -39,6 +38,14 @@ export const FestivalesList = () => {
         loadFestivales();
     }  , [user,navigate]);
 
+    if (authLoading || (loadingData && user?.role === 'CLIENTE')) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}>
+        <CircularProgress color="secondary" />
+      </Box>
+    );
+  }
+
     if (user?.role !== 'CLIENTE') return null;
 
   return (
@@ -51,7 +58,7 @@ export const FestivalesList = () => {
           Festivales Disponibles
         </Typography>
 
-        {loading ? (
+        {loadingData ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}>
             <CircularProgress color="secondary" />
           </Box>

@@ -1,15 +1,18 @@
-//change all navbar to include a full guide of all routes (home, festivales, admin panel, login/logout with the necessary roles check)
-
 import { useState } from 'react';
-import { AppBar, Toolbar, Typography, Button, Box, IconButton, Menu, MenuItem } from '@mui/material';
+import { AppBar, Toolbar, Box, IconButton, Menu, MenuItem } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import FestivalIcon from '@mui/icons-material/Festival';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LoginIcon from '@mui/icons-material/Login';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import EditNoteIcon from '@mui/icons-material/EditNote';
 
 import './Navbar.css';
 
@@ -22,6 +25,8 @@ export const Navbar = () => {
     logout();
     navigate('/');
   };
+
+  const closeMenu = () => setAnchorEl(null);
 
   return (
     <AppBar position="fixed" elevation={0} className="navbar-root">
@@ -38,27 +43,45 @@ export const Navbar = () => {
         </Box>
 
         <Box className="navbar-desktop">
-          {user && (
-            <button className="nav-btn-ghost" onClick={() => navigate('/FestivalesList')}>
-              <FestivalIcon sx={{ fontSize: 15 }} />
-              Festivales
-            </button>
+          
+          {user?.role === 'CLIENTE' && (
+            <>
+              <button className="nav-btn-ghost" onClick={() => navigate('/festivales-list')}>
+                <FestivalIcon sx={{ fontSize: 15 }} /> Festivales
+              </button>
+              <button className="nav-btn-ghost" onClick={() => navigate('/gestion-abonos')}>
+                <ConfirmationNumberIcon sx={{ fontSize: 15 }} /> Mis Abonos
+              </button>
+              <button className="nav-btn-ghost" onClick={() => navigate('/modificar-perfil-cliente')}>
+                <AccountCircleIcon sx={{ fontSize: 15 }} /> Mi Perfil
+              </button>
+            </>
           )}
+
+          {user?.role === 'EMPRESA' && (
+            <>
+              <button className="nav-btn-ghost" onClick={() => navigate('/datos-empresa')}>
+                <BarChartIcon sx={{ fontSize: 15 }} /> Dashboard
+              </button>
+              <button className="nav-btn-ghost" onClick={() => navigate('/modificar-festival')}>
+                <EditNoteIcon sx={{ fontSize: 15 }} /> Gestionar Festival
+              </button>
+            </>
+          )}
+
           {user?.role === 'ADMIN' && (
-            <button className="nav-btn-ghost" onClick={() => navigate('/AdminPanel')}>
-              <AdminPanelSettingsIcon sx={{ fontSize: 15 }} />
-              Administración
+            <button className="nav-btn-ghost" onClick={() => navigate('/admin-panel')}>
+              <AdminPanelSettingsIcon sx={{ fontSize: 15 }} /> Administración
             </button>
           )}
+
           {user ? (
             <button className="nav-btn-primary" onClick={handleLogout}>
-              <LogoutIcon sx={{ fontSize: 15 }} />
-              Cerrar sesión
+              <LogoutIcon sx={{ fontSize: 15 }} /> Cerrar sesión
             </button>
           ) : (
             <button className="nav-btn-primary" onClick={() => navigate('/login')}>
-              <LoginIcon sx={{ fontSize: 15 }} />
-              Login
+              <LoginIcon sx={{ fontSize: 15 }} /> Login
             </button>
           )}
         </Box>
@@ -74,7 +97,7 @@ export const Navbar = () => {
           <Menu
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
-            onClose={() => setAnchorEl(null)}
+            onClose={closeMenu}
             slotProps={{
               paper: {
                 sx: {
@@ -100,22 +123,39 @@ export const Navbar = () => {
               },
             }}}
           >
-            {user && (
-              <MenuItem onClick={() => { navigate('/FestivalesList'); setAnchorEl(null); }}>
+            {user?.role === 'CLIENTE' && [
+              <MenuItem key="festivales" onClick={() => { navigate('/festivales-list'); closeMenu(); }}>
                 <FestivalIcon sx={{ fontSize: 16 }} /> Festivales
+              </MenuItem>,
+              <MenuItem key="abonos" onClick={() => { navigate('/gestion-abonos'); closeMenu(); }}>
+                <ConfirmationNumberIcon sx={{ fontSize: 16 }} /> Mis Abonos
+              </MenuItem>,
+              <MenuItem key="perfil" onClick={() => { navigate('/modificar-perfil-cliente'); closeMenu(); }}>
+                <AccountCircleIcon sx={{ fontSize: 16 }} /> Mi Perfil
               </MenuItem>
-            )}
+            ]}
+
+            {user?.role === 'EMPRESA' && [
+              <MenuItem key="dashboard" onClick={() => { navigate('/datos-empresa'); closeMenu(); }}>
+                <BarChartIcon sx={{ fontSize: 16 }} /> Dashboard
+              </MenuItem>,
+              <MenuItem key="festival" onClick={() => { navigate('/modificar-festival'); closeMenu(); }}>
+                <EditNoteIcon sx={{ fontSize: 16 }} /> Gestionar Festival
+              </MenuItem>
+            ]}
+
             {user?.role === 'ADMIN' && (
-              <MenuItem onClick={() => { navigate('/AdminPanel'); setAnchorEl(null); }}>
+              <MenuItem onClick={() => { navigate('/admin-panel'); closeMenu(); }}>
                 <AdminPanelSettingsIcon sx={{ fontSize: 16 }} /> Administración
               </MenuItem>
             )}
+
             {user ? (
-              <MenuItem onClick={() => { handleLogout(); setAnchorEl(null); }}>
+              <MenuItem onClick={() => { handleLogout(); closeMenu(); }}>
                 <LogoutIcon sx={{ fontSize: 16 }} /> Cerrar sesión
               </MenuItem>
             ) : (
-              <MenuItem onClick={() => { navigate('/login'); setAnchorEl(null); }}>
+              <MenuItem onClick={() => { navigate('/login'); closeMenu(); }}>
                 <LoginIcon sx={{ fontSize: 16 }} /> Login
               </MenuItem>
             )}
