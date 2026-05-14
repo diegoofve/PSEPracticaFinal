@@ -24,13 +24,29 @@ import GroupIcon from '@mui/icons-material/Group';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import { api } from '../../lib/api';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import './AdminPanel.css';
 
 export const AdminPanel = () => {
+    const { user } = useAuth();
+    const navigate = useNavigate();
     const [pendientes, setPendientes] = useState<any[]>([]);
     //const [stats, setStats] = useState<any>(null); no funciona pero es para las estadísticas asi q chilleamos 
     const [loading, setLoading] = useState(true);
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+
+    useEffect(() => {
+        if (!user || user.role !== 'ADMIN') {
+            if (user?.role === 'EMPRESA') {
+                navigate('/modificar-festival');
+            } else if (user?.role === 'CLIENTE') {
+                navigate('/festivales-list');
+            } else {
+                navigate('/login');
+            }
+        }
+    }, [user, navigate]);
 
     const fetchData = async () => {
         setLoading(true);

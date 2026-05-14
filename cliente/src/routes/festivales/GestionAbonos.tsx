@@ -4,32 +4,51 @@ import { useEffect, useState } from 'react';
 import { 
   Box, Typography, Paper, CircularProgress, 
   Table, TableBody, TableCell, TableContainer, 
-  TableHead, TableRow, Button, Chip, Alert 
+  TableHead, TableRow, Button, Chip, Alert, Container 
 } from '@mui/material';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import LayersIcon from '@mui/icons-material/Layers';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext'; // Ajusta la ruta si es diferente
 import { api } from '../../lib/api';
-import './GestionAbonos.css'
+import './GestionAbonos.css';
 
 export const GestionAbonos = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
   const [compras, setCompras] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
-  const fetchHistorial = async () => {
-    try {
-      const response = await api.get('/usuarios/cliente/compras');//se supone que la api tiene que ser asi porque el id lo devuelve el back
-      setCompras(response.data);
-    } catch (error) {
-      console.error("Error al cargar el historial", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    if (!user || user.role !== 'CLIENTE') {
+      navigate(user?.role === 'EMPRESA' ? '/ModificarFestival' : '/login');
+      return;
+    }
+    const fetchHistorial = async () => {
+      try {
+        const response = await api.get('/usuarios/cliente/compras');
+        setCompras(response.data);
+      } catch (error) {
+        console.error("Error al cargar el historial", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchHistorial();
-  }, []);
+  }, [user, navigate]);
+
+  if (user?.role !== 'CLIENTE') return null;
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}>
+        <CircularProgress color="secondary" />
+      </Box>
+    );
+  }
 
   /*
   const handleSolicitarDevolucion = async (ventaId: number) => {
@@ -44,8 +63,6 @@ export const GestionAbonos = () => {
       });
     }
   };*/
-
-  if (loading) return <CircularProgress color="secondary" sx={{ display: 'block', mx: 'auto', mt: 5 }} />;
 
   return (
     <Box sx={{ p: { xs: 2, md: 4 }, color: 'white' }}>

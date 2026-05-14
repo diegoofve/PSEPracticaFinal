@@ -1,3 +1,6 @@
+//queda cambiar algo de la validacion
+
+
 import { useState, useEffect } from 'react';
 import { Box, Typography, TextField, Button, CircularProgress, Alert, Grid, Paper, InputAdornment,
 Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@mui/material';
@@ -13,6 +16,8 @@ import HomeIcon from '@mui/icons-material/Home';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 
 import { useAuth } from '../../context/AuthContext.tsx';
+import {useNavigate} from 'react-router-dom';
+
 import { api } from '../../lib/api.ts';
 import './ModificarPerfilCliente.css';
 
@@ -27,6 +32,8 @@ export const ModificarPerfilCliente = () => {
   const [formData, setFormData] = useState<any>({});
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [deleting, setDeleting] = useState(false);//esto??
+
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchProfile = async () => {

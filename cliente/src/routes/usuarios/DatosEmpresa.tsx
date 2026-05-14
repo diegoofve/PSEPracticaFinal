@@ -16,16 +16,31 @@ import {
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import FestivalIcon from '@mui/icons-material/Festival';
 import { api } from '../../lib/api';
+import {useAuth} from '../../context/AuthContext'
+import { useNavigate } from 'react-router-dom';
 import './DatosEmpresa.css';
 
 export const DatosEmpresa = () => {
   const [data, setData] = useState<{ totalGanado: number; festivales: any[] } | null>(null);
   const [loading, setLoading] = useState(true);
+  const {user} = useAuth();
+  const navigate = useNavigate();
 
-  useEffect(() => {
+    useEffect(() => {
+    if (!user || user.role !== 'EMPRESA') {
+      if (user?.role === 'ADMIN') {
+        navigate('/AdminPanel');
+      } else if (user?.role === 'CLIENTE') {
+        navigate('/festivales');
+      } else {
+        navigate('/login');
+      }
+      return;
+    }
+
     const fetchEmpresaDashboard = async () => {
       try {
-        const response = await api.get('/usuarios/empresa/dashboard');//esto debe dar el totalganado, festival...
+        const response = await api.get('/usuarios/empresa/dashboard');
         setData(response.data);
       } catch (error) {
         console.error("Error cargando el dashboard de empresa", error);
@@ -33,8 +48,12 @@ export const DatosEmpresa = () => {
         setLoading(false);
       }
     };
+
     fetchEmpresaDashboard();
-  }, []);
+  }, [user, navigate]);
+
+  if (user?.role !== 'EMPRESA') return null;
+
 
   if (loading) {
     return (

@@ -34,15 +34,12 @@ import './ModificarFestival.css';
 import { useAuth } from '../../context/AuthContext';
 
 
-
-
-
 export const ModificarFestival = () => {
 
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [deleting, setDeleting] = useState(false);//esto??
 
-  const {login} = useAuth();
+  const {user} = useAuth();
   const { id } = useParams(); // Si hay id modificamos, sino creamos.
   const navigate = useNavigate();
   const isEdit = Boolean(id); //pillas el id del fesstival a cambiar
@@ -65,6 +62,14 @@ export const ModificarFestival = () => {
 
   const [artistas, setArtistas] = useState<string[]>([]);
   const [nuevoArtista, setNuevoArtista] = useState(''); //para meter artistas nuevos en el festival
+
+useEffect(() => {
+    if (!user || user.role !== 'EMPRESA') {
+      navigate(user?.role === 'CLIENTE' ? '/festivales-list' : '/login');
+    }
+  }, [user, navigate]);
+
+  if (user?.role !== 'EMPRESA') return null;
 
   useEffect(() => {
     if (isEdit) {
