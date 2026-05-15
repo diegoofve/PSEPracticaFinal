@@ -48,6 +48,16 @@ const getEmpresas = async (req: Request, res: Response, next: NextFunction): Pro
     }
 }
 
+const getVentasEmpresa = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try{
+        const result = await EmpresaService.getVentasEmpresa(2)
+        console.log(result)
+        res.status(200).json(result)
+    }catch(err){
+        next(err)
+    }
+}
+
 const updateEmpresa = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try{
         const validation = UpdateEmpresaSchema.safeParse(req.body);
@@ -100,6 +110,7 @@ const bajaEmpresa = async (req: Request, res: Response, next: NextFunction): Pro
 export const EmpresaController = {
     getEmpresa,
     getEmpresas,
+    getVentasEmpresa,
     updateEmpresa,
     bajaEmpresa
 }

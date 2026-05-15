@@ -1,6 +1,6 @@
 import { type UpdateClienteDto, type ClienteDto, ListaClienteSchema } from "../dtos/clientes.dto"
 import { prisma } from '../lib/db';
-import { UnauthorizedError } from "../lib/errors";
+import { NotFoundError, UnauthorizedError } from "../lib/errors";
 
 const getCliente = async (id: number): Promise<ClienteDto[]> => {
     const result = await prisma.cliente.findMany({
@@ -58,9 +58,53 @@ const bajaCliente = async (clienteId: number): Promise<void> => {
     ])
 }
 
+const getAbonosCliente = async (clienteId: number) => {
+    const cliente = await prisma.cliente.findUnique({
+        where: { id: clienteId }
+    });
+
+    if (!cliente) {
+        throw new NotFoundError("Cliente no encontrado.");
+    }
+
+    const compras = await prisma.venta.findMany({
+        where: { 
+            clienteId: clienteId,
+            estado: "PAGADA" 
+        },
+        include: {      //conectamos mediante las relaciones de la BD las ventas
+            ventasAbonos: { //con las ventas de abonos, estas con los abonos y
+                include: {  //los abonos con los festivales para poder ver luego de cual es cada abono
+                    abono: {
+                        include: {
+                            festival: true
+                        }
+                    }
+                }
+            }
+        },
+        orderBy: { creadoEn: "desc" }
+    })
+
+    //aplano la respuesta porque si no es un monstruo de json
+    return compras.map(compra => ({
+        id: compra.id,
+        total: compra.total,
+        estado: compra.estado,
+        fechaCompra: compra.creadoEn,
+        abonos: compra.ventasAbonos.map(ventaAbono => ({
+            nombre: ventaAbono.abono.nombre,
+            festival: ventaAbono.abono.festival.nombre,
+            cantidad: ventaAbono.cantidad,
+            precioUnit: ventaAbono.precioUnit
+        }))
+    }))
+}
+
 export const ClienteService = {
     getCliente,
     getClientes,
+    getAbonosCliente,
     updateCliente,
     bajaCliente
 }

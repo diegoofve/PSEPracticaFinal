@@ -48,6 +48,16 @@ const getClientes = async (req: Request, res: Response, next: NextFunction): Pro
     }
 }
 
+const getAbonosCliente = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try{
+        const result = await ClienteService.getAbonosCliente(1);
+        console.log(result)
+        res.status(200).json(result)
+    }catch(err){
+        next(err)
+    }
+}
+
 const updateCliente = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try{
         const validation = UpdateClienteSchema.safeParse(req.body);
@@ -100,6 +110,7 @@ const bajaCliente = async (req: Request, res: Response, next: NextFunction): Pro
 export const ClienteController = {
     getCliente,
     getClientes,
+    getAbonosCliente,
     updateCliente,
     bajaCliente
 }
