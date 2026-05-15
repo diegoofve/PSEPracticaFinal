@@ -1,15 +1,14 @@
 Cosas a hacer:
 
-# EN GRANDE PORQUE TIENE QUE SER LO PRIMERO A ARREGLAR MAÑANA POR LA MAÑANA
-
-ARREGLAR LO DE LOS ABONOS EN AÑADIR FESTIVALES tendria que estar arreglado de ayer y de hecho todo funciona pero hay que cambiar un par de cosas para hacerlo y no me da tiempo ahora asi que luego lo arreglo cuando haga los pagos 
-
-ahora mismo se muestran todos los festivales tanto para clientes como empresas. ver si en alguno de los dos casos seria mejor ocultar los cancelados (seguramente no por devoluciones y tal pero yo q se, typescript me derrite las neuronas)
+  ahora mismo se muestran todos los festivales tanto para clientes como empresas. ver si en alguno de los dos casos seria mejor ocultar los cancelados (seguramente no por devoluciones y tal pero yo q se, typescript me derrite las neuronas)
 
 ## BACK
 
 registrar las rutas y dtos nuevos en swagger
 
+verificar todas las validaciones de los dtos en zod y ver si deberiamos tipar los dtos de response
+
+verificar el logger (concretamente, cambiar los mensajes para hacerlos mas especificos, como el objeto del nuevo cliente al registrar en vez de solo mandar un mensaje)
 
 ## FRONT
 
@@ -29,7 +28,7 @@ panel de admin
 - [ ] y especificacion OpenAPI **(opcional)**
 
 ## ADMINISTRACION
-- [ ] Consulta de gestoras, verificaciones y bloqueo
+- [x] Consulta de gestoras, verificaciones y bloqueo
 - [ ] Las organizadoras no verificadas no pueden operar en la plataforma **(opcional)**
 
 ## GESTION DE FESTIVALES
@@ -44,9 +43,9 @@ panel de admin
 - [x] Multiples tipos de abono por festival **(opcional)**
 
 ## VENTA DE ENTRADAS
-- [ ] Consulta de festivales disponibles
+- [x] Consulta de festivales disponibles
 - [ ] Flujo de pago con la pasarela externa
-- [ ] Generacion de abonos con QR
+- [x] Generacion de abonos con QR
 - [ ] Historico de abonos comprados
 - [ ] Solicitud de devoluciones para abonos candelados **(opcional)**
 - [ ] Funcionalidad de pulsera monedero desde el historico, recarga y consulta de saldo **(opcional)**

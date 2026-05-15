@@ -33,11 +33,21 @@ const crearFestival = async (empresaId: number, data: NewFestivalDto) => {
         throw new ForbiddenError("La empresa no está verificada.")
     }
 
+    const { precioAbono, ...datosFestival } = data;
     const festival = await prisma.festival.create({
         data: {
             empresaId,
-            ...data
-        }
+            ...datosFestival,
+            abonos: {
+                create: {
+                    nombre: "Abono General",
+                    descripcion: "Abono general para la entrada al festival",
+                    precio: data.precioAbono,
+                    stock: data.aforo
+                }
+            }
+        },
+        include: {abonos: true}
     })
 
     return festival
@@ -83,12 +93,19 @@ const crearAbono = async (empresaId: number, festivalId: number, data: NewAbonoD
         throw new ForbiddenError("El festival ha sido cancelado.")
     }
 
-    return await prisma.abono.create({
-        data: {
-            festivalId,
-            ...data
-        }
-    })
+    await prisma.$transaction([
+        prisma.abono.create({
+            data: {
+                festivalId,
+                ...data
+            }
+        }),
+        prisma.festival.update({
+            where: { id: festivalId },
+            data: { aforo: { increment: data.stock } }
+        })
+    ])
+
 }
 
 const bajaFestival = async (empresaId: number, festivalId: number) => {

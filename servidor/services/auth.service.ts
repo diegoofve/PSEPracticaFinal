@@ -10,7 +10,11 @@ const login = async (data: LoginDto): Promise<string> => {
     //comprobar primero si el ususario es el admin
     if (data.email === process.env.ADMIN_EMAIL) {
         const esAdmin = await bcrypt.compare(data.password, process.env.ADMIN_PASSWORD!)
-        if (!esAdmin) throw new UnauthorizedError("Credenciales incorrectas.")
+
+        if (!esAdmin){ 
+            throw new UnauthorizedError("Credenciales incorrectas.")
+        }
+
         return jwt.sign({ rol: "ADMIN" }, JWT_SECRET, { expiresIn: "8h" })
     }
 
@@ -30,10 +34,16 @@ const login = async (data: LoginDto): Promise<string> => {
         const cliente = await prisma.cliente.findFirst({
             where: { email: data.email, fechaBaja: null }
         })
-        if (!cliente) throw new UnauthorizedError("Credenciales incorrectas.")
+
+        if (!cliente){
+            throw new UnauthorizedError("Credenciales incorrectas.")
+        }
 
         const passwordCorrecta = await bcrypt.compare(data.password, cliente.password)
-        if (!passwordCorrecta) throw new UnauthorizedError("Credenciales incorrectas.")
+
+        if (!passwordCorrecta){
+            throw new UnauthorizedError("Credenciales incorrectas.")
+        }
 
         return jwt.sign({ id: cliente.id, rol: "CLIENTE" }, JWT_SECRET, { expiresIn: "8h" })
     }
@@ -42,10 +52,16 @@ const login = async (data: LoginDto): Promise<string> => {
         const empresa = await prisma.empresa.findFirst({
             where: { email: data.email, fechaBaja: null }
         })
-        if (!empresa) throw new UnauthorizedError("Credenciales incorrectas.")
+
+        if (!empresa) {
+            throw new UnauthorizedError("Credenciales incorrectas.")
+        }
 
         const passwordCorrecta = await bcrypt.compare(data.password, empresa.password)
-        if (!passwordCorrecta) throw new UnauthorizedError("Credenciales incorrectas.")
+
+        if (!passwordCorrecta){
+            throw new UnauthorizedError("Credenciales incorrectas.")
+        }
 
         return jwt.sign({ id: empresa.id, rol: "EMPRESA", estado: empresa.estado }, JWT_SECRET, { expiresIn: "8h" })
     }

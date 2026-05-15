@@ -3,6 +3,7 @@ import type { Request, Response, NextFunction } from "express"
 import { AdminService } from "../services/admin.service"
 import { EstadoEmpresaSchema } from "../dtos/admin.dto"
 import { BadRequestError } from "../lib/errors"
+import { logger } from "../lib/logger"
 
 const ERRORES_GENERICOS = ['unrecognized_keys', 'invalid_type'] //contiene los errores de zod que no queremos mostar por seguridad(faltan campos, tipo erroneo)
 
@@ -38,7 +39,8 @@ const cambiarEstadoEmpresa = async (req: Request, res: Response, next: NextFunct
         }
 
         await AdminService.cambiarEstadoEmpresa(id, validation.data)
-        res.status(200).json({ result: "Empresa restringida correctamente" })
+        logger.info("Estado de la empresa actualizado.")
+        res.status(200).json({ result: "Estado de la empresa actualizado correctamente" })
     } catch (err) {
         next(err)
     }
@@ -65,6 +67,7 @@ const banearCliente = async (req: Request, res: Response, next: NextFunction) =>
         }
 
         await AdminService.banearCliente(id)
+        logger.info(`Cliente ${id} baneado.`)
         res.status(200).json({ result: "Cliente baneado correctamente" })
     } catch (err) {
         next(err)
@@ -92,6 +95,7 @@ const banearEmpresa = async (req: Request, res: Response, next: NextFunction) =>
         }
 
         await AdminService.banearEmpresa(id)
+        logger.info(`Empresa ${id} baneada.`)
         res.status(200).json({ result: "Empresa baneada correctamente" })
     } catch (err) {
         next(err)

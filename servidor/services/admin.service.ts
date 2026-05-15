@@ -1,8 +1,6 @@
-// admin.service.ts
-import { es } from "zod/v4/locales"
 import { EstadoEmpresaDto } from "../dtos/admin.dto"
 import { prisma } from "../lib/db"
-import { NotFoundError, ConflictError, GonePermanentlyError } from "../lib/errors"
+import { NotFoundError, GonePermanentlyError } from "../lib/errors"
 import { EstadoGestora } from "@prisma/client"
 
 const cambiarEstadoEmpresa = async (empresaId: number, data: EstadoEmpresaDto) => {
@@ -15,16 +13,33 @@ const cambiarEstadoEmpresa = async (empresaId: number, data: EstadoEmpresaDto) =
         throw new GonePermanentlyError("La empresa está dada de baja")
     }
 
-    await prisma.empresa.update({
-        where: { id: empresaId },
-        data: { estado: data.estado as EstadoGestora }
-    })
+    const consultas: any = [
+        prisma.empresa.update({
+            where: { id: empresaId },
+            data: { estado: data.estado as EstadoGestora }
+        })
+    ]
+
+    if(data.estado === "RESTRINGIDA"){
+        consultas.push(
+            prisma.registroEmail.update({
+                where: { email: empresa.email },
+                data: { baneado: true}
+            })
+        )   
+    }
+
+    await prisma.$transaction(consultas)
 }
 
 const banearCliente = async (clienteId: number) => {
     const cliente = await prisma.cliente.findUnique({ where: { id: clienteId } })
     if (!cliente){
-        throw new NotFoundError("Cliente no encontrado")
+        throw new NotFoundError("Cliente no encontrado.")
+    }
+
+    if(cliente.fechaBaja != null){
+        throw new GonePermanentlyError("El cliente se ha dado de baja.")
     }
 
     await prisma.registroEmail.update({
@@ -36,7 +51,11 @@ const banearCliente = async (clienteId: number) => {
 const banearEmpresa = async (empresaId: number) => {
     const empresa = await prisma.empresa.findUnique({ where: { id: empresaId } })
     if (!empresa){
-        throw new NotFoundError("Empresa no encontrada")
+        throw new NotFoundError("Empresa no encontrada.")
+    }
+
+    if(empresa.fechaBaja != null){
+        throw new GonePermanentlyError("La empresa se ha dado de baja.")
     }
 
     await prisma.registroEmail.update({
