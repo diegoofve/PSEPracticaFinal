@@ -3,6 +3,7 @@ import {jwtDecode} from "jwt-decode";
 
 interface JwtPayload {
     sub: string;
+    id: number;
     rol: 'CLIENTE' | 'EMPRESA' | 'ADMIN';
 }
 

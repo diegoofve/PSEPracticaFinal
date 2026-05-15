@@ -23,12 +23,12 @@ export const GestionAbonos = () => {
 
   useEffect(() => {
     if (!user || user.rol !== 'CLIENTE') {
-      navigate(user?.rol === 'EMPRESA' ? '/ModificarFestival' : '/login');
+      navigate(user?.rol === 'EMPRESA' ? '/modificar-festival' : '/login');
       return;
     }
     const fetchHistorial = async () => {
       try {
-        const response = await api.get('/usuarios/cliente/compras');
+        const response = await api.get('/cliente/abonos');
         setCompras(response.data);
       } catch (error) {
         console.error("Error al cargar el historial", error);
@@ -53,7 +53,7 @@ export const GestionAbonos = () => {
   /*
   const handleSolicitarDevolucion = async (ventaId: number) => {
     try {
-      await api.post(`/payments/refund/${ventaId}`);//ruta de mentira (esta no es y se tiene que implementar)
+      await api.post(`/payments/devolucion/${Id}`);//ruta de mentira (esta no es y se tiene que implementar)
       setMessage({ type: 'success', text: 'Solicitud de devolución enviada con éxito.' });
       fetchHistorial(); // Refrescamos para ver cambios de estado
     } catch (error: any) {

@@ -105,7 +105,7 @@ import './Register.css';
 
     setLoading(true);
     try {
-      const endpoint = formType === 'cliente' ? '/register/cliente' : '/register/empresa'; //esto hay que cambiar las rutas de para coincidir cn la api (creo q están bien)
+      const endpoint = formType === 'cliente' ? '/register/cliente' : '/register/empresa';
       const payload = formType === 'cliente' ? dataCliente : dataEmpresa;
 
       await api.post(endpoint, payload);
@@ -115,7 +115,7 @@ import './Register.css';
       });
       
       login(loginResponse.data.token)
-      navigate('/FestivalesList');
+      navigate('/festivales-list');
     } catch (error: any) {
       setErrors({ api: error.response?.data?.message || 'Error al registrar la cuenta del cliente' });
     } finally {

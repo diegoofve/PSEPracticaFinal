@@ -40,7 +40,7 @@ export const DatosEmpresa = () => {
 
     const fetchEmpresaDashboard = async () => {
       try {
-        const response = await api.get('/usuarios/empresa/dashboard');
+        const response = await api.get('/empresa/ventas');
         setData(response.data);
       } catch (error) {
         console.error("Error cargando el dashboard de empresa", error);

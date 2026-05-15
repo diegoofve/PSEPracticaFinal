@@ -32,7 +32,9 @@ export const AdminPanel = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const [pendientes, setPendientes] = useState<any[]>([]);
-    //const [stats, setStats] = useState<any>(null); no funciona pero es para las estadísticas asi q chilleamos 
+    const [statsCliente, setStatsCliente] = useState<any>(null);
+    const [statsEmpresa, setStatsEmpresa] = useState<any>(null);
+
     const [loading, setLoading] = useState(true);
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
@@ -51,10 +53,12 @@ export const AdminPanel = () => {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const res = await api.get('/');//endpoint para empresas pendientes?
+            const res = await api.get('/empresa/${empresa.id}');//endpoint para empresas pendientes?
             setPendientes(res.data);
-            // const resStats = await api.get('/'); endpoint para sacar las estadísticas de los usuarios, que aún no esta
-            // setStats(resStats.data);
+            const resStatsEmpresa = await api.get('/empresas'); 
+            setStatsEmpresa(resStatsEmpresa.data);
+            const resStatsCliente = await api.get('/clientes'); 
+            setStatsCliente(resStatsCliente.data);
         } catch (e) {
             console.error("Error cargando empresas pendientes:", e);
         } finally {
@@ -68,8 +72,8 @@ export const AdminPanel = () => {
 
     const handleAction = async (id: number, action: 'verificar' | 'anular') => {
         try {
-            const nuevoEstado = action === 'verificar' ? 'VERIFICADO' : 'ANULADO';
-            await api.put(`/`, { estado: nuevoEstado });//endpoint para verificar la empresa
+            const nuevoEstado = action === 'verificar' ? 'VERIFICADA' : 'RESTRINGIDA';
+            await api.put('/admin/empresa/{$Id}/banear', { estado: nuevoEstado });//endpoint para verificar la empresa
             
             setMessage({ 
                 type: 'success', 
@@ -78,7 +82,7 @@ export const AdminPanel = () => {
             
             setPendientes(prev => prev.filter(emp => emp.id !== id));
         } catch (e) {
-            setMessage({ type: 'error', text: "Error al procesar la acción en el servidor." });
+            setMessage({ type: 'error', text: "Error al procesar la acción" });
         }
     };
 
@@ -100,26 +104,25 @@ export const AdminPanel = () => {
                     </Typography>
                 </Box>
 
-                {/* parte de estadística del usuario que aun no esta terminado
                 <Grid container spacing={3} sx={{ mb: 6 }}>
                     <Grid size={{ xs: 12, sm: 4 }}>
                         <Paper className="fest-admin-card" sx={{ p: 3, textAlign: 'center', borderBottom: '4px solid #00C2FF' }}>
                             <GroupIcon sx={{ color: '#00C2FF', fontSize: 40, mb: 1 }} />
-                            <Typography variant="h4" sx={{ color: 'white', fontWeight: 'bold' }}>{stats?.totalClientes || 0}</Typography>
+                            <Typography variant="h4" sx={{ color: 'white', fontWeight: 'bold' }}>{statsCliente?.totalClientes || 0}</Typography>
                             <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)' }}>Clientes totales:</Typography>
                         </Paper>
                     </Grid>
                     <Grid size={{ xs: 12, sm: 4 }}>
                         <Paper className="fest-admin-card" sx={{ p: 3, textAlign: 'center', borderBottom: '4px solid #A020F0' }}>
                             <BusinessIcon sx={{ color: '#A020F0', fontSize: 40, mb: 1 }} />
-                            <Typography variant="h4" sx={{ color: 'white', fontWeight: 'bold' }}>{stats?.totalEmpresas || 0}</Typography>
+                            <Typography variant="h4" sx={{ color: 'white', fontWeight: 'bold' }}>{statsEmpresa?.totalEmpresas || 0}</Typography>
                             <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)' }}>Empresas totales:</Typography>
                         </Paper>
                     </Grid>
                     //aquí habíamos pensado poner un total de todas las ventas de todos los festivales en la plataforma
                 </Grid>
                 <Divider sx={{ bgcolor: 'rgba(255,255,255,0.1)', mb: 6 }} />
-                */}
+                
 
                 <Typography variant="h5" sx={{ color: 'white', mb: 3, fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 1 }}>
                     <BusinessIcon /> Solicitudes de registro

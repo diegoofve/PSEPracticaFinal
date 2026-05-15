@@ -1,4 +1,4 @@
-//queda cambiar algo de la validacion
+//eliminar cliente usuario/empresa ->modificar todo para que funcione (navbar y poco mas)
 
 import { useState, useEffect } from 'react';
 import { Box, Typography, TextField, Button, CircularProgress, Alert, Grid, Paper, InputAdornment,
@@ -34,39 +34,51 @@ export const ModificarPerfilCliente = () => {
   const { user } = useAuth();
 
   useEffect(() => {
-    if (!user || user.rol !== 'CLIENTE') {
+    if (!user || (user.rol !== 'CLIENTE' && user.rol !== 'EMPRESA')) {
       if (user?.rol === 'ADMIN') {
         navigate('/AdminPanel');
-      } else if (user?.rol === 'EMPRESA') {
-        navigate('/DatosEmpresa');
       } else {
         navigate('/login');
       }
       return; 
     }
     const fetchProfile = async () => {
-      try {
-        const response = await api.get('/cliente/perfil'); 
-        const userData = response.data;
+  try {
+    if (!user || !user.id) {
+        throw new Error("No se encontró el id del usuario");
+    }
 
-        if (userData.cif) {
-          setUserType('empresa');
-        } else {
-          setUserType('cliente');
-        }
-        setFormData({ ...userData, password: '' });
-      } catch (error: any) {
-        setMessage({ type: 'error', text: 'Error al cargar los datos del perfil.' });
-      } finally {
-        setLoadingInitial(false);
-      }
-    };
+    const endpoint = user.rol === 'EMPRESA' 
+        ? `/empresa/${user.id}` 
+        : `/cliente/${user.id}`;
+
+    const response = await api.get(endpoint);
+    const userData = response.data;
+
+    if (userData.cif || user.rol === 'EMPRESA') {
+      setUserType('empresa');
+    } else {
+      setUserType('cliente');
+    }
+
+    setFormData({ ...userData, password: '' });
+
+  } catch (error: any) {
+    console.error("Error en fetchProfile:", error);
+    setMessage({ 
+        type: 'error', 
+        text: 'Error al cargar los datos del perfil.' 
+    });
+  } finally {
+    setLoadingInitial(false);
+  }
+};
 
     fetchProfile();
     
   }, [user, navigate]);
 
-  if (user?.rol !== 'CLIENTE') return null;
+  if (user?.rol !== 'CLIENTE' && user?.rol !=='EMPRESA' ) return null;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -83,7 +95,7 @@ export const ModificarPerfilCliente = () => {
         delete payload.password;
       }
       
-      const endpointUpdate = userType === 'cliente' ? '/updatecliente' : '/updateempresa';
+      const endpointUpdate = userType === 'cliente' ? '/cliente' : '/empresa';
 
       await api.put(endpointUpdate, payload);//la dirección de la api esta bien?
       setMessage({ type: 'success', text: 'Perfil actualizado.' });
@@ -97,7 +109,7 @@ export const ModificarPerfilCliente = () => {
   const handleDelete = async () => {
     setDeleting(true);
     try {
-      const endpointDelete = userType === 'cliente' ? '/deletecliente' : '/deleteempresa';
+      const endpointDelete = userType === 'cliente' ? '/cliente' : '/empresa';
       await api.delete(endpointDelete); //hay que ajustar el endpoint
       //logout();
       navigate('/login');

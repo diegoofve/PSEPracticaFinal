@@ -20,7 +20,7 @@ export const FestivalesList = () => {
     useEffect(() => {
       if (authLoading) return;
         if (!user || user.rol !== 'CLIENTE') {
-        navigate(user?.rol === 'EMPRESA' ? '/ModificarFestival' : '/login');
+        navigate(user?.rol === 'EMPRESA' ? '/modificar-festival' : '/login');
         return;
        
       }

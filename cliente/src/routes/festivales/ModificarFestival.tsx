@@ -1,11 +1,8 @@
 /*
-crear festivales (nombre festival, ubicación, aforo, descripción, fecha_ini, fecha_fin, precio por abono) --> se envia a pendiente
 modificar festivales (solo 3 dias antes del festival) --> hacer para solo 3 dias antes
 eliminarlos festivales?? lo mismo que cancelarlo
 
-diferente tipo de abono para cada festival??
-
-falta terminar de poner el eliminar festival (poner que si esta viendo/modificando un festival puedas modificarlo, si lo estas creando no)
+diferente tipo de abono para cada festival, falta por poner que se puedan crear diferentes tipos de abonos
 */
 
 import { useState, useEffect } from 'react';
@@ -75,7 +72,7 @@ useEffect(() => {
     if (isEdit) {
     const fetchFestival = async () => {
         try {
-          const response = await api.get(``);//endpoint de donde pillamos el festival
+          const response = await api.get('/festivales/${festival.id}');//endpoint de donde pillamos el festival
           const data = response.data;
           setFormData({
             nombre: data.nombre,
@@ -102,7 +99,7 @@ useEffect(() => {
   const handleDelete = async () => {
     setDeleting(true);
     try {
-      await api.delete(`/festivales/${id}`); //hay que ajustar el endpoint (supongo q depende del id que envies???)
+      await api.delete(`/festivales/${id}`); //hay que ajustar el endpoint
       navigate('/modificar-festival'); //ir a tus festivales
     } catch (error: any) {
       setMessage({ type: 'error', text: 'Error al eliminar el festival.' });
@@ -142,7 +139,7 @@ useEffect(() => {
 
     try {
       if (isEdit) {
-        await api.put(`/festivales/${id}`, payload);//actualizar los festivales; endpoint para hacer put??
+        await api.put('/festivales/${festival.id}', payload);//actualizar los festivales; endpoint para hacer put??
         setMessage({ type: 'success', text: 'Festival actualizado.' });
       } else {
         await api.post('/festivales', payload);//mismo problema

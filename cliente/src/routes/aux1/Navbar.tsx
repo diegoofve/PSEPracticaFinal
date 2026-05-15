@@ -66,6 +66,9 @@ export const Navbar = () => {
               <button className="nav-btn-ghost" onClick={() => navigate('/modificar-festival')}>
                 <EditNoteIcon sx={{ fontSize: 15 }} /> Gestionar Festival
               </button>
+              <button className="nav-btn-ghost" onClick={() => navigate('/modificar-perfil-cliente')}>
+                <AccountCircleIcon sx={{ fontSize: 15 }} /> Mi Perfil
+              </button>
             </>
           )}
 
@@ -141,6 +144,9 @@ export const Navbar = () => {
               </MenuItem>,
               <MenuItem key="festival" onClick={() => { navigate('/modificar-festival'); closeMenu(); }}>
                 <EditNoteIcon sx={{ fontSize: 16 }} /> Gestionar Festival
+              </MenuItem>,
+              <MenuItem key="festival" onClick={() => { navigate('/modificar-perfil-cliente'); closeMenu(); }}>
+                <EditNoteIcon sx={{ fontSize: 16 }} /> Gestionar los perfil de tu empresa
               </MenuItem>
             ]}
 
