@@ -1,14 +1,14 @@
 import type { NextFunction, Request, Response } from 'express';
 import { UpdateEmpresaSchema } from '../dtos/empresa.dto';
 import { isEmptyObject } from '../lib/util';
-import { BadRequestError } from '../lib/errors';
+import { BadRequestError, ForbiddenError } from '../lib/errors';
 import 'passport' //para req.user
 import { logger } from '../lib/logger';
 import { EmpresaService } from '../services/empresa.service';
 
 const ERRORES_GENERICOS = ['unrecognized_keys', 'invalid_type'] //contiene los errores de zod que no queremos mostar por seguridad(faltan campos, tipo erroneo)
 
-const verEmpresa = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const getEmpresa = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try{
         const idString = (req.params.id) as any
 
@@ -28,7 +28,7 @@ const verEmpresa = async (req: Request, res: Response, next: NextFunction): Prom
             return;
         }
 
-        const result = await EmpresaService.verEmpresa(id)
+        const result = await EmpresaService.getEmpresa(id)
         logger.info(`Informacion de la empresa ${id} ha sido devuelta`)
         res.status(200).json(result)
 
@@ -37,9 +37,9 @@ const verEmpresa = async (req: Request, res: Response, next: NextFunction): Prom
     }
 }
 
-const verEmpresas = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const getEmpresas = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try{
-        const result = await EmpresaService.verEmpresas()
+        const result = await EmpresaService.getEmpresas()
         logger.info("Informacion del cliente(s) ha sido devuelta")
         res.status(200).json(result)
 
@@ -67,6 +67,10 @@ const updateEmpresa = async (req: Request, res: Response, next: NextFunction): P
         }
 
         const empresaId = (req.user as any).id
+        if (!empresaId || isNaN(empresaId) || empresaId <= 0) {
+            throw new ForbiddenError("Acceso no autorizado.")
+            return
+        }
 
         await EmpresaService.updateEmpresa(empresaId, validation.data);
         logger.info("Update de empresa exitosa.")
@@ -77,11 +81,15 @@ const updateEmpresa = async (req: Request, res: Response, next: NextFunction): P
     }
 }
 
-const deleteEmpresa = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const bajaEmpresa = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try{
         const empresaId = (req.user as any).id
+        if (!empresaId || isNaN(empresaId) || empresaId <= 0) {
+            throw new ForbiddenError("Acceso no autorizado.")
+            return
+        }
 
-        await EmpresaService.deleteEmpresa(empresaId);
+        await EmpresaService.bajaEmpresa(empresaId);
         logger.info("Empresa dada de baja exitosamente.")
         res.status(204).send();
     }catch(err){
@@ -90,8 +98,8 @@ const deleteEmpresa = async (req: Request, res: Response, next: NextFunction): P
 }
 
 export const EmpresaController = {
-    verEmpresa,
-    verEmpresas,
+    getEmpresa,
+    getEmpresas,
     updateEmpresa,
-    deleteEmpresa
+    bajaEmpresa
 }

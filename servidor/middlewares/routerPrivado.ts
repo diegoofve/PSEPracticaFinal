@@ -2,7 +2,6 @@ import { Router } from 'express';
 import passport from 'passport';
 import { FestivalController } from '../controllers/festival.controller';
 import { authorize } from './auth';
-import { AuthController } from '../controllers/auth.controller';
 import { tempEndpoint } from '../lib/util';
 import { ClienteController } from '../controllers/cliente.controller';
 import { EmpresaController } from '../controllers/empresa.controller';
@@ -12,32 +11,34 @@ const routerPrivado = Router();
 
 //Festivales
 routerPrivado.get('/festivales', passport.authenticate('jwt', { session: false }), authorize(["CLIENTE"]), 
-tempEndpoint) //devolver la info de todos los festivales
+FestivalController.getFestivales) //devolver la info de todos los festivales
+routerPrivado.get('/festivales/empresa', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
+FestivalController.getFestivalesEmpresa) //devolver la info de todos los festivales
 routerPrivado.post('/festivales', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
 FestivalController.crearFestival)
-routerPrivado.put('/festivales', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
-tempEndpoint) //editar un festival
-routerPrivado.post('/festivales/nuevoAbono', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
-tempEndpoint) //crear nuevos abonos
-routerPrivado.delete('/festivales', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
-tempEndpoint)
+routerPrivado.put('/festivales/:id', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
+FestivalController.updateFestival) //editar un festival
+routerPrivado.post('/festivales/:id/nuevoAbono', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
+FestivalController.crearAbono) //crear nuevos abonos
+routerPrivado.delete('/festivales:id', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
+FestivalController.bajaFestival)
 
 //Perfil de cliente
 routerPrivado.get('/cliente/:id', passport.authenticate('jwt', { session: false }), authorize(["CLIENTE"]),
-ClienteController.verCliente) //devolver la info de un cliente
+ClienteController.getCliente) //devolver la info de un cliente
 routerPrivado.put('/cliente', passport.authenticate('jwt', { session: false }), authorize(["CLIENTE"]),
 ClienteController.updateCliente)
 routerPrivado.delete('/cliente', passport.authenticate('jwt', { session: false }), authorize(["CLIENTE"]),
-ClienteController.deleteCliente)
+ClienteController.bajaCliente)
 
 
 //Perfil de empresa
 routerPrivado.get('/empresa/:id', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]),
-EmpresaController.verEmpresa)// devolver info de una empresa
+EmpresaController.getEmpresa)// devolver info de una empresa
 routerPrivado.put('/empresa', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
 EmpresaController.updateEmpresa)
 routerPrivado.delete('/empresa', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
-EmpresaController.deleteEmpresa)
+EmpresaController.bajaEmpresa)
 
 //Pagos
 routerPrivado.post('/payment', passport.authenticate('jwt', { session: false }), authorize(["CLIENTE"]), 
@@ -52,12 +53,12 @@ routerPrivado.put('/admin/empresa/:id/banear', passport.authenticate('jwt', { se
 AdminController.banearEmpresa)
 routerPrivado.put('/admin/cliente/:id/banear', passport.authenticate('jwt', { session: false }), authorize(["ADMIN"]), 
 AdminController.banearCliente)
-routerPrivado.put('/admin/empresa/:id/estado', passport.authenticate('jwt', { session: false }), authorize(["ADMIN"]), 
+routerPrivado.put('/admin/empresa/:id/estado', //passport.authenticate('jwt', { session: false }), authorize(["ADMIN"]), 
 AdminController.cambiarEstadoEmpresa)
 
-routerPrivado.get('/empresas', passport.authenticate('jwt', { session: false }), authorize(["ADMIN"]), 
-EmpresaController.verEmpresas)
+routerPrivado.get('/empresas', //passport.authenticate('jwt', { session: false }), authorize(["ADMIN"]), 
+EmpresaController.getEmpresas)
 routerPrivado.get('/clientes', passport.authenticate('jwt', { session: false }), authorize(["ADMIN"]), 
-ClienteController.verClientes)
+ClienteController.getClientes)
 
 export default routerPrivado;

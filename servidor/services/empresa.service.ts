@@ -2,7 +2,7 @@ import  { type UpdateEmpresaDto, ListaEmpresaSchema, type EmpresaDto  } from "..
 import { prisma } from '../lib/db';
 import { UnauthorizedError } from "../lib/errors";
 
-const verEmpresa = async (id: number): Promise<EmpresaDto[]> => {
+const getEmpresa = async (id: number): Promise<EmpresaDto[]> => {
     const result = await prisma.empresa.findMany({
         where: {
             id: id,
@@ -13,7 +13,7 @@ const verEmpresa = async (id: number): Promise<EmpresaDto[]> => {
     return ListaEmpresaSchema.parse(result);
 }
 
-const verEmpresas = async (): Promise<EmpresaDto[]> => {
+const getEmpresas = async (): Promise<EmpresaDto[]> => {
     const result = await prisma.empresa.findMany({
         where: {
             fechaBaja: null
@@ -40,7 +40,7 @@ const updateEmpresa = async (empresaId: number, data: UpdateEmpresaDto): Promise
 
 
 
-const deleteEmpresa = async (empresaId: number): Promise<void> => {
+const bajaEmpresa = async (empresaId: number): Promise<void> => {
     const result = await prisma.empresa.findUnique({
         where: {id: empresaId}
     })
@@ -61,8 +61,8 @@ const deleteEmpresa = async (empresaId: number): Promise<void> => {
 }
 
 export const EmpresaService = {
-    verEmpresa,
-    verEmpresas,
+    getEmpresa,
+    getEmpresas,
     updateEmpresa,
-    deleteEmpresa
+    bajaEmpresa
 }

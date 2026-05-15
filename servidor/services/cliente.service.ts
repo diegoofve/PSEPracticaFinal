@@ -2,7 +2,7 @@ import { type UpdateClienteDto, type ClienteDto, ListaClienteSchema } from "../d
 import { prisma } from '../lib/db';
 import { UnauthorizedError } from "../lib/errors";
 
-const verCliente = async (id: number): Promise<ClienteDto[]> => {
+const getCliente = async (id: number): Promise<ClienteDto[]> => {
     const result = await prisma.cliente.findMany({
         where: {
             id: id,
@@ -13,7 +13,7 @@ const verCliente = async (id: number): Promise<ClienteDto[]> => {
     return ListaClienteSchema.parse(result);
 }
 
-const verClientes = async (): Promise<ClienteDto[]> => {
+const getClientes = async (): Promise<ClienteDto[]> => {
     const result = await prisma.cliente.findMany({
         where: {
             fechaBaja: null
@@ -38,7 +38,7 @@ const updateCliente = async (clienteId: number, data: UpdateClienteDto): Promise
     })
 }
 
-const deleteCliente = async (clienteId: number): Promise<void> => {
+const bajaCliente = async (clienteId: number): Promise<void> => {
     const result = await prisma.cliente.findUnique({
         where: {id: clienteId}
     })
@@ -59,8 +59,8 @@ const deleteCliente = async (clienteId: number): Promise<void> => {
 }
 
 export const ClienteService = {
-    verCliente,
-    verClientes,
+    getCliente,
+    getClientes,
     updateCliente,
-    deleteCliente
+    bajaCliente
 }

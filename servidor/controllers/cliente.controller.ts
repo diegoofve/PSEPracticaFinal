@@ -1,14 +1,14 @@
 import type { Request, Response, NextFunction } from "express"
 import { UpdateClienteSchema } from '../dtos/clientes.dto';
 import { isEmptyObject } from '../lib/util';
-import { BadRequestError } from '../lib/errors';
+import { BadRequestError, ForbiddenError } from '../lib/errors';
 import 'passport' //para req.user
 import { logger } from '../lib/logger';
 import { ClienteService } from "../services/cliente.service";
 
 const ERRORES_GENERICOS = ['unrecognized_keys', 'invalid_type'] //contiene los errores de zod que no queremos mostar por seguridad(faltan campos, tipo erroneo)
 
-const verCliente = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const getCliente = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try{
         const idString = (req.params.id) as any
 
@@ -28,7 +28,7 @@ const verCliente = async (req: Request, res: Response, next: NextFunction): Prom
             return;
         }
 
-        const result = await ClienteService.verCliente(id)
+        const result = await ClienteService.getCliente(id)
         logger.info(`Informacion del cliente ${id} ha sido devuelta`)
         res.status(200).json(result)
 
@@ -37,9 +37,9 @@ const verCliente = async (req: Request, res: Response, next: NextFunction): Prom
     }
 }
 
-const verClientes = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const getClientes = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try{
-        const result = await ClienteService.verClientes()
+        const result = await ClienteService.getClientes()
         logger.info("Informacion del cliente(s) ha sido devuelta")
         res.status(200).json(result)
 
@@ -67,6 +67,10 @@ const updateCliente = async (req: Request, res: Response, next: NextFunction): P
         }
 
         const clienteId = (req.user as any).id
+        if (!clienteId || isNaN(clienteId) || clienteId <= 0) {
+            throw new ForbiddenError("Acceso no autorizado.")
+            return
+        }
 
         await ClienteService.updateCliente(clienteId, validation.data);
         logger.info("Update de cliente exitosa.")
@@ -77,11 +81,15 @@ const updateCliente = async (req: Request, res: Response, next: NextFunction): P
     }
 }
 
-const deleteCliente = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const bajaCliente = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try{
         const clienteId = (req.user as any).id
+        if (!clienteId || isNaN(clienteId) || clienteId <= 0) {
+            throw new ForbiddenError("Acceso no autorizado.")
+            return
+        }
 
-        await ClienteService.deleteCliente(clienteId);
+        await ClienteService.bajaCliente(clienteId);
         logger.info("Cliente dado de baja exitosamente.")
         res.status(204).send();
     }catch(err){
@@ -90,8 +98,8 @@ const deleteCliente = async (req: Request, res: Response, next: NextFunction): P
 }
 
 export const ClienteController = {
-    verCliente,
-    verClientes,
+    getCliente,
+    getClientes,
     updateCliente,
-    deleteCliente
+    bajaCliente
 }

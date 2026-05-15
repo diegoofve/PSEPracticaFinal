@@ -2,18 +2,14 @@ Cosas a hacer:
 
 # EN GRANDE PORQUE TIENE QUE SER LO PRIMERO A ARREGLAR MAÑANA POR LA MAÑANA
 
-ARREGLAR LO DE LOS ABONOS EN AÑADIR FESTIVALES
+ARREGLAR LO DE LOS ABONOS EN AÑADIR FESTIVALES tendria que estar arreglado de ayer y de hecho todo funciona pero hay que cambiar un par de cosas para hacerlo y no me da tiempo ahora asi que luego lo arreglo cuando haga los pagos 
 
+ahora mismo se muestran todos los festivales tanto para clientes como empresas. ver si en alguno de los dos casos seria mejor ocultar los cancelados (seguramente no por devoluciones y tal pero yo q se, typescript me derrite las neuronas)
 
 ## BACK
 
-pasar de codigo ascii del front que envia la tarjeta de credito a codigo normal para hacer la compra
-
 registrar las rutas y dtos nuevos en swagger
 
-acabar todo el apartado de festivales (controller, service, dtos)
-
-cositas de admin
 
 ## FRONT
 
@@ -39,13 +35,13 @@ panel de admin
 ## GESTION DE FESTIVALES
 - [x] Alta de festivales
 - [x] Front de alta de festis
-- [ ] Listado de festivales propios
+- [x] Listado de festivales propios
 - [x] Front edicion de festivales si quedan mas de 3 dias
-- [ ] Cancelacion de festis
+- [x] Cancelacion de festis
 - [x] Front cancelación festis
 - [ ] Visualizar informacion de ventas propia
 - [ ] Integracion de API musical en el detalle de los festivales, pudiendo obtener infromacion de cada artista **(opcional)**
-- [ ] Multiples tipos de abono por festival **(opcional)**
+- [x] Multiples tipos de abono por festival **(opcional)**
 
 ## VENTA DE ENTRADAS
 - [ ] Consulta de festivales disponibles
