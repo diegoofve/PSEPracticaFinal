@@ -103,7 +103,7 @@ useEffect(() => {
   }
   try {
     setLoading(true);
-    await api.post('/', nuevoAbono);
+    await api.post(`/festivales/${id}/nuevoAbono`, nuevoAbono);
     setToast({ open: true, message: 'Nuevo abono añadido con éxito.', severity: 'success' });    window.location.reload(); 
   } catch (error) {
     setToast({ open: true, message: 'Error al crear el abono.', severity: 'error' });  } finally {

@@ -44,7 +44,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/login" element={<Layout><Login /></Layout>} />
           <Route path="/register" element={<Layout><Register /></Layout>} />
           <Route path="/modificar-perfil-cliente" element={<Layout><ModificarPerfilCliente /></Layout>} />
-          <Route path="/modificar-festival" element={<Layout><ModificarFestival /></Layout>} />
+          <Route path="/modificar-festival/:id?" element={<Layout><ModificarFestival /></Layout>} />
           <Route path="/festivales-list" element={<Layout><FestivalesList /></Layout>} />
           <Route path="/admin-panel" element={<Layout><AdminPanel /></Layout>} />
           <Route path="/gestion-abonos" element={<Layout><GestionAbonos /></Layout>} />

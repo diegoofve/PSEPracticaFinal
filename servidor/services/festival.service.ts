@@ -1,4 +1,4 @@
-import { ListaFestivalSchema, NewAbonoDto, UpdateFestivalDto, type FestivalDto, type NewFestivalDto } from "../dtos/festival.dto"
+import { ListaFestivalSchema, UpdateFestivalDto, type FestivalDto, type NewFestivalDto } from "../dtos/festival.dto"
 import {prisma} from "../lib/db";
 import { ConflictError, ForbiddenError, NotFoundError } from "../lib/errors";
 
@@ -13,8 +13,9 @@ const getFestivales = async (): Promise<FestivalDto[]> => {
 
 const getFestivalesEmpresa = async (empresaId: number): Promise<FestivalDto[]> => {
     const result = await prisma.festival.findMany({
-        where: { activo: true, empresaId:empresaId },
-        include: { abonos: true }
+        where: { empresaId:empresaId },
+        include: { abonos: true },  
+        orderBy: { fechaInicio: "asc" }
     })
 
     return ListaFestivalSchema.parse(result);

@@ -17,16 +17,18 @@ si una empresa se da de baja se cancelan sus festivales? y si es baneada??
 cositas que he hecho refactorizando y que es posible (probable) que hayan roto cositas del front
 - todas las validaciones de absolutamente todo (porfa porfa porfa porfa no rompas nada juro haberlo hecho muy bien) (no parece que haya roto nada pero hay que hacer una prueba intensiva)
 - he quitado la fecha de creacion de los dto de devolucion de clientes y empresas
-
+comprobación festivales antes de 3 dias para poder modificarlo
 
 ## FRONT
 
-comprobación festivales antes de 3 dias para poder modificarlo
+se queda pillado al cancelar un festival
+editar un festival tiene todos los campos como obligatorios
+se puede editar un festival cancelado (el boton deberia bloquearse)
+login y register deberian redirigir si estas loggeado
+modificar un festival redirige a crear uno nuevo no a dashboard (quizas no es un bug)
 
-no se muestran los festivales bajo empresas
-no se pueden actualizar los perfiles porque se manda mal el payload (quitar email, fecha, cif/dni, estado)
-quitar la url y la descripcion del payload de crear festival para evitar errores (y revisar en otros formularios situaciones similares)
-actualizar como se cojen los datos en el historial de abonos del cliente que sale todo vacio
+
+
 
 ## GENERAL
 - [x] Registro de usuarios ruta api

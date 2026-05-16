@@ -29,7 +29,7 @@ routerPrivado.put('/festivales/:id', passport.authenticate('jwt', { session: fal
 FestivalController.updateFestival) //editar un festival
 routerPrivado.post('/festivales/:id/nuevoAbono', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
 AbonoController.crearAbono) //crear nuevos abonos
-routerPrivado.delete('/festivales:id', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
+routerPrivado.delete('/festivales/:id', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
 FestivalController.bajaFestival)
 
 //Perfil de cliente
