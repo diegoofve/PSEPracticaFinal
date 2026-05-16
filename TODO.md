@@ -10,6 +10,15 @@ ahora mismo se muestran todos los festivales tanto para clientes como empresas. 
 
 registrar las rutas y dtos nuevos en swagger
 
+las empresas no verificadas pueden operar?? hay que revisarlo en back, en front NO pueden
+
+si una empresa se da de baja se cancelan sus festivales? y si es baneada??
+
+cositas que he hecho refactorizando y que es posible (probable) que hayan roto cositas del front
+- cambiar los endpoints que devuelven los datos de un solo cliente/empresa para que tomen el id inyectado en la sesion y no uno por parametro de url
+- todas las validaciones de absolutamente todo (porfa porfa porfa porfa no rompas nada juro haberlo hecho muy bien)
+- he quitado la fecha de creacion de los dto de devolucion de clientes y empresas
+
 
 ## FRONT
 
@@ -42,7 +51,7 @@ actualizar como se cojen los datos en el historial de abonos del cliente que sal
 - [x] Front edicion de festivales si quedan mas de 3 dias
 - [x] Cancelacion de festis
 - [x] Front cancelación festis
-- [X$$] Visualizar informacion de ventas propia
+- [X] Visualizar informacion de ventas propia
 - [ ] Integracion de API musical en el detalle de los festivales, pudiendo obtener infromacion de cada artista **(opcional)**
 - [x] Multiples tipos de abono por festival **(opcional)**
 

@@ -12,7 +12,6 @@ export const ClienteSchema = z.object({ //necesario documentar en swagger? es de
     apellidos: z.string(),
     fechaNacimiento: z.coerce.date(), 
     telefono: z.string(),
-    creadoEn: z.coerce.date()
 })
 
 export const ListaClienteSchema = z.array(ClienteSchema)
@@ -20,7 +19,7 @@ export const ListaClienteSchema = z.array(ClienteSchema)
 export const UpdateClienteSchema = z.object({
     nombre: z.string().optional().openapi({ example: 'Pepe'}),
     apellidos: z.string().optional().openapi({ example: 'Garcia Ejemplo'}),
-    fechaNacimiento: z.coerce.date().refine(esMayorDeEdad, 'Debes ser mayor de edad para registrarte.').optional().openapi({ example: "2000-01-01"}),
+    fechaNacimiento: z.coerce.date().refine(esMayorDeEdad, 'Debes ser mayor de edad para usar la plataforma.').optional().openapi({ example: "2000-01-01"}),
     telefono: z.string().regex(/^(\+34|0034|34)?[6789]\d{8}$/, 'Teléfono no válido.').optional().openapi({ example: "666123456"}),
     password: z.string().min(8, "La contraseña debe tener al menos 8 caracteres.").optional().openapi({ example: 'contraseña123'}),
 }).strict().openapi('UpdateClienteDto');

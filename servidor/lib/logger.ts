@@ -1,7 +1,8 @@
 import pino from 'pino';
 import path from 'path';
 
-const LOG_DIR = path.join(__dirname, '../../logs');
+//cambiar la ruta antes de entregar, no tiene sentido a nivel de despliegue fisico dejarlo fuera de /servidor
+const LOG_DIR = path.join(__dirname, '../../logs'); 
 
 export const logger = pino({
     transport: {

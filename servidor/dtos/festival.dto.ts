@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
 import { isValidDate } from "../lib/util";
+import { AbonoSchema } from "./abono.dto";
 
 extendZodWithOpenApi(z);
 
@@ -12,19 +13,9 @@ export const NewFestivalSchema = z.object({
     artistas: z.array(z.string()).optional().openapi({ example: ["Mora", "Rosalía"]}),
     fechaInicio: z.coerce.date().refine(isValidDate, "La fecha de inicio no puede ser pasada.").openapi({ example: "2025-05-01" }),
     fechaFin: z.coerce.date().openapi({ example: "2025-05-02"}),
-    precioAbono: z.number().positive().openapi({ example: 70}),//hay que añadir euro/dolar??...
+    precioAbono: z.number().positive("El precio del abono debe ser positivo.").openapi({ example: 70}),
     imagen: z.url("La url no es válida.").optional().openapi({ example: "https://ejemplo.com/primavera.jpg" }),
 }).strict().openapi("NewFestivalDto");
-
-const AbonoSchema = z.object({
-    id: z.number(),
-    festivalId: z.number(),
-    nombre: z.string(),
-    descripcion: z.string().nullable(),
-    precio: z.coerce.string(), //decimal de prisma se serializa como string
-    stock: z.number(),
-    creadoEn: z.coerce.date()
-}).openapi("AbonoDto")
 
 export const FestivalSchema = z.object({
     id: z.number(),
@@ -55,16 +46,7 @@ export const UpdateFestivalSchema = z.object({
     imagen: z.url("La url no es válida.").optional().openapi({ example: "https://ejemplo.com/primavera.jpg" }),
 }).openapi("UpdateFestivalDto")
 
-export const NewAbonoSchema = z.object({
-    nombre: z.string().openapi({ example: "VIP" }),
-    descripcion: z.string().optional().openapi({ example: "Acceso VIP al festival" }),
-        precio: z.number().positive().openapi({ example: 150 }),
-    stock: z.number().int().positive().openapi({ example: 500 })
-}).strict().openapi("NewAbonoDto")
-
-
 export type NewFestivalDto = z.infer<typeof NewFestivalSchema>;
 export type FestivalDto = z.infer<typeof FestivalSchema>;
 export type ListaFestivalDto = z.infer<typeof ListaFestivalSchema>;
 export type UpdateFestivalDto = z.infer<typeof UpdateFestivalSchema>;
-export type NewAbonoDto = z.infer<typeof NewAbonoSchema>

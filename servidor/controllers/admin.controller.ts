@@ -1,46 +1,19 @@
-// admin.controller.ts
 import type { Request, Response, NextFunction } from "express"
 import { AdminService } from "../services/admin.service"
 import { EstadoEmpresaSchema } from "../dtos/admin.dto"
-import { BadRequestError } from "../lib/errors"
 import { logger } from "../lib/logger"
-
-const ERRORES_GENERICOS = ['unrecognized_keys', 'invalid_type'] //contiene los errores de zod que no queremos mostar por seguridad(faltan campos, tipo erroneo)
+import { validateBody, validateParamsId } from "../lib/util"
 
 const cambiarEstadoEmpresa = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const validation = EstadoEmpresaSchema.safeParse(req.body)
+        const data = validateBody(EstadoEmpresaSchema, req)
 
-        if (!validation.success) {
-            const issue = validation.error.issues[0]
-            const mensaje = ERRORES_GENERICOS.includes(issue.code)
-                ? 'Request no válida'
-                : issue.message
-            throw new BadRequestError(mensaje)
-            return;
-        }
+        const id = validateParamsId(req)
 
-        const idString = (req.params.id) as any
+        await AdminService.cambiarEstadoEmpresa(id, data)
 
-        if (!idString) {
-            throw new BadRequestError("No se ha detectado ningun parámetro.")
-            return;
-        }
-
-        const id = Number(idString)
-
-        if(Number.isNaN(id)){
-            throw new BadRequestError("El parámetro debe ser un número.")
-        }
-
-        if(id <= 0){
-            throw new BadRequestError("El parámetro debe ser un número positivo.")
-            return;
-        }
-
-        await AdminService.cambiarEstadoEmpresa(id, validation.data)
         logger.info("Estado de la empresa actualizado.")
-        res.status(200).json({ result: "Estado de la empresa actualizado correctamente" })
+        res.status(200).json({ result: "Estado de la empresa actualizado correctamente." })
     } catch (err) {
         next(err)
     }
@@ -48,27 +21,12 @@ const cambiarEstadoEmpresa = async (req: Request, res: Response, next: NextFunct
 
 const banearCliente = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const idString = (req.params.id) as any
-
-        if (!idString) {
-            throw new BadRequestError("No se ha detectado ningun parámetro.")
-            return;
-        }
-
-        const id = Number(idString)
-
-        if(Number.isNaN(id)){
-            throw new BadRequestError("El parámetro debe ser un número.")
-        }
-
-        if(id <= 0){
-            throw new BadRequestError("El parámetro debe ser un número positivo.")
-            return;
-        }
+        const id = validateParamsId(req)
 
         await AdminService.banearCliente(id)
+
         logger.info(`Cliente ${id} baneado.`)
-        res.status(200).json({ result: "Cliente baneado correctamente" })
+        res.status(200).json({ result: "Cliente baneado correctamente." })
     } catch (err) {
         next(err)
     }
@@ -76,27 +34,12 @@ const banearCliente = async (req: Request, res: Response, next: NextFunction) =>
 
 const banearEmpresa = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const idString = (req.params.id) as any
-
-        if (!idString) {
-            throw new BadRequestError("No se ha detectado ningun parámetro.")
-            return;
-        }
-
-        const id = Number(idString)
-
-        if(Number.isNaN(id)){
-            throw new BadRequestError("El parámetro debe ser un número.")
-        }
-
-        if(id <= 0){
-            throw new BadRequestError("El parámetro debe ser un número positivo.")
-            return;
-        }
+        const id = validateParamsId(req)
 
         await AdminService.banearEmpresa(id)
+        
         logger.info(`Empresa ${id} baneada.`)
-        res.status(200).json({ result: "Empresa baneada correctamente" })
+        res.status(200).json({ result: "Empresa baneada correctamente." })
     } catch (err) {
         next(err)
     }

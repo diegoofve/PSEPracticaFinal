@@ -13,7 +13,6 @@ export const EmpresaSchema = z.object({
   nombreContacto: z.string(),
   telefonoContacto: z.string(),
   estado: z.enum(EstadoGestora),
-  creadoEn: z.coerce.date()
 });
 
 export const ListaEmpresaSchema = z.array(EmpresaSchema);

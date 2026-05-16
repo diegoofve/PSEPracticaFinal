@@ -6,6 +6,7 @@ import { ClienteController } from '../controllers/cliente.controller';
 import { EmpresaController } from '../controllers/empresa.controller';
 import { AdminController } from '../controllers/admin.controller';
 import { PaymentController } from '../controllers/payment.controller';
+import { AbonoController } from '../controllers/abono.controller';
 
 const routerPrivado = Router();
 
@@ -27,12 +28,12 @@ FestivalController.crearFestival)
 routerPrivado.put('/festivales/:id', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
 FestivalController.updateFestival) //editar un festival
 routerPrivado.post('/festivales/:id/nuevoAbono', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
-FestivalController.crearAbono) //crear nuevos abonos
+AbonoController.crearAbono) //crear nuevos abonos
 routerPrivado.delete('/festivales:id', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
 FestivalController.bajaFestival)
 
 //Perfil de cliente
-routerPrivado.get('/cliente/:id', passport.authenticate('jwt', { session: false }), authorize(["CLIENTE"]),
+routerPrivado.get('/cliente', passport.authenticate('jwt', { session: false }), authorize(["CLIENTE"]),
 ClienteController.getCliente) //devolver la info de un cliente
 routerPrivado.put('/cliente', passport.authenticate('jwt', { session: false }), authorize(["CLIENTE"]),
 ClienteController.updateCliente)
@@ -41,7 +42,7 @@ ClienteController.bajaCliente)
 
 
 //Perfil de empresa
-routerPrivado.get('/empresa/:id', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]),
+routerPrivado.get('/empresa', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]),
 EmpresaController.getEmpresa)// devolver info de una empresa
 routerPrivado.put('/empresa', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
 EmpresaController.updateEmpresa)

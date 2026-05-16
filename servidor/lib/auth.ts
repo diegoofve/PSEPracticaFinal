@@ -4,7 +4,7 @@ import { prisma } from "./db";
 
 const options: StrategyOptions = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: process.env.JWT_SECRET || 'mi_clave_super_secreta'
+    secretOrKey: process.env.JWT_SECRET !
 };
 
 export const JWTStrategy = new Strategy(options, async (payload, done) => {
