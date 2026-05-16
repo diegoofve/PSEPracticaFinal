@@ -53,7 +53,6 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
     }
     try {
       const payload = {
-        festivalId: festival.id,
         abonoId: selectedAbono.id,
         cardHolder: paymentForm.cardHolder,// nombre de la persona sin codificar
         cardNumber: btoa(paymentForm.cardNumber),// en base64

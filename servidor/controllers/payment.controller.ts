@@ -3,13 +3,14 @@ import { BuyTicketSchema } from '../dtos/payment.dto';
 import { PaymentService } from '../services/payment.service';
 import 'passport';
 import { logger } from '../lib/logger';
-import { BadRequestError, UnauthorizedError } from '../lib/errors';
+import { BadRequestError, ForbiddenError, UnauthorizedError } from '../lib/errors';
 
 const ERRORES_GENERICOS = ['unrecognized_keys', 'invalid_type'] //contiene los errores de zod que no queremos mostar por seguridad(faltan campos, tipo erroneo)
 
 
 const makePayment = async (req: Request, res: Response, next: NextFunction) => {
     try{
+        logger.warn(req.body)
         const validation = BuyTicketSchema.safeParse(req.body)
 
         if (!validation.success) {
@@ -21,22 +22,10 @@ const makePayment = async (req: Request, res: Response, next: NextFunction) => {
             return;
         }
 
-        const idString = (req.params.id) as any
-
-        if (!idString) {
-            throw new BadRequestError("No se ha detectado ningun parámetro.")
-            return;
-        }
-
-        const clienteId = Number(idString)
-
-        if(Number.isNaN(clienteId)){
-            throw new BadRequestError("El parámetro debe ser un número.")
-        }
-
-        if(clienteId <= 0){
-            throw new BadRequestError("El parámetro debe ser un número positivo.")
-            return;
+        const clienteId = (req.user as any).id
+        if (!clienteId || isNaN(clienteId) || clienteId <= 0) {
+            throw new ForbiddenError("Acceso no autorizado.")
+            return
         }
 
         const {  abonoId, cardHolder, cardNumber, expiryDate, cvv } = validation.data;

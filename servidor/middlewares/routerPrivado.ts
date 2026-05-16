@@ -2,12 +2,20 @@ import { Router } from 'express';
 import passport from 'passport';
 import { FestivalController } from '../controllers/festival.controller';
 import { authorize } from './auth';
-import { tempEndpoint } from '../lib/util';
 import { ClienteController } from '../controllers/cliente.controller';
 import { EmpresaController } from '../controllers/empresa.controller';
 import { AdminController } from '../controllers/admin.controller';
+import { PaymentController } from '../controllers/payment.controller';
 
 const routerPrivado = Router();
+
+//Pagos
+routerPrivado.post('/payment', passport.authenticate('jwt', { session: false }), authorize(["CLIENTE"]), 
+PaymentController.makePayment)//hacer un pago
+routerPrivado.get('/cliente/abonos', passport.authenticate('jwt', { session: false }), authorize(["CLIENTE"]), 
+ClienteController.getAbonosCliente) //ver los abonos comprados por un cliente
+routerPrivado.get('/empresa/ventas', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
+EmpresaController.getVentasEmpresa)
 
 //Festivales
 routerPrivado.get('/festivales', passport.authenticate('jwt', { session: false }), authorize(["CLIENTE"]), 
@@ -40,20 +48,12 @@ EmpresaController.updateEmpresa)
 routerPrivado.delete('/empresa', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
 EmpresaController.bajaEmpresa)
 
-//Pagos
-routerPrivado.post('/payment', passport.authenticate('jwt', { session: false }), authorize(["CLIENTE"]), 
-tempEndpoint)//hacer un pago
-routerPrivado.get('/cliente/abonos', //passport.authenticate('jwt', { session: false }), authorize(["CLIENTE"]), 
-ClienteController.getAbonosCliente) //ver los abonos comprados por un cliente
-routerPrivado.get('/empresa/ventas', //passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
-EmpresaController.getVentasEmpresa)
-
 //Admin
 routerPrivado.put('/admin/empresa/:id/banear', passport.authenticate('jwt', { session: false }), authorize(["ADMIN"]), 
 AdminController.banearEmpresa)
 routerPrivado.put('/admin/cliente/:id/banear', passport.authenticate('jwt', { session: false }), authorize(["ADMIN"]), 
 AdminController.banearCliente)
-routerPrivado.put('/admin/empresa/:id/estado', //passport.authenticate('jwt', { session: false }), authorize(["ADMIN"]), 
+routerPrivado.put('/admin/empresa/:id/estado', passport.authenticate('jwt', { session: false }), authorize(["ADMIN"]), 
 AdminController.cambiarEstadoEmpresa)
 
 routerPrivado.get('/empresas', passport.authenticate('jwt', { session: false }), authorize(["ADMIN"]), 

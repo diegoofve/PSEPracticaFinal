@@ -51,7 +51,7 @@ const getClientes = async (req: Request, res: Response, next: NextFunction): Pro
 const getAbonosCliente = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try{
         const clienteId = (req.user as any).id
-        if (!clienteId || isNaN(clienteId) || clienteId <= 0) {
+        if (!clienteId || isNaN(Number(clienteId)) || clienteId <= 0) {
             throw new ForbiddenError("Acceso no autorizado.")
             return
         }

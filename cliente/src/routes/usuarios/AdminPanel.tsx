@@ -32,8 +32,8 @@ export const AdminPanel = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const [pendientes, setPendientes] = useState<any[]>([]);
-    const [statsCliente, setStatsCliente] = useState<any>(null);
-    const [statsEmpresa, setStatsEmpresa] = useState<any>(null);
+    const [listaClientes, setListaClientes] = useState<any>([]);
+    const [listaEmpresas, setListaEmpresas] = useState<any>([]);
 
     const [loading, setLoading] = useState(true);
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
@@ -53,12 +53,16 @@ export const AdminPanel = () => {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const res = await api.get('/empresa/${empresa.id}');//endpoint para empresas pendientes?
-            setPendientes(res.data);
             const resStatsEmpresa = await api.get('/empresas'); 
-            setStatsEmpresa(resStatsEmpresa.data);
+            const empresasData = resStatsEmpresa.data || [];
+            setListaEmpresas(empresasData);
+
+            // Filtramos localmente las que están pendientes de verificar
+            const empresasPendientes = empresasData.filter((emp: any) => emp.estado === 'PENDIENTE');
+            setPendientes(empresasPendientes);
+            
             const resStatsCliente = await api.get('/clientes'); 
-            setStatsCliente(resStatsCliente.data);
+            setListaClientes(resStatsCliente.data || []);
         } catch (e) {
             console.error("Error cargando empresas pendientes:", e);
         } finally {
@@ -73,7 +77,7 @@ export const AdminPanel = () => {
     const handleAction = async (id: number, action: 'verificar' | 'anular') => {
         try {
             const nuevoEstado = action === 'verificar' ? 'VERIFICADA' : 'RESTRINGIDA';
-            await api.put('/admin/empresa/{$Id}/banear', { estado: nuevoEstado });//endpoint para verificar la empresa
+            await api.put(`/admin/empresa/${id}/estado`, { estado: nuevoEstado });//endpoint para verificar la empresa
             
             setMessage({ 
                 type: 'success', 
@@ -108,18 +112,17 @@ export const AdminPanel = () => {
                     <Grid size={{ xs: 12, sm: 4 }}>
                         <Paper className="fest-admin-card" sx={{ p: 3, textAlign: 'center', borderBottom: '4px solid #00C2FF' }}>
                             <GroupIcon sx={{ color: '#00C2FF', fontSize: 40, mb: 1 }} />
-                            <Typography variant="h4" sx={{ color: 'white', fontWeight: 'bold' }}>{statsCliente?.totalClientes || 0}</Typography>
+                            <Typography variant="h4" sx={{ color: 'white', fontWeight: 'bold' }}>{listaClientes.length || 0}</Typography>
                             <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)' }}>Clientes totales:</Typography>
                         </Paper>
                     </Grid>
                     <Grid size={{ xs: 12, sm: 4 }}>
                         <Paper className="fest-admin-card" sx={{ p: 3, textAlign: 'center', borderBottom: '4px solid #A020F0' }}>
                             <BusinessIcon sx={{ color: '#A020F0', fontSize: 40, mb: 1 }} />
-                            <Typography variant="h4" sx={{ color: 'white', fontWeight: 'bold' }}>{statsEmpresa?.totalEmpresas || 0}</Typography>
+                            <Typography variant="h4" sx={{ color: 'white', fontWeight: 'bold' }}>{listaEmpresas.length || 0}</Typography>
                             <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)' }}>Empresas totales:</Typography>
                         </Paper>
                     </Grid>
-                    //aquí habíamos pensado poner un total de todas las ventas de todos los festivales en la plataforma
                 </Grid>
                 <Divider sx={{ bgcolor: 'rgba(255,255,255,0.1)', mb: 6 }} />
                 

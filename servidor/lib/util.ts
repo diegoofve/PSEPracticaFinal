@@ -24,5 +24,3 @@ export const isEmptyObject = (args: unknown): boolean => {
 export const isValidDate = (fecha: Date): boolean => {
     return fecha >= new Date();
 }
-
-export const tempEndpoint = (req: Request, res: Response) => {res.status(301).json({error: "WIP endpoint"})}

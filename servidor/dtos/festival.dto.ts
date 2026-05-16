@@ -21,7 +21,7 @@ const AbonoSchema = z.object({
     festivalId: z.number(),
     nombre: z.string(),
     descripcion: z.string().nullable(),
-    precio: z.string(), //decimal de prisma se serializa como string
+    precio: z.coerce.string(), //decimal de prisma se serializa como string
     stock: z.number(),
     creadoEn: z.coerce.date()
 }).openapi("AbonoDto")

@@ -117,14 +117,14 @@ export const DatosEmpresa = () => {
         </Typography>
 
         <Grid container spacing={3}>
-          {data?.festivales.length === 0 ? (
+          {data?.festivales?.length === 0 ? (
             <Grid size={{xs:12}}>
               <Paper sx={{ p: 4, bgcolor: 'rgba(255,255,255,0.05)', textAlign: 'center', borderRadius: 4 }}>
                 <Typography sx={{ color: 'rgba(255,255,255,0.5)' }}>Aún no has creado ningún festival.</Typography>
               </Paper>
             </Grid>
           ) : (
-            data?.festivales.map((fest: any) => (
+            data?.festivales?.map((fest: any) => (
               <Grid size={{xs:12 ,sm:6, md:4}}  key={fest.id}>
                 <Paper 
                   className="fest-admin-card" 
