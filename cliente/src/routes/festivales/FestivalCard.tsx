@@ -46,6 +46,16 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
 
   const [toast, setToast] = useState({ open: false, message: '', severity: 'success' as 'success' | 'error' });//para mostrar mensajes error/exito al comprar el abono
 
+const handleExpiryDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, ''); 
+    
+    if (value.length >= 3) {
+      value = `${value.slice(0, 2)}/${value.slice(2, 4)}`;
+    }
+    
+    setPaymentForm({ ...paymentForm, expiryDate: value.slice(0, 5) });
+  };
+
   const handleConfirmPayment = async () => {
     if (!paymentForm.cardHolder || !paymentForm.cardNumber || !paymentForm.expiryDate || !paymentForm.cvv) {
       setToast({ open: true, message: 'Completa todos los campos de pago.', severity: 'error' });
@@ -174,7 +184,7 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
               <TextField className="fest-field" label="Número de tarjeta" placeholder="1234 5678 9012 3456" fullWidth value={paymentForm.cardNumber} onChange={(e) => setPaymentForm({...paymentForm, cardNumber: e.target.value})} />
             </Grid>
             <Grid size={{xs: 6}}>
-              <TextField className="fest-field" label="Mes/Año" placeholder="12/29" fullWidth value={paymentForm.expiryDate} onChange={(e) => setPaymentForm({...paymentForm, expiryDate: e.target.value})} />
+              <TextField className="fest-field" label="Mes/Año" placeholder="12/29" fullWidth value={paymentForm.expiryDate} onChange={handleExpiryDateChange} />
             </Grid>
             <Grid size={{xs: 6}}>
               <TextField className="fest-field" label="CVV" placeholder="123" fullWidth value={paymentForm.cvv} onChange={(e) => setPaymentForm({...paymentForm, cvv: e.target.value})} />
@@ -201,7 +211,7 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
           <Box sx={{ p: 2, bgcolor: 'white', borderRadius: 2, display: 'inline-block' }}>
             <QRCodeSVG 
               value={JSON.stringify({
-                vId: datosVenta?.ventaId,
+                vId: datosVenta?.id,
                 cId: datosVenta?.clienteId,
                 f: festival.nombre,
                 t: selectedAbono?.nombre
@@ -211,7 +221,7 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
           </Box>
 
           <Box sx={{ mt: 3, width: '100%', bgcolor: 'rgba(255,255,255,0.05)', p: 2, borderRadius: 2 }}>
-            <Typography variant="subtitle2" color="secondary">ID Transacción: #{datosVenta?.ventaId}</Typography>
+            <Typography variant="subtitle2" color="secondary">ID Transacción: #{datosVenta?.id}</Typography>
             <Typography variant="body2">Abono: {selectedAbono?.nombre}</Typography>
             <Typography variant="body2">Fecha: {new Date().toLocaleDateString()}</Typography>
           </Box>
@@ -223,7 +233,7 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
         </DialogActions>
       </Dialog>
 
-      <Snackbar open={toast.open} autoHideDuration={4000} onClose={() => setToast({...toast, open: false})}>
+      <Snackbar open={toast.open} autoHideDuration={4000} onClose={() => setToast({...toast, open: false})} sx={{ zIndex: 9999 }}>
         <Alert severity={toast.severity} variant="filled">{toast.message}</Alert>
       </Snackbar>
     </Card>

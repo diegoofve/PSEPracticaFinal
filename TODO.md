@@ -15,11 +15,11 @@ registrar las rutas y dtos nuevos en swagger
 
 comprobación festivales antes de 3 dias para poder modificarlo
 
-panel de admin (falta poder banear clientes y empresas)
-corregir registrado en invalid date admin
-corregir asignar campos al formulario de editar perfiles
-corregir payload de las peticiones de update de perfiles
-al eliminar el usuario/empresa eliminar el jwt
+panel de admin (falta poder banear clientes y empresas) -> esta
+corregir registrado en invalid date admin -> esta (me lo he cargado)
+corregir asignar campos al formulario de editar perfiles -> esta
+corregir payload de las peticiones de update de perfiles -> esto que era????
+al eliminar el usuario/empresa eliminar el jwt -> esta
 minor: borrar datos del formulario al crear el festivalk
 añadir ver festivales a las empresas
 al poner la fecha de caducidad al pagar la barra no se pone sola (1229 en vez de 12/29)

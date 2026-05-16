@@ -1,5 +1,8 @@
 //eliminar cliente usuario/empresa ->modificar todo para que funcione (navbar y poco mas)
 
+
+
+//no se puede cambiar el email; email y dni tampoco se puede cambiar; arreglar el json que se envia para que cumpla la logica
 import { useState, useEffect } from 'react';
 import { Box, Typography, TextField, Button, CircularProgress, Alert, Grid, Paper, InputAdornment,
 Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@mui/material';
@@ -21,8 +24,6 @@ import './ModificarPerfilCliente.css';
 
 export const ModificarPerfilCliente = () => {
   const navigate = useNavigate();
-  const { logout } = useAuth();//esto q es y porque es necesario??
-
   const [loadingInitial, setLoadingInitial] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
@@ -31,7 +32,12 @@ export const ModificarPerfilCliente = () => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [deleting, setDeleting] = useState(false);//esto??
 
-  const { user } = useAuth();
+  const { user , logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
 
   useEffect(() => {
     if (!user || (user.rol !== 'CLIENTE' && user.rol !== 'EMPRESA')) {
@@ -53,7 +59,7 @@ export const ModificarPerfilCliente = () => {
         : `/cliente/${user.id}`;
 
     const response = await api.get(endpoint);
-    const userData = response.data;
+    const userData = response.data[0];
 
     if (userData.cif || user.rol === 'EMPRESA') {
       setUserType('empresa');
@@ -94,6 +100,14 @@ export const ModificarPerfilCliente = () => {
       if (!payload.password) {
         delete payload.password;
       }
+
+      if (!payload.nombre) {
+        delete payload.nombre;
+      }
+
+      if (!payload.apellidos) {
+        delete payload.apellidos;
+      }
       
       const endpointUpdate = userType === 'cliente' ? '/cliente' : '/empresa';
 
@@ -111,8 +125,7 @@ export const ModificarPerfilCliente = () => {
     try {
       const endpointDelete = userType === 'cliente' ? '/cliente' : '/empresa';
       await api.delete(endpointDelete); //hay que ajustar el endpoint
-      //logout();
-      navigate('/login');
+      handleLogout();
     } catch (error: any) {
       setMessage({ type: 'error', text: 'Error al eliminar la cuenta.' });
       setOpenDeleteModal(false);
@@ -143,7 +156,7 @@ export const ModificarPerfilCliente = () => {
             </Box>
             <Box>
               <Typography variant="h4" component="h1"  sx={{ color: 'white' , fontWeight:"bold"}}>
-                Mi Perfil
+                Mi perfil
               </Typography>
               <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' }}>
                 {userType === 'cliente' ? 'Datos del cliente' : 'Datos de Promotor'}
@@ -176,16 +189,16 @@ export const ModificarPerfilCliente = () => {
             {userType === 'empresa' && (
               <>
                 <Grid size={{ xs: 12 }}>
-                  <TextField className="fest-field" label="Razón Social" name="razon" value={formData.razon || ''} onChange={handleChange} fullWidth slotProps={{ input: { startAdornment: <InputAdornment position="start"><BusinessIcon /></InputAdornment> } }} />
+                  <TextField className="fest-field" label="Razón Social" name="razonSocial" value={formData.razonSocial || ''} onChange={handleChange} fullWidth slotProps={{ input: { startAdornment: <InputAdornment position="start"><BusinessIcon /></InputAdornment> } }} />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <TextField className="fest-field" label="CIF" name="cif" value={formData.cif || ''} onChange={handleChange} fullWidth disabled slotProps={{ input: { startAdornment: <InputAdornment position="start"><BadgeIcon /></InputAdornment> } }} helperText="El CIF no se puede modificar" />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
-                  <TextField className="fest-field" label="Teléfono" name="telefono" value={formData.telefono || ''} onChange={handleChange} fullWidth slotProps={{ input: { startAdornment: <InputAdornment position="start"><PhoneIcon /></InputAdornment> } }} />
+                  <TextField className="fest-field" label="Teléfono" name="telefonoContacto" value={formData.telefonoContacto || ''} onChange={handleChange} fullWidth slotProps={{ input: { startAdornment: <InputAdornment position="start"><PhoneIcon /></InputAdornment> } }} />
                 </Grid>
                 <Grid size={{ xs: 12 }}>
-                  <TextField className="fest-field" label="Domicilio Fiscal" name="domicilio" value={formData.domicilio || ''} onChange={handleChange} fullWidth slotProps={{ input: { startAdornment: <InputAdornment position="start"><HomeIcon /></InputAdornment> } }} />
+                  <TextField className="fest-field" label="Domicilio Fiscal" name="domicilioSocial" value={formData.domicilioSocial || ''} onChange={handleChange} fullWidth slotProps={{ input: { startAdornment: <InputAdornment position="start"><HomeIcon /></InputAdornment> } }} />
                 </Grid>
                 <Grid size={{ xs: 12 }}>
                   <TextField className="fest-field" label="Nombre Contacto" name="nombreContacto" value={formData.nombreContacto || ''} onChange={handleChange} fullWidth slotProps={{ input: { startAdornment: <InputAdornment position="start"><PersonIcon /></InputAdornment> } }} />

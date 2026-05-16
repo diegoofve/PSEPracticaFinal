@@ -24,7 +24,6 @@ import { api } from '../../lib/api.ts';
 import './ModificarFestival.css';
 import { useAuth } from '../../context/AuthContext';
 
-
 export const ModificarFestival = () => {
 
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -42,11 +41,11 @@ export const ModificarFestival = () => {
   const [formData, setFormData] = useState({
     nombre: '',
     ubicacion: '',
-    aforo: 0,
+    aforo: '' as string | number ,
     descripcion: '',
     fechaInicio: '',
     fechaFin: '',
-    precioAbono: 0,
+    precioAbono: '' as string | number ,
     imagen: '',
     empresaId: undefined as number | undefined
   });
@@ -55,7 +54,7 @@ export const ModificarFestival = () => {
   
   const [nuevoArtista, setNuevoArtista] = useState(''); //para meter artistas nuevos en el festival
 
-  const [nuevoAbono, setNuevoAbono] = useState({ nombre: '', descripcion: '', precio: 0, stock: 0 });
+  const [nuevoAbono, setNuevoAbono] = useState({ nombre: '', descripcion: '', precio: '' as string | number , stock: '' as string | number  });
   const [abonosActuales, setAbonosActuales] = useState<any[]>([]); //dto primario + array para ir almacenando abonos
 
 useEffect(() => {
@@ -98,7 +97,7 @@ useEffect(() => {
   }, [id, isEdit]);
 
   const handleAddAbono = async () => {
-  if (!nuevoAbono.nombre || nuevoAbono.precio <= 0 || nuevoAbono.stock <= 0) {
+  if (!nuevoAbono.nombre || Number(nuevoAbono.precio) <= 0 || Number(nuevoAbono.stock) <= 0) {
     setMessage({ type: 'error', text: 'Completa los datos del abono (nombre, precio y stock).' });
     return;
   }
@@ -131,7 +130,7 @@ useEffect(() => {
     setFormData({ 
       ...formData, 
       [name]: name === 'aforo' || name === 'precioAbono' 
-            ? parseFloat(value) || 0 
+            ? (value === ''?'': Number(value)) || 0 
             : value 
     });
   };
@@ -152,6 +151,8 @@ useEffect(() => {
 
     const payload = {
       ...formData,
+      aforo: Number(formData.aforo) || 0,
+      precioAbono: Number(formData.precioAbono) || 0,
       artistas: artistas.length > 0 ? artistas : undefined
     };
 
@@ -162,6 +163,19 @@ useEffect(() => {
       } else {
         await api.post('/festivales', payload);//mismo problema
         setMessage({ type: 'success', text: 'Festival creado con éxito' });
+        setFormData({
+          nombre: '',
+          ubicacion: '',
+          aforo: '' as string | number ,
+          descripcion: '',
+          fechaInicio: '',
+          fechaFin: '',
+          precioAbono: '' as string | number ,
+          imagen: '',
+          empresaId: undefined
+        });
+        setArtistas([]);
+        setNuevoArtista('');
         setTimeout(() => navigate('/modificar-festival'), 1500);//ir a tus festivales cuando se ha creado/modificado uno
       }
     } catch (error: any) {
@@ -276,11 +290,11 @@ useEffect(() => {
                       </Grid>
                       <Grid size={{ xs: 12, sm: 4 }}>
                         <TextField size="small" label="Precio" type="number" fullWidth className="fest-field" 
-                          value={nuevoAbono.precio} onChange={(e) => setNuevoAbono({...nuevoAbono, precio: parseFloat(e.target.value) || 0})} />
+                          value={nuevoAbono.precio} onChange={(e) => setNuevoAbono({...nuevoAbono, precio: e.target.value === '' ? '' : Number(e.target.value)})}  />
                       </Grid>
                       <Grid size={{ xs: 12, sm: 4 }}>
                         <TextField size="small" label="Stock" type="number" fullWidth className="fest-field" 
-                          value={nuevoAbono.stock} onChange={(e) => setNuevoAbono({...nuevoAbono, stock: parseInt(e.target.value) || 0})} />
+                          value={nuevoAbono.stock} onChange={(e) => setNuevoAbono({...nuevoAbono, stock: e.target.value === '' ? '' : Number(e.target.value)})}  />
                       </Grid>
                       <Grid size={{ xs: 12, sm: 9 }}>
                         <TextField size="small" label="Descripción" fullWidth className="fest-field" 
