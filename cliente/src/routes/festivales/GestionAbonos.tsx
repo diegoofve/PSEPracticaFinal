@@ -99,7 +99,7 @@ export const GestionAbonos = () => {
                 return (
                   <TableRow key={venta.id}>
                     <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>{festival?.nombre}</TableCell>
-                    <TableCell sx={{ color: 'white' }}>{venta.ventasAbonos[0]?.abono?.tipo}</TableCell>
+                    <TableCell sx={{ color: 'white' }}>{venta.ventasAbonos[0]?.abono?.nombre}</TableCell>
                     <TableCell sx={{ color: 'white' }}>{venta.total} €</TableCell>
                     <TableCell>
                       <Chip 

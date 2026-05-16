@@ -2,18 +2,12 @@
 modificar festivales (solo 3 dias antes del festival) --> hacer para solo 3 dias antes
 eliminarlos festivales?? lo mismo que cancelarlo
 
-diferente tipo de abono para cada festival, falta por poner que se puedan crear diferentes tipos de abonos
 */
 
 import { useState, useEffect } from 'react';
 import { 
   Box, Typography, TextField, Button, CircularProgress, Alert, Grid, Paper, 
-  InputAdornment, IconButton, Chip, Stack, 
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions
+  InputAdornment, IconButton, Chip, Stack, Dialog,DialogTitle,DialogActions, Divider
 } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -58,7 +52,11 @@ export const ModificarFestival = () => {
   });
 
   const [artistas, setArtistas] = useState<string[]>([]);
+  
   const [nuevoArtista, setNuevoArtista] = useState(''); //para meter artistas nuevos en el festival
+
+  const [nuevoAbono, setNuevoAbono] = useState({ nombre: '', descripcion: '', precio: 0, stock: 0 });
+  const [abonosActuales, setAbonosActuales] = useState<any[]>([]); //dto primario + array para ir almacenando abonos
 
 useEffect(() => {
     if (!user || user.rol !== 'EMPRESA') {
@@ -81,11 +79,14 @@ useEffect(() => {
             descripcion: data.descripcion || '',
             fechaInicio: data.fechaInicio ? data.fechaInicio.split('T')[0] : '',
             fechaFin: data.fechaFin ? data.fechaFin.split('T')[0] : '',
-            precioAbono: data.precioAbono || 100000, //punish user for no price
+            precioAbono: data.precioAbono || 100000, //punish user for no user
             imagen: data.imagen || '',
             empresaId: data.empresaId
           });
-          setArtistas(data.artistas || []);
+
+            setAbonosActuales(data.abonos || []);
+            setArtistas(data.artistas || []);
+
         } catch (error) {
           setMessage({ type: 'error', text: 'Error al cargar los datos del festival.' });
         } finally {
@@ -95,6 +96,23 @@ useEffect(() => {
       fetchFestival();
     }
   }, [id, isEdit]);
+
+  const handleAddAbono = async () => {
+  if (!nuevoAbono.nombre || nuevoAbono.precio <= 0 || nuevoAbono.stock <= 0) {
+    setMessage({ type: 'error', text: 'Completa los datos del abono (nombre, precio y stock).' });
+    return;
+  }
+  try {
+    setLoading(true);
+    await api.post('/', nuevoAbono);
+    setMessage({ type: 'success', text: 'Nuevo abono añadido con éxito.' });
+    window.location.reload(); 
+  } catch (error) {
+    setMessage({ type: 'error', text: 'Error al crear el abono.' });
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleDelete = async () => {
     setDeleting(true);
@@ -233,6 +251,50 @@ useEffect(() => {
               <Grid size={{ xs: 12 }}>
                 <TextField className="fest-field" label="URL de la imagen del cartel" name="imagen" value={formData.imagen} onChange={handleChange} fullWidth slotProps={{ input: { startAdornment: <InputAdornment position="start"><AddPhotoAlternateIcon sx={{ color: 'rgba(255,255,255,0.3)' }} /></InputAdornment> } }} />
               </Grid>
+
+              {isEdit && (
+                <Grid size={{ xs: 12 }}>
+                  <Box sx={{ p: 3, mt: 2, bgcolor: 'rgba(255,255,255,0.05)', borderRadius: 2, border: '1px dashed rgba(255,255,255,0.2)' }}>
+                    <Typography variant="h6" sx={{ color: 'white', mb: 2 }}>Gestión de Abonos Múltiples</Typography>
+                    
+                    <Stack spacing={2} sx={{ mb: 3 }}>
+                      {abonosActuales.map((abono, index) => (
+                        <Box key={index} sx={{ display: 'flex', justifyContent: 'space-between', bgcolor: 'rgba(0,0,0,0.3)', p: 1.5, borderRadius: 1 }}>
+                          <Typography sx={{ color: 'white' }}>{abono.nombre} ({abono.descripcion})</Typography>
+                          <Typography sx={{ color: '#00C2FF' }}>{abono.precio}€ - Stock: {abono.stock}</Typography>
+                        </Box>
+                      ))}
+                    </Stack>
+
+                    <Divider sx={{ mb: 2, bgcolor: 'rgba(255,255,255,0.1)' }} />
+                    
+                    <Typography variant="subtitle2" sx={{ color: 'rgba(255,255,255,0.7)', mb: 1 }}>Añadir nuevo tipo de abono:</Typography>
+                    <Grid container spacing={2}>
+                      <Grid size={{ xs: 12, sm: 4 }}>
+                        <TextField size="small" label="Nombre (General/VIp...)" fullWidth className="fest-field" 
+                          value={nuevoAbono.nombre} onChange={(e) => setNuevoAbono({...nuevoAbono, nombre: e.target.value})} />
+                      </Grid>
+                      <Grid size={{ xs: 12, sm: 4 }}>
+                        <TextField size="small" label="Precio" type="number" fullWidth className="fest-field" 
+                          value={nuevoAbono.precio} onChange={(e) => setNuevoAbono({...nuevoAbono, precio: parseFloat(e.target.value) || 0})} />
+                      </Grid>
+                      <Grid size={{ xs: 12, sm: 4 }}>
+                        <TextField size="small" label="Stock" type="number" fullWidth className="fest-field" 
+                          value={nuevoAbono.stock} onChange={(e) => setNuevoAbono({...nuevoAbono, stock: parseInt(e.target.value) || 0})} />
+                      </Grid>
+                      <Grid size={{ xs: 12, sm: 9 }}>
+                        <TextField size="small" label="Descripción" fullWidth className="fest-field" 
+                          value={nuevoAbono.descripcion} onChange={(e) => setNuevoAbono({...nuevoAbono, descripcion: e.target.value})} />
+                      </Grid>
+                      <Grid size={{ xs: 12, sm: 3 }}>
+                        <Button variant="contained" fullWidth onClick={handleAddAbono} sx={{ height: '100%', bgcolor: '#A020F0' }}>
+                          Añadir Abono
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Box>
+                </Grid>
+              )}
 
               <Grid size={{ xs: 12 }}>
                 <Button type="submit" fullWidth disabled={loading} className="fest-submit-btn">

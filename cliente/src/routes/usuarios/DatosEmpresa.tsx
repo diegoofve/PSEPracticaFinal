@@ -159,7 +159,7 @@ export const DatosEmpresa = () => {
                       sx={{ fontWeight: 'bold' }}
                     />
                     <Typography sx={{ color: '#00C2FF', fontWeight: 'bold' }}>
-                      {fest.precioAbono} €
+                      {fest.abonos && fest.abonos.length > 0 ? `${fest.abonos[0].precio} €` : 'Sin abonos'}
                     </Typography>
                   </Box>
                 </Paper>

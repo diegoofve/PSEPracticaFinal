@@ -118,25 +118,30 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
         <CardContent sx={{ pt: 0 }}>
           <Divider sx={{ bgcolor: 'rgba(255,255,255,0.1)', my: 2 }} />
           <Typography variant="h6" sx={{ color: 'white', mb: 2, fontSize: '1rem' }}>Selecciona tu abono:</Typography>
-          <Grid container spacing={2}>
-            {['General', 'VIP'].map((tipo) => (
-              <Grid size={{xs: 12}} key={tipo}>
+            <Grid container spacing={2}>
+            {festival.abonos?.map((abono: any) => (
+              <Grid size={{xs: 12}} key={abono.id}>
                 <Box sx={{ 
                   display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                   p: 2, bgcolor: 'rgba(255,255,255,0.05)', borderRadius: 2, border: '1px solid rgba(255,255,255,0.1)'
                 }}>
                   <Box>
-                    <Typography sx={{ color: 'white', fontWeight: 'bold' }}>Abono {tipo}</Typography>
-                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)' }}>Acceso total + {tipo}</Typography>
+                    <Typography sx={{ color: 'white', fontWeight: 'bold' }}>
+                      {abono.nombre} - {abono.precio}€
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)' }}>
+                      {abono.descripcion || `Acceso al festival`} (Stock: {abono.stock})
+                    </Typography>
                   </Box>
                   <Button 
                     variant="contained" 
                     size="small"
                     startIcon={<ConfirmationNumber />}
-                    onClick={() => { setSelectedAbono({ tipo, id: 1 }); setOpenPayment(true); }}
+                    disabled={abono.stock <= 0}
+                    onClick={() => { setSelectedAbono(abono); setOpenPayment(true); }}
                     sx={{ background: 'linear-gradient(90deg, #FF3C78, #A020F0)', textTransform: 'none' }}
                   >
-                    Comprar
+                    {abono.stock > 0 ? 'Comprar' : 'Agotado'}
                   </Button>
                 </Box>
               </Grid>
@@ -160,7 +165,7 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
         </DialogTitle>
         <DialogContent>
           <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.6)', mb: 3 }}>
-            Estás comprando: <strong>Abono {selectedAbono?.tipo}</strong> para {festival.nombre}.
+            Estás comprando: <strong>Abono {selectedAbono?.nombre}</strong> para {festival.nombre}.
           </Typography>
           <Grid container spacing={2}>
             <Grid size={{xs: 12}}>
@@ -200,7 +205,7 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
                 vId: datosVenta?.ventaId,
                 cId: datosVenta?.clienteId,
                 f: festival.nombre,
-                t: selectedAbono?.tipo
+                t: selectedAbono?.nombre
               })}
               size={200}
             />
@@ -208,7 +213,7 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
 
           <Box sx={{ mt: 3, width: '100%', bgcolor: 'rgba(255,255,255,0.05)', p: 2, borderRadius: 2 }}>
             <Typography variant="subtitle2" color="secondary">ID Transacción: #{datosVenta?.ventaId}</Typography>
-            <Typography variant="body2">Abono: {selectedAbono?.tipo}</Typography>
+            <Typography variant="body2">Abono: {selectedAbono?.nombre}</Typography>
             <Typography variant="body2">Fecha: {new Date().toLocaleDateString()}</Typography>
           </Box>
         </DialogContent>
