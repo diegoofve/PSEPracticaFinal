@@ -18,6 +18,8 @@ import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import './DatosEmpresa.css';
 
+const precioMinimo = (abonos: any[]): number => abonos.length === 0 ? 0 : Math.min(...abonos.map(a => Number(a.precio) || 0));
+
 export const DatosEmpresa = () => {
   const [data, setData] = useState<{ totalGanado: number; festivales: any[] } | null>(null);
   const [loading, setLoading] = useState(true);
@@ -40,7 +42,7 @@ export const DatosEmpresa = () => {
       try {
         const [resVentas, resFestivales] = await Promise.all([
           api.get('/empresa/ventas'),
-          api.get('/empresa/festivales')
+          api.get('/festivales/empresa')
         ]);
 
         const ventasMapeadas = resVentas.data || [];
@@ -174,7 +176,7 @@ export const DatosEmpresa = () => {
                       />
                       <Typography sx={{ color: '#00C2FF', fontWeight: 'bold' }}>
                         {fest.abonos && fest.abonos.length > 0 
-                          ? `Desde ${Number(fest.abonos[0].precio)} €` 
+                          ? `Desde ${precioMinimo(fest.abonos)} €` 
                           : `${Number(fest.precioAbono || 0)} €`
                         }
                       </Typography>
