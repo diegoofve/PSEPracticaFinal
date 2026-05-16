@@ -5,7 +5,7 @@
 //no se puede cambiar el email; email y dni tampoco se puede cambiar; arreglar el json que se envia para que cumpla la logica
 import { useState, useEffect } from 'react';
 import { Box, Typography, TextField, Button, CircularProgress, Alert, Grid, Paper, InputAdornment,
-Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@mui/material';
+Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 import PersonIcon from '@mui/icons-material/Person';
@@ -30,7 +30,13 @@ export const ModificarPerfilCliente = () => {
   const [userType, setUserType] = useState<'cliente' | 'empresa' | null>(null);
   const [formData, setFormData] = useState<any>({});
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const [deleting, setDeleting] = useState(false);//esto??
+  const [deleting, setDeleting] = useState(false);
+
+  const [toast, setToast] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({
+    open: false,
+    message: '',
+    severity: 'success',
+  });
 
   const { user , logout } = useAuth();
 
@@ -96,25 +102,44 @@ export const ModificarPerfilCliente = () => {
     setMessage(null);
 
     try {
-      const payload = { ...formData };
-      if (!payload.password) {
-        delete payload.password;
+      let payload: any = {};
+      if (userType === 'cliente') {
+        if (formData.nombre) payload.nombre = formData.nombre;
+        if (formData.apellidos) payload.apellidos = formData.apellidos;
+        if (formData.fechaNacimiento) payload.fechaNacimiento = formData.fechaNacimiento;
+        if (formData.telefono) payload.telefono = formData.telefono;
+        if (formData.password) payload.password = formData.password;
+      } else {
+        if (formData.razonSocial) payload.razon = formData.razonSocial;
+        if (formData.domicilioSocial) payload.domicilio = formData.domicilioSocial;
+        if (formData.nombreContacto) payload.nombreContacto = formData.nombreContacto;
+        if (formData.telefonoContacto) payload.telefono = formData.telefonoContacto;
+        if (formData.password) payload.password = formData.password;
       }
 
-      if (!payload.nombre) {
-        delete payload.nombre;
-      }
-
-      if (!payload.apellidos) {
-        delete payload.apellidos;
-      }
+      delete payload.creadoEn;
+      delete payload.email;
+      delete payload.dni;
+      delete payload.cif;
+      delete payload.estado;
+      delete payload.id;
       
       const endpointUpdate = userType === 'cliente' ? '/cliente' : '/empresa';
+      await api.put(endpointUpdate, payload);
 
-      await api.put(endpointUpdate, payload);//la dirección de la api esta bien?
-      setMessage({ type: 'success', text: 'Perfil actualizado.' });
+      setToast({
+        open: true,
+        message: 'Perfil actualizado',
+        severity: 'success'
+      });
+
+      setFormData((prev: any) => ({ ...prev, password: '' }));
     } catch (error: any) {
-      setMessage({ type: 'error', text: error.response?.data?.message || 'Error al actualizar el perfil' });
+      setToast({
+        open: true,
+        message: error.response?.data?.message || 'Error al actualizar',
+        severity: 'error'
+      });
     } finally {
       setSaving(false);
     }
@@ -251,6 +276,21 @@ export const ModificarPerfilCliente = () => {
           </Button>
         </DialogActions>
       </Dialog>
+        <Snackbar 
+          open={toast.open} 
+          autoHideDuration={4000} 
+          onClose={() => setToast({ ...toast, open: false })}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        >
+          <Alert 
+            onClose={() => setToast({ ...toast, open: false })} 
+            severity={toast.severity} 
+            variant="filled"
+            sx={{ width: '100%', fontWeight: 'bold', borderRadius: 2 }}
+          >
+            {toast.message}
+          </Alert>
+        </Snackbar>
     </Box>
   );
 };

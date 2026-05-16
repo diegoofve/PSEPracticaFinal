@@ -20,10 +20,15 @@ export const FestivalesList = () => {
     useEffect(() => {
       if (authLoading) return;
         if (!user || user.rol !== 'CLIENTE') {
-        navigate(user?.rol === 'EMPRESA' ? '/modificar-festival' : '/login');
-        return;
-       
-      }
+          if (user?.rol === 'ADMIN') {
+            navigate('/admin-panel');
+          } else if (user?.rol === 'EMPRESA') {
+            navigate('/modificar-festival');
+          } else {
+            navigate('/login');
+          }
+          return;
+        }
         const loadFestivales = async () => {
         try {
         const response = await api.get('/festivales');

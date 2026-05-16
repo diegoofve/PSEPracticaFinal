@@ -1,13 +1,7 @@
-/*
-modificar festivales (solo 3 dias antes del festival) --> hacer para solo 3 dias antes
-eliminarlos festivales?? lo mismo que cancelarlo
-
-*/
-
 import { useState, useEffect } from 'react';
 import { 
   Box, Typography, TextField, Button, CircularProgress, Alert, Grid, Paper, 
-  InputAdornment, IconButton, Chip, Stack, Dialog,DialogTitle,DialogActions, Divider
+  InputAdornment, IconButton, Chip, Stack, Dialog,DialogTitle,DialogActions, Divider, Snackbar
 } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -23,6 +17,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { api } from '../../lib/api.ts';
 import './ModificarFestival.css';
 import { useAuth } from '../../context/AuthContext';
+import { LegendToggleRounded } from '@mui/icons-material';
 
 export const ModificarFestival = () => {
 
@@ -37,6 +32,12 @@ export const ModificarFestival = () => {
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(isEdit);
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+
+  const [toast, setToast] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({
+    open: false,
+    message: '',
+    severity: 'success'
+  });
 
   const [formData, setFormData] = useState({
     nombre: '',
@@ -87,8 +88,7 @@ useEffect(() => {
             setArtistas(data.artistas || []);
 
         } catch (error) {
-          setMessage({ type: 'error', text: 'Error al cargar los datos del festival.' });
-        } finally {
+          setToast({ open: true, message: 'Error al cargar los datos del festival.', severity: 'error' });        } finally {
           setInitialLoading(false);
         }
       };
@@ -98,20 +98,35 @@ useEffect(() => {
 
   const handleAddAbono = async () => {
   if (!nuevoAbono.nombre || Number(nuevoAbono.precio) <= 0 || Number(nuevoAbono.stock) <= 0) {
-    setMessage({ type: 'error', text: 'Completa los datos del abono (nombre, precio y stock).' });
+    setToast({ open: true, message: 'Completa los datos del abono (nombre, precio y stock).', severity: 'error' });
     return;
   }
   try {
     setLoading(true);
     await api.post('/', nuevoAbono);
-    setMessage({ type: 'success', text: 'Nuevo abono añadido con éxito.' });
-    window.location.reload(); 
+    setToast({ open: true, message: 'Nuevo abono añadido con éxito.', severity: 'success' });    window.location.reload(); 
   } catch (error) {
-    setMessage({ type: 'error', text: 'Error al crear el abono.' });
-  } finally {
+    setToast({ open: true, message: 'Error al crear el abono.', severity: 'error' });  } finally {
     setLoading(false);
   }
 };
+
+const intentarEliminar = () => {
+    if (formData.fechaInicio) {
+      const hoy = new Date();
+      const fechaInicio = new Date(formData.fechaInicio);
+      const diferenciaMilisegundos = fechaInicio.getTime() - hoy.getTime();
+      const diferenciaDias = Math.ceil(diferenciaMilisegundos / (1000 * 60 * 60 * 24));
+
+      if (diferenciaDias < 3) {
+        setToast({ open: true, message: 'No puedes cancelar un festival a menos de 3 días de su inicio.', severity: 'error' });
+        window.scrollTo({ top: 0, behavior: 'smooth' });//una ñapa
+        return;
+      }
+    }
+    setOpenDeleteModal(true);
+  };
+
 
   const handleDelete = async () => {
     setDeleting(true);
@@ -119,8 +134,7 @@ useEffect(() => {
       await api.delete(`/festivales/${id}`); //hay que ajustar el endpoint
       navigate('/modificar-festival'); //ir a tus festivales
     } catch (error: any) {
-      setMessage({ type: 'error', text: 'Error al eliminar el festival.' });
-      setOpenDeleteModal(false);
+      setToast({ open: true, message: 'Error al eliminar el festival.', severity: 'error' });      setOpenDeleteModal(false);
       setDeleting(false);
     }
   };
@@ -153,12 +167,13 @@ useEffect(() => {
       ...formData,
       aforo: Number(formData.aforo) || 0,
       precioAbono: Number(formData.precioAbono) || 0,
-      artistas: artistas.length > 0 ? artistas : undefined
+      artistas: artistas.length > 0 ? artistas : undefined,
+      imagen: formData.imagen.trim() === '' ? undefined : formData.imagen
     };
 
     try {
       if (isEdit) {
-        await api.put('/festivales/${festival.id}', payload);//actualizar los festivales; endpoint para hacer put??
+        await api.put('/festivales/${id}', payload);//actualizar los festivales; endpoint para hacer put??
         setMessage({ type: 'success', text: 'Festival actualizado.' });
       } else {
         await api.post('/festivales', payload);//mismo problema
@@ -179,7 +194,11 @@ useEffect(() => {
         setTimeout(() => navigate('/modificar-festival'), 1500);//ir a tus festivales cuando se ha creado/modificado uno
       }
     } catch (error: any) {
-      setMessage({ type: 'error', text: error.response?.data?.message || 'Error al guardar el festival.' });
+        setToast({ 
+        open: true, 
+        message: error.response?.data?.message || 'Error al guardar el festival.', 
+        severity: 'error' 
+      });
     } finally {
       setLoading(false);
     }
@@ -312,10 +331,22 @@ useEffect(() => {
 
               <Grid size={{ xs: 12 }}>
                 <Button type="submit" fullWidth disabled={loading} className="fest-submit-btn">
-                  {loading ? <CircularProgress size={24} color="inherit" /> : (isEdit ? 'Guardar Cambios' : 'Publicar Festival')}
+                  {loading ? <CircularProgress size={24} color="inherit" /> : (isEdit ? 'Guardar cambios' : 'Publicar festival')}
                 </Button>
+                  {isEdit && (
+                  <Button 
+                    variant="outlined" 
+                    color="error" 
+                    fullWidth 
+                    onClick={intentarEliminar} 
+                    sx={{ mt: 2, borderWidth: 2, textTransform: 'none', fontWeight: 'bold' }}
+                  >
+                    Eliminar festival
+                  </Button>
+                )}
+
                 <Button fullWidth onClick={() => navigate(-1)} sx={{ mt: 1, color: 'rgba(255,255,255,0.5)', textTransform: 'none' }}>
-                  Cancelar
+                  Volver atrás
                 </Button>
               </Grid>
             </Grid>

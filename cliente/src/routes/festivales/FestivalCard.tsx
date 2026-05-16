@@ -9,7 +9,6 @@ import {
   ExpandMore as ExpandMoreIcon, 
   Place, 
   CalendarMonth, 
-  People, 
   CreditCard, 
   ConfirmationNumber 
 } from '@mui/icons-material';
@@ -174,7 +173,7 @@ const handleExpiryDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         </DialogTitle>
         <DialogContent>
           <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.6)', mb: 3 }}>
-            Estás comprando: <strong>Abono {selectedAbono?.nombre}</strong> para {festival.nombre}.
+            Estás comprando: <strong> {selectedAbono?.nombre}</strong> para {festival.nombre}.
           </Typography>
           <Grid container spacing={2}>
             <Grid size={{xs: 12}}>
@@ -199,7 +198,7 @@ const handleExpiryDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         </DialogActions>
       </Dialog>
 
-      <Dialog open={openQR} onClose={() => setOpenQR(false)} className="fest-payment-dialog">
+      <Dialog open={openQR} onClose={() => {setOpenQR(false); window.location.reload()}} className="fest-payment-dialog">
         <DialogTitle sx={{ textAlign: 'center', fontWeight: 'bold', color: '#00C2FF' }}>
           ¡Entrada lista!
         </DialogTitle>
@@ -221,13 +220,12 @@ const handleExpiryDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
           </Box>
 
           <Box sx={{ mt: 3, width: '100%', bgcolor: 'rgba(255,255,255,0.05)', p: 2, borderRadius: 2 }}>
-            <Typography variant="subtitle2" color="secondary">ID Transacción: #{datosVenta?.id}</Typography>
             <Typography variant="body2">Abono: {selectedAbono?.nombre}</Typography>
             <Typography variant="body2">Fecha: {new Date().toLocaleDateString()}</Typography>
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenQR(false)} fullWidth sx={{ color: 'white' }}>
+          <Button onClick={() => {setOpenQR(false);window.location.reload()}} fullWidth sx={{ color: 'white' }}>
             Cerrar
           </Button>
         </DialogActions>

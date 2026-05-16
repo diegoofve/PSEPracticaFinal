@@ -44,9 +44,7 @@ export const Login = () => {
 
     try {
       const response = await api.post('/login', { email, password });
-      
       login(response.data.token);
-      
       navigate('/festivales-list');
     } catch (error: any) {
       setErrors({ api: error.response?.data?.message || 'Error al iniciar sesión' });

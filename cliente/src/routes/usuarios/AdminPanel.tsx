@@ -18,6 +18,7 @@ import {
   Table,
   TableBody, TableCell, TableContainer, TableHead, TableRow, Chip
 } from '@mui/material';
+
 import BlockIcon from '@mui/icons-material/Block';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -32,6 +33,8 @@ import './AdminPanel.css';
 export const AdminPanel = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
+
+    const [toastBanear, setToastBanear] = useState({ open: false, message: '', severity: 'success' as 'success' | 'error' });
 
     const [pendientes, setPendientes] = useState<any[]>([]);
     const [listaClientes, setListaClientes] = useState<any>([]);
@@ -98,13 +101,21 @@ export const AdminPanel = () => {
         const endpoint = tipo === 'empresa' 
         ? `/admin/empresa/${id}/banear` 
         : `/admin/cliente/${id}/banear`;
-        await api.put(endpoint);//hay qye poner bien la api
-        setMessage({ type: 'success', text: `${tipo === 'cliente' ? 'Cliente' : 'Empresa'} baneado` });
+        await api.put(endpoint);
+        setToastBanear({ 
+                open: true, 
+                message: `${tipo === 'cliente' ? 'Cliente' : 'Empresa'} baneado con éxito.`, 
+                severity: 'success' 
+            });
         fetchData();
     } catch (error) {
-        setMessage({ type: 'error', text: `Error al intentar banear` });
-    }
-};
+        setToastBanear({ 
+                open: true, 
+                message: `Error al intentar banear al ${tipo}.`, 
+                severity: 'error' 
+            });
+        }
+    };
 
     return (
         <Box className="fest-admin-root" sx={{ py: 8, minHeight: '100vh' }}>
@@ -232,7 +243,7 @@ export const AdminPanel = () => {
                                                 <TableCell sx={{ color: 'white' }}>{cliente.email}</TableCell>
                                                 <TableCell sx={{ color: 'white' }}>{cliente.dni}</TableCell>
                                                 <TableCell align="right">
-                                                    <Button size="small" variant="contained" color="error" startIcon={<BlockIcon />} onClick={() => handleBanear(cliente.id, 'cliente')}>
+                                                    <Button size="small" variant="contained" color="error" startIcon={<BlockIcon />} onClick={() => handleBanear(cliente.id, 'cliente')} disabled={listaEmpresas.estado === 'RESTRINGIDA'}>
                                                         Banear
                                                     </Button>
                                                 </TableCell>
