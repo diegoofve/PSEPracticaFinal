@@ -15,8 +15,7 @@ las empresas no verificadas pueden operar?? hay que revisarlo en back, en front 
 si una empresa se da de baja se cancelan sus festivales? y si es baneada??
 
 cositas que he hecho refactorizando y que es posible (probable) que hayan roto cositas del front
-- cambiar los endpoints que devuelven los datos de un solo cliente/empresa para que tomen el id inyectado en la sesion y no uno por parametro de url
-- todas las validaciones de absolutamente todo (porfa porfa porfa porfa no rompas nada juro haberlo hecho muy bien)
+- todas las validaciones de absolutamente todo (porfa porfa porfa porfa no rompas nada juro haberlo hecho muy bien) (no parece que haya roto nada pero hay que hacer una prueba intensiva)
 - he quitado la fecha de creacion de los dto de devolucion de clientes y empresas
 
 

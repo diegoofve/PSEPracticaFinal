@@ -1,6 +1,8 @@
+import { da } from "zod/v4/locales";
 import { type UpdateClienteDto, type ClienteDto, ListaClienteSchema } from "../dtos/clientes.dto"
 import { prisma } from '../lib/db';
 import { NotFoundError, UnauthorizedError } from "../lib/errors";
+import bcrypt from "bcryptjs";
 
 const getCliente = async (id: number): Promise<ClienteDto[]> => {
     const result = await prisma.cliente.findMany({
@@ -32,9 +34,16 @@ const updateCliente = async (clienteId: number, data: UpdateClienteDto): Promise
         throw new UnauthorizedError("Credenciales incorrectas.");
     }
 
+    const { password, ...datos } = data
+    const datosUpdate: any = datos
+
+    if(password){
+        datosUpdate.password = await bcrypt.hash(password, 10)
+    }
+
     await prisma.cliente.update({
         where: {id: clienteId},
-        data: data
+        data: datosUpdate
     })
 }
 

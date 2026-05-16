@@ -61,8 +61,8 @@ export const ModificarPerfilCliente = () => {
     }
 
     const endpoint = user.rol === 'EMPRESA' 
-        ? `/empresa/${user.id}` 
-        : `/cliente/${user.id}`;
+        ? "/empresa/" 
+        : "/cliente/"
 
     const response = await api.get(endpoint);
     const userData = response.data[0];
