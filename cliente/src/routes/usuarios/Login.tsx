@@ -1,6 +1,4 @@
-//falta poner que si una empresa no esta validada no puede iniciar sesión
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, Typography, TextField, Button, CircularProgress, Alert} from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
 import LockIcon from '@mui/icons-material/Lock';
@@ -10,6 +8,7 @@ import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../lib/api.ts';
+import { jwtDecode } from 'jwt-decode';
 import './Login.css';
 
 export const Login = () => {
@@ -20,7 +19,28 @@ export const Login = () => {
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
-    const {login} = useAuth();
+    const { login, user, loading: authLoading } = useAuth();  
+    
+    useEffect(() => {
+        if (authLoading) return;
+
+        if (user && user.rol) {
+            switch (user.rol) {
+                case 'ADMIN':
+                    navigate('/admin-panel');
+                    break;
+                case 'EMPRESA':
+                    navigate('/datos-empresa');
+                    break;
+                case 'CLIENTE':
+                    navigate('/festivales-list');
+                    break;
+                default:
+                    navigate('/');
+                    break;
+            }
+        }
+    }, [user, authLoading, navigate]);
 
     const validate = () => {
         const newErrors: typeof errors = {};
@@ -44,8 +64,27 @@ export const Login = () => {
 
     try {
       const response = await api.post('/login', { email, password });
-      login(response.data.token);
-      navigate('/festivales-list');
+      const token = response.data.token;
+
+      const usuarioDecodificado: any = jwtDecode(token);
+      
+      if (usuarioDecodificado.rol === 'EMPRESA' && usuarioDecodificado.estado !== 'VERIFICADA') {
+                setErrors({ 
+                    api: 'Tu cuenta de gestora está pendiente de revisión o restringida por el administrador.' 
+                });
+                setLoading(false);
+                return;
+            }
+
+            login(token);
+
+            if (usuarioDecodificado.rol === 'ADMIN') {
+                navigate('/admin-panel');
+            } else if (usuarioDecodificado.rol === 'EMPRESA') {
+                navigate('/datos-empresa');
+            } else {
+                navigate('/festivales-list');
+            }
     } catch (error: any) {
       setErrors({ api: error.response?.data?.message || 'Error al iniciar sesión' });
     } finally {

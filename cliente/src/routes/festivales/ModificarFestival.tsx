@@ -21,8 +21,12 @@ import { LegendToggleRounded } from '@mui/icons-material';
 
 export const ModificarFestival = () => {
 
+  const hoy = new Date();
+  const todayStr = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}-${String(hoy.getDate()).padStart(2, '0')}`;//calculamos la fecha en el formato indicado de hoy
+
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [deleting, setDeleting] = useState(false);//esto??
+  const [isCancelled, setIsCancelled] = useState(false);
 
   const {user} = useAuth();
   const { id } = useParams(); // Si hay id modificamos, sino creamos.
@@ -73,16 +77,20 @@ useEffect(() => {
           const response = await api.get('/festivales/${festival.id}');//endpoint de donde pillamos el festival
           const data = response.data;
           setFormData({
-            nombre: data.nombre,
-            ubicacion: data.ubicacion,
-            aforo: data.aforo,
+            nombre: data.nombre || '',
+            ubicacion: data.ubicacion || '',
+            aforo: data.aforo || '',
             descripcion: data.descripcion || '',
             fechaInicio: data.fechaInicio ? data.fechaInicio.split('T')[0] : '',
             fechaFin: data.fechaFin ? data.fechaFin.split('T')[0] : '',
-            precioAbono: data.precioAbono || 100000, //punish user for no user
+            precioAbono: data.precioAbono || '',
             imagen: data.imagen || '',
             empresaId: data.empresaId
           });
+
+            if (data.activo === false){
+              setIsCancelled(true);
+            }
 
             setAbonosActuales(data.abonos || []);
             setArtistas(data.artistas || []);
@@ -161,23 +169,35 @@ const intentarEliminar = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setMessage(null);
 
-    const payload = {
-      ...formData,
-      aforo: Number(formData.aforo) || 0,
-      precioAbono: Number(formData.precioAbono) || 0,
-      artistas: artistas.length > 0 ? artistas : undefined,
-      imagen: formData.imagen.trim() === '' ? undefined : formData.imagen
-    };
+    let payload: any = {};
+
+    if (isEdit) {
+      if (formData.nombre) payload.nombre = formData.nombre;
+      if (formData.ubicacion) payload.ubicacion = formData.ubicacion;
+      if (formData.aforo !== '') payload.aforo = Number(formData.aforo);
+      if (formData.descripcion) payload.descripcion = formData.descripcion;
+      if (formData.fechaInicio) payload.fechaInicio = formData.fechaInicio;
+      if (formData.fechaFin) payload.fechaFin = formData.fechaFin;
+      if (artistas.length > 0) payload.artistas = artistas;
+      if (formData.imagen && formData.imagen.trim() !== '') payload.imagen = formData.imagen;
+    } else {
+      payload = {
+        ...formData,
+        aforo: Number(formData.aforo) || 0,
+        precioAbono: Number(formData.precioAbono) || 0,
+        artistas: artistas.length > 0 ? artistas : undefined,
+        imagen: formData.imagen.trim() === '' ? undefined : formData.imagen
+      };
+    }
 
     try {
       if (isEdit) {
         await api.put('/festivales/${id}', payload);//actualizar los festivales; endpoint para hacer put??
-        setMessage({ type: 'success', text: 'Festival actualizado.' });
+        setToast({ open: true, message: 'Festival actualizado', severity: 'success' });
       } else {
-        await api.post('/festivales', payload);//mismo problema
-        setMessage({ type: 'success', text: 'Festival creado con éxito' });
+        await api.post('/festivales', payload);
+        setToast({ open: true, message: 'Festival creado', severity: 'success' });
         setFormData({
           nombre: '',
           ubicacion: '',
@@ -191,10 +211,10 @@ const intentarEliminar = () => {
         });
         setArtistas([]);
         setNuevoArtista('');
-        setTimeout(() => navigate('/modificar-festival'), 1500);//ir a tus festivales cuando se ha creado/modificado uno
+        navigate('/datos-empresa');
       }
     } catch (error: any) {
-        setToast({ 
+      setToast({ 
         open: true, 
         message: error.response?.data?.message || 'Error al guardar el festival.', 
         severity: 'error' 
@@ -231,37 +251,57 @@ const intentarEliminar = () => {
               <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)' }}>
                 Completa los datos del festival para {isEdit ? 'actualizarlo' : 'publicarlo'} en la plataforma.
               </Typography>
+              <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)' }}>
+                {isCancelled ? 'Este festival ha sido cancelado' : 'Completa los datos del festival para gestionarlo.'}
+              </Typography>
             </Box>
           </Box>
+
+          {isCancelled && (
+            <Alert severity="error" sx={{ mb: 3, fontWeight: 'bold', borderRadius: 2 }}>
+              Festival cancelado (solo lectura)
+            </Alert>
+          )}
 
           {message && <Alert severity={message.type} sx={{ mb: 3 }}>{message.text}</Alert>}
 
           <Box component="form" onSubmit={handleSubmit}>
             <Grid container spacing={3}>
               <Grid size={{ xs: 12 }}>
-                <TextField className="fest-field" label="Nombre del Festival" name="nombre" value={formData.nombre} onChange={handleChange} fullWidth required />
+                <TextField className="fest-field" label="Nombre del Festival" name="nombre" value={formData.nombre} onChange={handleChange} fullWidth  required={!isEdit}/>
               </Grid>
 
               <Grid size={{ xs: 12, sm: 8 }}>
-                <TextField className="fest-field" label="Ubicación" name="ubicacion" value={formData.ubicacion} onChange={handleChange} fullWidth required slotProps={{ input: { startAdornment: <InputAdornment position="start"><LocationOnIcon sx={{ color: 'rgba(255,255,255,0.3)' }} /></InputAdornment> } }} />
+                <TextField className="fest-field" label="Ubicación" name="ubicacion" value={formData.ubicacion} onChange={handleChange} fullWidth required={!isEdit} slotProps={{ input: { startAdornment: <InputAdornment position="start"><LocationOnIcon sx={{ color: 'rgba(255,255,255,0.3)' }} /></InputAdornment> } }} />
               </Grid>
               <Grid size={{ xs: 12, sm: 4 }}>
-                <TextField className="fest-field" label="Aforo Máximo" name="aforo" type="number" value={formData.aforo} onChange={handleChange} fullWidth required slotProps={{ input: { startAdornment: <InputAdornment position="start"><PeopleIcon sx={{ color: 'rgba(255,255,255,0.3)' }} /></InputAdornment> } }} />
+                <TextField className="fest-field" label="Aforo Máximo" name="aforo" type="number" value={formData.aforo} onChange={handleChange} fullWidth required={!isEdit} slotProps={{ input: { startAdornment: <InputAdornment position="start"><PeopleIcon sx={{ color: 'rgba(255,255,255,0.3)' }} /></InputAdornment> } }} />
               </Grid>
 
               <Grid size={{ xs: 12 }}>
-                <TextField className="fest-field" label="Descripción" name="descripcion" value={formData.descripcion} onChange={handleChange} fullWidth multiline rows={3} slotProps={{ input: { startAdornment: <InputAdornment position="start"><DescriptionIcon sx={{ color: 'rgba(255,255,255,0.3)' }} /></InputAdornment> } }} />
+                <TextField className="fest-field" label="Descripción" name="descripcion" value={formData.descripcion} onChange={handleChange} fullWidth required={!isEdit} multiline rows={3} slotProps={{ input: { startAdornment: <InputAdornment position="start"><DescriptionIcon sx={{ color: 'rgba(255,255,255,0.3)' }} /></InputAdornment> } }} />
               </Grid>
 
               <Grid size={{ xs: 12, sm: 6 }}>
-                <TextField className="fest-field" label="Fecha Inicio" name="fechaInicio" type="date" value={formData.fechaInicio} onChange={handleChange} fullWidth required slotProps={{ inputLabel: { shrink: true }, input: { startAdornment: <InputAdornment position="start"><CalendarMonthIcon sx={{ color: 'rgba(255,255,255,0.3)' }} /></InputAdornment> } }} />
+                <TextField className="fest-field" label="Fecha Inicio" name="fechaInicio" type="date" value={formData.fechaInicio} onChange={handleChange} fullWidth required={!isEdit} slotProps={{ inputLabel: { shrink: true }, 
+                    input: { 
+                      readOnly: isCancelled, 
+                      startAdornment: <InputAdornment position="start"><CalendarMonthIcon sx={{ color: 'rgba(255,255,255,0.3)' }} /></InputAdornment> 
+                    },
+                    htmlInput: { min: todayStr, max: '2100-12-31' } 
+                  }}/>
               </Grid>
               <Grid size={{ xs: 12, sm: 6 }}>
-                <TextField className="fest-field" label="Fecha Fin" name="fechaFin" type="date" value={formData.fechaFin} onChange={handleChange} fullWidth required slotProps={{ inputLabel: { shrink: true } }} />
+                <TextField className="fest-field" label="Fecha Fin" name="fechaFin" type="date" value={formData.fechaFin} onChange={handleChange} fullWidth required={!isEdit} 
+                  slotProps={{ 
+                    inputLabel: { shrink: true }, 
+                    input: { readOnly: isCancelled },
+                    htmlInput: { min: formData.fechaInicio || todayStr, max: '2100-12-31' } 
+                  }} />
               </Grid>
 
               <Grid size={{ xs: 12, sm: 6 }}>
-                <TextField className="fest-field" label="Precio del Abono (€)" name="precioAbono" type="number" value={formData.precioAbono} onChange={handleChange} fullWidth required slotProps={{ inputLabel: { shrink: true }, input: { startAdornment: <InputAdornment position="start">€</InputAdornment> } }} />
+                <TextField className="fest-field" label="Precio del Abono (€)" name="precioAbono" type="number" value={formData.precioAbono} onChange={handleChange} fullWidth required={!isEdit} slotProps={{ inputLabel: { shrink: true }, input: { startAdornment: <InputAdornment position="start">€</InputAdornment> } }} />
               </Grid>
 
               <Grid size={{ xs: 12 }}>
@@ -304,24 +344,24 @@ const intentarEliminar = () => {
                     <Typography variant="subtitle2" sx={{ color: 'rgba(255,255,255,0.7)', mb: 1 }}>Añadir nuevo tipo de abono:</Typography>
                     <Grid container spacing={2}>
                       <Grid size={{ xs: 12, sm: 4 }}>
-                        <TextField size="small" label="Nombre (General/VIp...)" fullWidth className="fest-field" 
+                        <TextField size="small" label="Nombre (General/VIp...)" fullWidth  required={!isEdit} className="fest-field" 
                           value={nuevoAbono.nombre} onChange={(e) => setNuevoAbono({...nuevoAbono, nombre: e.target.value})} />
                       </Grid>
                       <Grid size={{ xs: 12, sm: 4 }}>
-                        <TextField size="small" label="Precio" type="number" fullWidth className="fest-field" 
+                        <TextField size="small" label="Precio" type="number" fullWidth  required={!isEdit} className="fest-field" 
                           value={nuevoAbono.precio} onChange={(e) => setNuevoAbono({...nuevoAbono, precio: e.target.value === '' ? '' : Number(e.target.value)})}  />
                       </Grid>
                       <Grid size={{ xs: 12, sm: 4 }}>
-                        <TextField size="small" label="Stock" type="number" fullWidth className="fest-field" 
+                        <TextField size="small" label="Stock" type="number" fullWidth  required={!isEdit} className="fest-field" 
                           value={nuevoAbono.stock} onChange={(e) => setNuevoAbono({...nuevoAbono, stock: e.target.value === '' ? '' : Number(e.target.value)})}  />
                       </Grid>
                       <Grid size={{ xs: 12, sm: 9 }}>
-                        <TextField size="small" label="Descripción" fullWidth className="fest-field" 
+                        <TextField size="small" label="Descripción" fullWidth  required={!isEdit} className="fest-field" 
                           value={nuevoAbono.descripcion} onChange={(e) => setNuevoAbono({...nuevoAbono, descripcion: e.target.value})} />
                       </Grid>
                       <Grid size={{ xs: 12, sm: 3 }}>
-                        <Button variant="contained" fullWidth onClick={handleAddAbono} sx={{ height: '100%', bgcolor: '#A020F0' }}>
-                          Añadir Abono
+                        <Button variant="contained" fullWidth onClick={handleAddAbono} disabled={isCancelled} sx={{ height: '100%', bgcolor: '#A020F0' }}>
+                          Añadir abono
                         </Button>
                       </Grid>
                     </Grid>
@@ -330,7 +370,7 @@ const intentarEliminar = () => {
               )}
 
               <Grid size={{ xs: 12 }}>
-                <Button type="submit" fullWidth disabled={loading} className="fest-submit-btn">
+                <Button type="submit" fullWidth disabled={loading || isCancelled} className="fest-submit-btn">
                   {loading ? <CircularProgress size={24} color="inherit" /> : (isEdit ? 'Guardar cambios' : 'Publicar festival')}
                 </Button>
                   {isEdit && (
@@ -339,6 +379,7 @@ const intentarEliminar = () => {
                     color="error" 
                     fullWidth 
                     onClick={intentarEliminar} 
+                    disabled={isCancelled}
                     sx={{ mt: 2, borderWidth: 2, textTransform: 'none', fontWeight: 'bold' }}
                   >
                     Eliminar festival

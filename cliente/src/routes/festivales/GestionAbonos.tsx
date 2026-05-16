@@ -1,6 +1,4 @@
-//incluir aquí histórico abonos + solcitud de devolución por festival cancelado (esto ultimo aun no)
-
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { 
   Box, Typography, Paper, CircularProgress, 
   Table, TableBody, TableCell, TableContainer, 
@@ -9,7 +7,7 @@ import {
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import LayersIcon from '@mui/icons-material/Layers';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext'; // Ajusta la ruta si es diferente
+import { useAuth } from '../../context/AuthContext';
 import { api } from '../../lib/api';
 import './GestionAbonos.css';
 
@@ -21,12 +19,7 @@ export const GestionAbonos = () => {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
-  useEffect(() => {
-    if (!user || user.rol !== 'CLIENTE') {
-      navigate(user?.rol === 'EMPRESA' ? '/modificar-festival' : '/login');
-      return;
-    }
-    const fetchHistorial = async () => {
+  const fetchHistorial = useCallback(async () => {
       try {
         const response = await api.get('/cliente/abonos');
         setCompras(response.data);
@@ -35,11 +28,15 @@ export const GestionAbonos = () => {
       } finally {
         setLoading(false);
       }
-    };
+    }, []);
 
+  useEffect(() => {
+    if (!user || user.rol !== 'CLIENTE') {
+      navigate(user?.rol === 'EMPRESA' ? '/modificar-festival' : '/login');
+      return;
+    }
     fetchHistorial();
-  }, [user, navigate]);
-
+    }, [user, navigate, fetchHistorial]);
   if (user?.rol !== 'CLIENTE') return null;
 
   if (loading) {
@@ -92,41 +89,46 @@ export const GestionAbonos = () => {
               </TableRow>
             ) : (
               compras.map((venta) => {
-                const festival = venta.ventasAbonos?.[0]?.abono?.festival;
-                const tipoAbono = venta.ventasAbonos?.[0]?.abono?.nombre || 'Abono Desconocido';
-                const esCancelado = festival?.estado === 'CANCELADO' || festival?.estado === 'ANULADO';
+                const abonoComprado = venta.abonos?.[0];
+                
+                const nombreFestival = abonoComprado?.festival || 'Festival Desconocido';
+                const tipoAbono = abonoComprado?.nombre || 'Abono Desconocido';
+                
+                const esCancelado = abonoComprado?.festivalActivo === false; 
+                
                 const yaDevuelto = venta.estado === 'DEVUELTO';
 
                 return (
                   <TableRow key={venta.id}>
-                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>{festival?.nombre}</TableCell>
+                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>{nombreFestival}</TableCell>
                     <TableCell sx={{ color: 'white' }}>{tipoAbono}</TableCell>
                     <TableCell sx={{ color: 'white' }}>{venta.total} €</TableCell>
                     <TableCell>
                       <Chip 
-                        label={festival?.estado!} 
+                        label={esCancelado ? "CANCELADO" : "ACTIVO"} 
                         color={esCancelado ? "error" : "success"} 
                         size="small"
                         variant="outlined"
                       />
                     </TableCell>
-                    {/* <TableCell> //aun no esta implementado el refund del festival
+                    <TableCell>
                       {esCancelado && !yaDevuelto ? (
                         <Button 
                           variant="contained" 
                           color="warning" 
                           startIcon={<AccountBalanceWalletIcon />}
-                          onClick={() => handleSolicitarDevolucion(venta.id)}
+                          // onClick={() => handleSolicitarDevolucion(venta.id)}
+                          disabled 
                           sx={{ textTransform: 'none', fontWeight: 'bold' }}
                         >
                           Solicitar Devolución
                         </Button>
                       ) : yaDevuelto ? (
-                        <Typography variant="body2" sx={{ color: '#00C2FF' }}>Dinero devuelto</Typography>
+                        <Typography variant="body2" sx={{ color: '#00C2FF', fontWeight: 'bold' }}>Reembolsado</Typography>
                       ) : (
                         <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.4)' }}>Sin acciones</Typography>
                       )}
-                    </TableCell>*/}
+                    </TableCell>
                   </TableRow>
                 );
               })

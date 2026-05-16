@@ -21,14 +21,6 @@ comprobación festivales antes de 3 dias para poder modificarlo
 
 ## FRONT
 
-se queda pillado al cancelar un festival
-editar un festival tiene todos los campos como obligatorios
-se puede editar un festival cancelado (el boton deberia bloquearse)
-login y register deberian redirigir si estas loggeado
-modificar un festival redirige a crear uno nuevo no a dashboard (quizas no es un bug)
-
-
-
 
 ## GENERAL
 - [x] Registro de usuarios ruta api
