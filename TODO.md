@@ -15,18 +15,10 @@ registrar las rutas y dtos nuevos en swagger
 
 comprobación festivales antes de 3 dias para poder modificarlo
 
-panel de admin (falta poder banear clientes y empresas) -> esta
-corregir registrado en invalid date admin -> esta (me lo he cargado)
-corregir asignar campos al formulario de editar perfiles -> esta
-corregir payload de las peticiones de update de perfiles -> esto que era????
-al eliminar el usuario/empresa eliminar el jwt -> esta
-minor: borrar datos del formulario al crear el festivalk
-añadir ver festivales a las empresas
-al poner la fecha de caducidad al pagar la barra no se pone sola (1229 en vez de 12/29)
-el error de pago sale detras de la pantalla de pago
-id de transaccion asterisco en el qr del pago
-no se muestran los beneficios de la empresa en el dashboard
-paginas blancas????
+no se muestran los festivales bajo empresas
+no se pueden actualizar los perfiles porque se manda mal el payload (quitar email, fecha, cif/dni, estado)
+quitar la url y la descripcion del payload de crear festival para evitar errores (y revisar en otros formularios situaciones similares)
+actualizar como se cojen los datos en el historial de abonos del cliente que sale todo vacio
 
 ## GENERAL
 - [x] Registro de usuarios ruta api

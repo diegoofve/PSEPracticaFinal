@@ -92,18 +92,19 @@ export const GestionAbonos = () => {
               </TableRow>
             ) : (
               compras.map((venta) => {
-                const festival = venta.ventasAbonos[0]?.abono?.festival;
+                const festival = venta.ventasAbonos?.[0]?.abono?.festival;
+                const tipoAbono = venta.ventasAbonos?.[0]?.abono?.nombre || 'Abono Desconocido';
                 const esCancelado = festival?.estado === 'CANCELADO' || festival?.estado === 'ANULADO';
                 const yaDevuelto = venta.estado === 'DEVUELTO';
 
                 return (
                   <TableRow key={venta.id}>
                     <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>{festival?.nombre}</TableCell>
-                    <TableCell sx={{ color: 'white' }}>{venta.ventasAbonos[0]?.abono?.nombre}</TableCell>
+                    <TableCell sx={{ color: 'white' }}>{tipoAbono}</TableCell>
                     <TableCell sx={{ color: 'white' }}>{venta.total} €</TableCell>
                     <TableCell>
                       <Chip 
-                        label={festival?.estado} 
+                        label={festival?.estado!} 
                         color={esCancelado ? "error" : "success"} 
                         size="small"
                         variant="outlined"

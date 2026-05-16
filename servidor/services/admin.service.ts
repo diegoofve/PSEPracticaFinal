@@ -26,7 +26,13 @@ const cambiarEstadoEmpresa = async (empresaId: number, data: EstadoEmpresaDto) =
                 where: { email: empresa.email },
                 data: { baneado: true}
             })
-        )   
+        )  
+        consultas.push(
+            prisma.empresa.update({
+                where: { id: empresaId },
+                data: { fechaBaja: new Date() }
+            })
+        )
     }
 
     await prisma.$transaction(consultas)
@@ -42,10 +48,16 @@ const banearCliente = async (clienteId: number) => {
         throw new GonePermanentlyError("El cliente se ha dado de baja.")
     }
 
-    await prisma.registroEmail.update({
-        where: { email: cliente.email },
-        data: { baneado: true }
-    })
+    await prisma.$transaction([
+        prisma.registroEmail.update({
+            where: { email: cliente.email },
+            data: { baneado: true }
+        }),
+        prisma.cliente.update({
+            where : { id: clienteId},
+            data: { fechaBaja: new Date() }
+        })
+    ])
 }
 
 const banearEmpresa = async (empresaId: number) => {
@@ -58,10 +70,15 @@ const banearEmpresa = async (empresaId: number) => {
         throw new GonePermanentlyError("La empresa se ha dado de baja.")
     }
 
-    await prisma.registroEmail.update({
-        where: { email: empresa.email },
-        data: { baneado: true }
-    })
+    await prisma.$transaction([prisma.registroEmail.update({
+            where: { email: empresa.email },
+            data: { baneado: true }
+        }),
+        prisma.empresa.update({
+            where: { id: empresaId },
+            data: { fechaBaja: new Date() }
+        })
+    ])
 }
 
 export const AdminService = {

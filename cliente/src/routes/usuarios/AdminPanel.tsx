@@ -95,7 +95,10 @@ export const AdminPanel = () => {
     const handleBanear = async (id: number, tipo: 'cliente' | 'empresa') => {
     if (!window.confirm(`¿Quieres banear permanentemente a este ${tipo}?`)) return;
     try {
-        await api.put(``);//hay qye poner bien la api
+        const endpoint = tipo === 'empresa' 
+        ? `/admin/empresa/${id}/banear` 
+        : `/admin/cliente/${id}/banear`;
+        await api.put(endpoint);//hay qye poner bien la api
         setMessage({ type: 'success', text: `${tipo === 'cliente' ? 'Cliente' : 'Empresa'} baneado` });
         fetchData();
     } catch (error) {
