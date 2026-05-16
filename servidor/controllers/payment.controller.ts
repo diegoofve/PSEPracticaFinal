@@ -20,22 +20,32 @@ const makePayment = async (req: Request, res: Response, next: NextFunction) => {
             throw new BadRequestError(mensaje)
             return;
         }
-        const clienteId = (req as any).user?.id; 
 
-        if (!clienteId) {
-            throw new UnauthorizedError("No estas autorizado para realizar la compra.")
+        const idString = (req.params.id) as any
+
+        if (!idString) {
+            throw new BadRequestError("No se ha detectado ningun parámetro.")
             return;
         }
 
-        const { festivalId, abonoId, cardHolder, cardNumber, expiryDate, cvv } = validation.data;
+        const clienteId = Number(idString)
+
+        if(Number.isNaN(clienteId)){
+            throw new BadRequestError("El parámetro debe ser un número.")
+        }
+
+        if(clienteId <= 0){
+            throw new BadRequestError("El parámetro debe ser un número positivo.")
+            return;
+        }
+
+        const {  abonoId, cardHolder, cardNumber, expiryDate, cvv } = validation.data;
 
         const decodedCardNumber = Buffer.from(cardNumber, 'base64').toString('utf-8');
         const decodedExpiryDate = Buffer.from(expiryDate, 'base64').toString('utf-8');
         const decodedCvv = Buffer.from(cvv, 'base64').toString('utf-8');
 
-        await PaymentService.makePayment({
-            clienteId,
-            festivalId,
+        await PaymentService.makePayment(clienteId, {
             abonoId,
             cardHolder,
             cardNumber: decodedCardNumber,

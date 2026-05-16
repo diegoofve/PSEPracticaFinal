@@ -50,7 +50,13 @@ const getEmpresas = async (req: Request, res: Response, next: NextFunction): Pro
 
 const getVentasEmpresa = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try{
-        const result = await EmpresaService.getVentasEmpresa(2)
+        const empresaId = (req.user as any).id
+        if (!empresaId || isNaN(empresaId) || empresaId <= 0) {
+            throw new ForbiddenError("Acceso no autorizado.")
+            return
+        }
+
+        const result = await EmpresaService.getVentasEmpresa(empresaId)
         console.log(result)
         res.status(200).json(result)
     }catch(err){

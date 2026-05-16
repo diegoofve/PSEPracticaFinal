@@ -43,9 +43,9 @@ EmpresaController.bajaEmpresa)
 //Pagos
 routerPrivado.post('/payment', passport.authenticate('jwt', { session: false }), authorize(["CLIENTE"]), 
 tempEndpoint)//hacer un pago
-routerPrivado.get('/cliente/:id/abonos', passport.authenticate('jwt', { session: false }), authorize(["CLIENTE"]), 
+routerPrivado.get('/cliente/abonos', //passport.authenticate('jwt', { session: false }), authorize(["CLIENTE"]), 
 ClienteController.getAbonosCliente) //ver los abonos comprados por un cliente
-routerPrivado.get('/empresa/:id/ventas', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
+routerPrivado.get('/empresa/ventas', //passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
 EmpresaController.getVentasEmpresa)
 
 //Admin

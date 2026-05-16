@@ -50,7 +50,13 @@ const getClientes = async (req: Request, res: Response, next: NextFunction): Pro
 
 const getAbonosCliente = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try{
-        const result = await ClienteService.getAbonosCliente(1);
+        const clienteId = (req.user as any).id
+        if (!clienteId || isNaN(clienteId) || clienteId <= 0) {
+            throw new ForbiddenError("Acceso no autorizado.")
+            return
+        }
+
+        const result = await ClienteService.getAbonosCliente(clienteId);
         console.log(result)
         res.status(200).json(result)
     }catch(err){
