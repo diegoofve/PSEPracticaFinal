@@ -29,6 +29,19 @@ const getFestivalesEmpresa = async (req: Request, res: Response, next: NextFunct
     }
 }
 
+const getFestival = async (req: Request, res: Response, next: NextFunction) => {
+    try{
+        const id = validateParamsId(req)
+
+        const result = await FestivalService.getFestival(id)
+
+        logger.info(`Informacion del festival ${id} devuelta.`)
+        res.status(200).json(result)
+    } catch (err) {
+        next(err)
+    }
+}
+
 const crearFestival = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try{
         const data = validateBody(NewFestivalSchema, req)
@@ -83,6 +96,7 @@ const bajaFestival = async (req: Request, res: Response, next: NextFunction) => 
 export const FestivalController = {
     getFestivales,
     getFestivalesEmpresa,
+    getFestival,
     crearFestival,
     updateFestival,
     bajaFestival

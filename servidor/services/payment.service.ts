@@ -1,6 +1,6 @@
 import { BuyTicketDto } from "../dtos/payment.dto";
 import { prisma } from "../lib/db";
-import { ConflictError, FatalError, NotFoundError } from "../lib/errors";
+import { ConflictError, FatalError, NotFoundError, PaymentError } from "../lib/errors";
 import axios from "axios"
 import { logger } from "../lib/logger";
 
@@ -43,24 +43,32 @@ const makePayment = async (clienteId: number, data: BuyTicketDto) => {
         include: { ventasAbonos: true}
     })
 
-    // const authPago = await client.post("/auth/login", {
-    //     username: process.env.API_AUTH_USER,
-    //     password: process.env.API_AUTH_PASSWORD
-    // })
+    const authPago = await client.post("/auth/login", {
+        username: process.env.API_AUTH_USER,
+        password: process.env.API_AUTH_PASSWORD
+    })
 
-    // const token = authPago.data.access_token
+    const token = authPago.data.access_token
 
-    // const pago = await client.post("/payments/charge", {
-    //         ...paymentData,
-    //         amount: abono.precio,
-    //         currency: "EUR"
-    //     },
-    //     { headers: {Authorization: `Bearer ${token} `} }
-    // )
+    let pagoAceptado = false
+    try{
+        const pago = await client.post("/payments/charge", {
+                ...paymentData,
+                amount: Number(abono.precio),
+                currency: "EUR"
+            },
+            { headers: {Authorization: `Bearer ${token} `} }
+        )
+        pagoAceptado = pago.data.status === "approved"
+    }catch(err){
+        await prisma.venta.update({
+            where: { id: venta.id },
+            data: { estado: "CANCELADA" }
+        })
 
-    //const pagoAceptado = pago.data.status === "approved"
+        throw new PaymentError("No se ha podido procesar el pago")
+    }
 
-    const pagoAceptado = true;
     if(!pagoAceptado){
         await prisma.venta.update({
             where: { id: venta.id },

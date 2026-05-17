@@ -13,29 +13,28 @@ const cambiarEstadoEmpresa = async (empresaId: number, data: EstadoEmpresaDto) =
         throw new GonePermanentlyError("La empresa está dada de baja")
     }
 
-    const consultas: any = [
-        prisma.empresa.update({
+    await prisma.$transaction(async (tx) => {
+        await tx.empresa.update({
             where: { id: empresaId },
             data: { estado: data.estado as EstadoGestora }
         })
-    ]
 
-    if(data.estado === "RESTRINGIDA"){
-        consultas.push(
-            prisma.registroEmail.update({
+        if (data.estado === "RESTRINGIDA") {
+            await tx.registroEmail.update({
                 where: { email: empresa.email },
-                data: { baneado: true}
+                data: { baneado: true }
             })
-        )  
-        consultas.push(
-            prisma.empresa.update({
+            await tx.empresa.update({
                 where: { id: empresaId },
                 data: { fechaBaja: new Date() }
             })
-        )
-    }
-
-    await prisma.$transaction(consultas)
+            //Dar de baja todos los festivales de la empresa
+            await tx.festival.updateMany({
+                where: { empresaId },
+                data: { activo: false }
+            })
+        }
+    })
 }
 
 const banearCliente = async (clienteId: number) => {
@@ -70,15 +69,21 @@ const banearEmpresa = async (empresaId: number) => {
         throw new GonePermanentlyError("La empresa se ha dado de baja.")
     }
 
-    await prisma.$transaction([prisma.registroEmail.update({
+    await prisma.$transaction( async (tx) => {
+        await tx.registroEmail.update({
             where: { email: empresa.email },
             data: { baneado: true }
         }),
-        prisma.empresa.update({
+        await tx.empresa.update({
             where: { id: empresaId },
             data: { fechaBaja: new Date() }
-        })
-    ])
+        }),
+        //Dar de baja todos los festivales de la empresa
+        await tx.festival.updateMany({
+        where: { empresaId },
+        data: { activo: false }
+        })  
+    })
 }
 
 export const AdminService = {

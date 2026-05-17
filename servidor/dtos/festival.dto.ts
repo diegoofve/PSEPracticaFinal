@@ -10,6 +10,7 @@ export const NewFestivalSchema = z.object({
     descripcion: z.string().optional().openapi({ example: "Un festival muy divertido al que acudir con tus amigos!"}),
     ubicacion: z.string().openapi({ example: "IFEMA, Madrid" }),
     aforo: z.number().int().positive("El aforo debe ser positivo.").openapi({ example: 10000}),
+    cantidad: z.number().int().positive("El numero de entradas debe ser positivo").openapi({ example: 500 }),
     artistas: z.array(z.string()).optional().openapi({ example: ["Mora", "Rosalía"]}),
     fechaInicio: z.coerce.date().refine(isValidDate, "La fecha de inicio no puede ser pasada.").openapi({ example: "2025-05-01" }),
     fechaFin: z.coerce.date().openapi({ example: "2025-05-02"}),

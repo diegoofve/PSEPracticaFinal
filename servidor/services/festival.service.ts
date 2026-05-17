@@ -1,6 +1,6 @@
-import { ListaFestivalSchema, UpdateFestivalDto, type FestivalDto, type NewFestivalDto } from "../dtos/festival.dto"
+import { FestivalSchema, ListaFestivalSchema, UpdateFestivalDto, type FestivalDto, type NewFestivalDto } from "../dtos/festival.dto"
 import {prisma} from "../lib/db";
-import { ConflictError, ForbiddenError, NotFoundError } from "../lib/errors";
+import { BadRequestError, ConflictError, ForbiddenError, NotFoundError } from "../lib/errors";
 
 const getFestivales = async (): Promise<FestivalDto[]> => {
     const result = await prisma.festival.findMany({
@@ -9,6 +9,19 @@ const getFestivales = async (): Promise<FestivalDto[]> => {
     })
 
     return ListaFestivalSchema.parse(result);
+}
+
+const getFestival = async (id: number): Promise<FestivalDto> => {
+    const result = await prisma.festival.findUnique({
+        where: { id },
+        include: { abonos: true }
+    })
+
+    if(!result){
+        throw new NotFoundError("No se ha encontrado el festival.")
+    }
+
+    return FestivalSchema.parse(result)
 }
 
 const getFestivalesEmpresa = async (empresaId: number): Promise<FestivalDto[]> => {
@@ -34,6 +47,10 @@ const crearFestival = async (empresaId: number, data: NewFestivalDto) => {
         throw new ForbiddenError("La empresa no está verificada.")
     }
 
+    if (data.cantidad > data.aforo){
+        throw new BadRequestError("No puedes vender mas entradas que el aforo que tiene el festival.")
+    }
+
     const { precioAbono, ...datosFestival } = data;
     const festival = await prisma.festival.create({
         data: {
@@ -44,7 +61,7 @@ const crearFestival = async (empresaId: number, data: NewFestivalDto) => {
                     nombre: "Abono General",
                     descripcion: "Abono general para la entrada al festival",
                     precio: data.precioAbono,
-                    stock: data.aforo
+                    stock: data.cantidad
                 }
             }
         },
@@ -71,6 +88,14 @@ const updateFestival = async (empresaId: number, festivalId: number, data: Updat
         throw new ForbiddenError("El festival ha sido cancelado.")
     }
 
+    const empresa = await prisma.empresa.findUnique({
+        where: { id: empresaId }
+    })
+
+    if(empresa?.estado === "PENDIENTE") {
+        throw new ForbiddenError("La empresa tiene que estar verificada para editar festival.")
+    }
+
     await prisma.festival.update({
         where: { id: festivalId },
         data: data  
@@ -94,6 +119,20 @@ const bajaFestival = async (empresaId: number, festivalId: number) => {
         throw new ConflictError("El festival ya está cancelado.")
     }
 
+    const tresDiasAntes = new Date()
+    tresDiasAntes.setDate(tresDiasAntes.getDate() + 3)
+    if(festival.fechaInicio <= tresDiasAntes){
+        throw new ForbiddenError("No puedes cancelar festivales con menos de 3 dias de antelacion.")
+    }
+
+    const empresa = await prisma.empresa.findUnique({
+        where: { id: empresaId }
+    })
+
+    if(empresa?.estado === "PENDIENTE") {
+        throw new ForbiddenError("La empresa tiene que estar verificada para borrar festivales.")
+    }
+
     await prisma.festival.update({
         where: { id: festivalId },
         data: { activo: false }
@@ -103,6 +142,7 @@ const bajaFestival = async (empresaId: number, festivalId: number) => {
 export const FestivalService = {
     getFestivales,
     getFestivalesEmpresa,
+    getFestival,
     crearFestival,
     updateFestival,
     bajaFestival

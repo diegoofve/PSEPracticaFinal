@@ -70,7 +70,7 @@ useEffect(() => {
     if (isEdit) {
     const fetchFestival = async () => {
         try {
-          const response = await api.get('/festivales/${festival.id}');//endpoint de donde pillamos el festival
+          const response = await api.get(`/festivales/${id}`);//endpoint de donde pillamos el festival
           const data = response.data;
           setFormData({
             nombre: data.nombre || '',
@@ -189,7 +189,7 @@ const intentarEliminar = () => {
 
     try {
       if (isEdit) {
-        await api.put('/festivales/${id}', payload);//actualizar los festivales; endpoint para hacer put??
+        await api.put(`/festivales/${id}`, payload);//actualizar los festivales; endpoint para hacer put??
         setToast({ open: true, message: 'Festival actualizado', severity: 'success' });
       } else {
         await api.post('/festivales', payload);

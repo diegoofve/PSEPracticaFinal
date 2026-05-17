@@ -94,15 +94,20 @@ const bajaEmpresa = async (empresaId: number): Promise<void> => {
         throw new UnauthorizedError("Credenciales incorrectas.")
     }
 
-    await prisma.$transaction([
-        prisma.registroEmail.delete({
+    await prisma.$transaction( async (tx) => {
+        await tx.registroEmail.delete({
             where: {email: result.email}
         }),
-        prisma.empresa.update({
+        await tx.empresa.update({
             where: { id: empresaId },
             data: { fechaBaja: new Date() }
-        })
-    ])
+        }),
+        //Dar de baja todos los festivales de la empresa
+        await tx.festival.updateMany({
+        where: { empresaId },
+        data: { activo: false }
+        })  
+    })
 }
 
 export const EmpresaService = {

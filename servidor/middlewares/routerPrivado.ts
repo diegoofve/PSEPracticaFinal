@@ -23,6 +23,8 @@ routerPrivado.get('/festivales', passport.authenticate('jwt', { session: false }
 FestivalController.getFestivales) //devolver la info de todos los festivales
 routerPrivado.get('/festivales/empresa', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
 FestivalController.getFestivalesEmpresa) //devolver la info de todos los festivales
+routerPrivado.get('/festival/:id', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
+FestivalController.getFestival)
 routerPrivado.post('/festivales', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
 FestivalController.crearFestival)
 routerPrivado.put('/festivales/:id', passport.authenticate('jwt', { session: false }), authorize(["EMPRESA"]), 
