@@ -4,12 +4,34 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import HeadphonesIcon from '@mui/icons-material/Headphones';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
+
+import {useEffect} from 'react';
 import './App.css'
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from './context/AuthContext';
 export default App;
 
 function App() {
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (user && user.rol) {
+        switch (user.rol) {
+            case 'ADMIN':
+                navigate('/admin-panel');
+                break;
+            case 'EMPRESA':
+                navigate('/datos-empresa');
+                break;
+            case 'CLIENTE':
+                navigate('/festivales-list');
+                break;
+            default:
+                break;
+        }
+    }
+  }, [user, navigate]);
 
   return(
     <div className="app-root">

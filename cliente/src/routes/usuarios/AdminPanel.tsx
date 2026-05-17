@@ -67,8 +67,8 @@ export const AdminPanel = () => {
                 type: 'success', 
                 text: `Perfil de empresa ${action === 'verificar' ? 'verificado' : 'rechazado'} correctamente.` 
             });
-            
-            setPendientes(prev => prev.filter(emp => emp.id !== id));
+
+            fetchData();
         } catch (e) {
             setMessage({ type: 'error', text: "Error al procesarlo" });
         }

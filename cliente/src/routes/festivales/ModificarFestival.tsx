@@ -58,13 +58,19 @@ export const ModificarFestival = () => {
   const [nuevoAbono, setNuevoAbono] = useState({ nombre: '', descripcion: '', precio: '' as string | number , stock: '' as string | number  });
   const [abonosActuales, setAbonosActuales] = useState<any[]>([]); //dto primario + array para ir almacenando abonos
 
-useEffect(() => {
-    if (!user || user.rol !== 'EMPRESA') {
-      navigate(user?.rol === 'CLIENTE' ? '/festivales-list' : '/login');
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    } else if (user.rol === 'CLIENTE') {
+      navigate('/festivales-list');
+    } else if (user.rol === 'ADMIN') {
+      navigate('/admin-panel');
+    } else if (user.rol === 'EMPRESA' && (user as any) !== 'VERIFICADA') {
+      navigate('/login'); 
     }
   }, [user, navigate]);
 
-  if (user?.rol !== 'EMPRESA') return null;
+    if (!user || user.rol !== 'EMPRESA' || (user as any) !== 'VERIFICADA') return null;
 
   useEffect(() => {
     if (isEdit) {
@@ -244,9 +250,11 @@ const intentarEliminar = () => {
               <Typography variant="h4"  sx={{ color: 'white', fontWeight: 'bold' }}>
                 {isEdit ? 'Editar Festival' : 'Crear Festival'}
               </Typography>
+              {/*
               <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)' }}>
                 Completa los datos del festival para {isEdit ? 'actualizarlo' : 'publicarlo'} en la plataforma.
               </Typography>
+              */}
               <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)' }}>
                 {isCancelled ? 'Este festival ha sido cancelado' : 'Completa los datos del festival para gestionarlo.'}
               </Typography>

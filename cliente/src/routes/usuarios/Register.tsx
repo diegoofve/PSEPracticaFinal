@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, Typography, TextField, Button, CircularProgress, Alert, InputAdornment, Grid, Paper } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
@@ -19,7 +19,26 @@ import './Register.css';
 
   export const Register = () => {
     const navigate = useNavigate();
-    const {login} = useAuth();
+    const { login, user } = useAuth();
+
+  useEffect(() => {
+    if (user && user.rol) {
+        switch (user.rol) {
+            case 'ADMIN':
+                navigate('/admin-panel');
+                break;
+            case 'EMPRESA':
+                navigate('/datos-empresa');
+                break;
+            case 'CLIENTE':
+                navigate('/festivales-list');
+                break;
+            default:
+                navigate('/');
+                break;
+        }
+    }
+  }, [user, navigate]);
 
     const [formType, setFormType] = useState<'cliente' | 'empresa'>('cliente');
     const [loading, setLoading] = useState(false);
@@ -147,7 +166,7 @@ import './Register.css';
             </Box>
             <Box>
               <Typography variant="h4" component="h1" sx={{ color: 'white' ,fontWeight : "bold"}}>
-                {formType === 'cliente' ? 'Nuevo Acceso' : 'Alta Promotor'}
+                {formType === 'cliente' ? 'Nuevo acceso' : 'Alta empresa gestora'}
               </Typography>
             </Box>
           </Box>

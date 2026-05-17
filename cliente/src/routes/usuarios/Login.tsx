@@ -54,7 +54,7 @@ export const Login = () => {
     };
 
 
-  const handleSubmit = async (e: React.FormEvent) => { //deprecated xd
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!validate()) return;
@@ -67,14 +67,6 @@ export const Login = () => {
       const token = response.data.token;
 
       const usuarioDecodificado: any = jwtDecode(token);
-      
-      if (usuarioDecodificado.rol === 'EMPRESA' && usuarioDecodificado.estado !== 'VERIFICADA') {
-                setErrors({ 
-                    api: 'Tu cuenta de gestora está pendiente de revisión o restringida por el administrador.' 
-                });
-                setLoading(false);
-                return;
-            }
 
             login(token);
 
@@ -240,13 +232,13 @@ export const Login = () => {
       </Button>
       <Box className="fest-divider">
         <Box className="fest-divider-line" />
-        <Typography className="fest-divider-text">acceso</Typography>
+        <Typography className="fest-divider-text">Acceso</Typography>
         <Box className="fest-divider-line" />
       </Box>
       <Box className="fest-tags">
-        <span className="fest-tag tag-pink">Electrónica</span>
-        <span className="fest-tag tag-purple">Indie</span>
-        <span className="fest-tag tag-amber">Live Acts</span>
+        <span className="fest-tag tag-pink">Reggaeton</span>
+        <span className="fest-tag tag-purple">Makina</span>
+        <span className="fest-tag tag-amber">Eventos en vivo</span>
       </Box>
 
       <Box sx={{ textAlign: 'center', mt: 3 }}>
