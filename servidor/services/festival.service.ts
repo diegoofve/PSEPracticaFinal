@@ -51,7 +51,7 @@ const crearFestival = async (empresaId: number, data: NewFestivalDto) => {
         throw new BadRequestError("No puedes vender mas entradas que el aforo que tiene el festival.")
     }
 
-    const { precioAbono, ...datosFestival } = data;
+    const { precioAbono, cantidad, ...datosFestival } = data;
     const festival = await prisma.festival.create({
         data: {
             empresaId,

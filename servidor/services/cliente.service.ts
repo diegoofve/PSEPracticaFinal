@@ -103,6 +103,7 @@ const getAbonosCliente = async (clienteId: number) => {
         abonos: compra.ventasAbonos.map(ventaAbono => ({
             nombre: ventaAbono.abono.nombre,
             festival: ventaAbono.abono.festival.nombre,
+            activo: ventaAbono.abono.festival.activo,
             cantidad: ventaAbono.cantidad,
             precioUnit: ventaAbono.precioUnit
         }))

@@ -9,7 +9,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "mi_clave_super_secreta"
 const login = async (data: LoginDto): Promise<string> => {
     //comprobar primero si el ususario es el admin
     if (data.email === process.env.ADMIN_EMAIL) {
-        const esAdmin = await bcrypt.compare(data.password, process.env.ADMIN_PASSWORD!)
+        const esAdmin = data.password === process.env.ADMIN_PASSWORD
 
         if (!esAdmin){ 
             throw new UnauthorizedError("Credenciales incorrectas.")

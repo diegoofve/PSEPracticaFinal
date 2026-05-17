@@ -44,6 +44,7 @@ const getFestival = async (req: Request, res: Response, next: NextFunction) => {
 
 const crearFestival = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try{
+        logger.error(req.body)
         const data = validateBody(NewFestivalSchema, req)
 
         if (data.fechaFin <= data.fechaInicio){

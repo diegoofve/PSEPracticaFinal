@@ -87,7 +87,7 @@ export const GestionAbonos = () => {
                 const nombreFestival = abonoComprado?.festival || 'Festival desconocido';
                 const tipoAbono = abonoComprado?.nombre || 'Abono desconocido';
                 
-                const esCancelado = abonoComprado?.festivalActivo === false; 
+                const esCancelado = abonoComprado?.activo === false; 
                 
                 const yaDevuelto = venta.estado === 'DEVUELTO';
 
