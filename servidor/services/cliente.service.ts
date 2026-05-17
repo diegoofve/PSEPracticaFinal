@@ -1,4 +1,3 @@
-import { da } from "zod/v4/locales";
 import { type UpdateClienteDto, type ClienteDto, ListaClienteSchema } from "../dtos/clientes.dto"
 import { prisma } from '../lib/db';
 import { NotFoundError, UnauthorizedError } from "../lib/errors";

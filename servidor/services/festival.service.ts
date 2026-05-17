@@ -88,6 +88,13 @@ const updateFestival = async (empresaId: number, festivalId: number, data: Updat
         throw new ForbiddenError("El festival ha sido cancelado.")
     }
 
+
+    const fechaIni = data.fechaInicio ? data.fechaInicio : festival.fechaInicio
+    const fechaFin = data.fechaFin ? data.fechaFin : festival.fechaFin
+    if(fechaIni <= fechaFin) {
+        throw new BadRequestError("La fecha de fin no puede ser mayor que la de inicio.")
+    }
+
     const empresa = await prisma.empresa.findUnique({
         where: { id: empresaId }
     })

@@ -1,25 +1,15 @@
 Cosas a hacer:
-
-# EN GRANDE PORQUE TIENE QUE SER LO PRIMERO A ARREGLAR MAÑANA POR LA MAÑANA
-
-ARREGLAR LO DE LOS ABONOS EN AÑADIR FESTIVALES tendria que estar arreglado de ayer y de hecho todo funciona pero hay que cambiar un par de cosas para hacerlo y no me da tiempo ahora asi que luego lo arreglo cuando haga los pagos 
-
-ahora mismo se muestran todos los festivales tanto para clientes como empresas. ver si en alguno de los dos casos seria mejor ocultar los cancelados (seguramente no por devoluciones y tal pero yo q se, typescript me derrite las neuronas)
-
 ## BACK
 
-registrar las rutas y dtos nuevos en swagger
-
-las empresas no verificadas pueden operar?? hay que revisarlo en back, en front NO pueden
-
-si una empresa se da de baja se cancelan sus festivales? y si es baneada??
-
-cositas que he hecho refactorizando y que es posible (probable) que hayan roto cositas del front
-- todas las validaciones de absolutamente todo (porfa porfa porfa porfa no rompas nada juro haberlo hecho muy bien) (no parece que haya roto nada pero hay que hacer una prueba intensiva)
-- he quitado la fecha de creacion de los dto de devolucion de clientes y empresas
-comprobación festivales antes de 3 dias para poder modificarlo
+ACABADO!! (??)
+revisar bien la documentacion del swagger
 
 ## FRONT
+al cerrar el qr tras una compra se recarga la pagina
+al aprobar una empresa no se actualiza automaticamente para aparecer abajo con el resto
+hacer algo al modificar un festival que se queda como si nada
+loggeado no se deberia poder acceder al register
+mensajes de error
 
 comprobar que en el historico de festivales se vea el QR generado
 toast en gestionAbonos y modificarFestival y AdminPanel y los de mas abajo

@@ -66,7 +66,7 @@ const makePayment = async (clienteId: number, data: BuyTicketDto) => {
             data: { estado: "CANCELADA" }
         })
 
-        throw new PaymentError("No se ha podido procesar el pago")
+        throw new PaymentError("No se ha podido procesar el pago.")
     }
 
     if(!pagoAceptado){
@@ -74,6 +74,8 @@ const makePayment = async (clienteId: number, data: BuyTicketDto) => {
             where: { id: venta.id },
             data: { estado: "CANCELADA" }
         })
+
+        throw new PaymentError("El pago no ha sido aceptado.")
     }
 
     try {

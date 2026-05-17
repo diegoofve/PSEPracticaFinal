@@ -1,4 +1,3 @@
-import { da } from "zod/v4/locales";
 import  { type UpdateEmpresaDto, ListaEmpresaSchema, type EmpresaDto  } from "../dtos/empresa.dto"
 import { prisma } from '../lib/db';
 import { ForbiddenError, NotFoundError, UnauthorizedError } from "../lib/errors";
