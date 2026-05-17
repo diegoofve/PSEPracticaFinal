@@ -18,9 +18,9 @@ export const DatosEmpresa = () => {
   useEffect(() => {
     if (!user || user.rol !== 'EMPRESA') {
       if (user?.rol === 'ADMIN') {
-        navigate('/AdminPanel');
+        navigate('/admin-panel');
       } else if (user?.rol === 'CLIENTE') {
-        navigate('/festivales');
+        navigate('/festivales-list');
       } else {
         navigate('/login');
       }
@@ -55,8 +55,6 @@ export const DatosEmpresa = () => {
 
     fetchEmpresaDashboard();
   }, [user, navigate]);
-
-  if (user?.rol !== 'EMPRESA') return null;
 
   if (loading) {
     return (

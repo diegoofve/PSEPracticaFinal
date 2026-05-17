@@ -54,9 +54,7 @@ export const ModificarFestival = () => {
   });
 
   const [artistas, setArtistas] = useState<string[]>([]);
-  
   const [nuevoArtista, setNuevoArtista] = useState(''); //para meter artistas nuevos en el festival
-
   const [nuevoAbono, setNuevoAbono] = useState({ nombre: '', descripcion: '', precio: '' as string | number , stock: '' as string | number  });
   const [abonosActuales, setAbonosActuales] = useState<any[]>([]); //dto primario + array para ir almacenando abonos
 
@@ -129,21 +127,22 @@ const intentarEliminar = () => {
 
       if (diferenciaDias < 3) {
         setToast({ open: true, message: 'No puedes cancelar un festival a menos de 3 días de su inicio.', severity: 'error' });
-        window.scrollTo({ top: 0, behavior: 'smooth' });//una ñapa
         return;
       }
     }
     setOpenDeleteModal(true);
   };
 
-
   const handleDelete = async () => {
     setDeleting(true);
     try {
       await api.delete(`/festivales/${id}`); //hay que ajustar el endpoint
-      navigate('/modificar-festival'); //ir a tus festivales
+      setOpenDeleteModal(false);
+      setDeleting(false);
+      navigate('/datos-empresa'); //ir a tus festivales
     } catch (error: any) {
-      setToast({ open: true, message: 'Error al eliminar el festival.', severity: 'error' });      setOpenDeleteModal(false);
+      setToast({ open: true, message: 'Error al eliminar el festival.', severity: 'error' });
+      setOpenDeleteModal(false);
       setDeleting(false);
     }
   };
@@ -419,6 +418,21 @@ const intentarEliminar = () => {
                 </Button>
                 </DialogActions>
             </Dialog>
+            <Snackbar 
+              open={toast.open} 
+              autoHideDuration={4000} 
+              onClose={() => setToast({ ...toast, open: false })}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            >
+              <Alert 
+                  onClose={() => setToast({ ...toast, open: false })} 
+                  severity={toast.severity} 
+                  variant="filled"
+                  sx={{ width: '100%', color: 'white' }}
+              >
+                  {toast.message}
+              </Alert>
+            </Snackbar>
         </Paper>
       </Box>
     </Box>

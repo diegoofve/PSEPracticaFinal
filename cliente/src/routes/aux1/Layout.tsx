@@ -22,9 +22,6 @@ export const Layout = ({ children }: LayoutProps) => {
 
       <footer className="layout-footer">
         <div className="layout-footer-inner">
-          <div className="navbar-logo-mark" style={{ width: 28, height: 28, borderRadius: 7 }}>
-            <span style={{ color: '#fff', fontSize: 14 }}>♪</span>
-          </div>
           <div className="layout-footer-dots">
             <div className="fest-dot d1" />
             <div className="fest-dot d2" />

@@ -40,6 +40,12 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
 
   const [toast, setToast] = useState({ open: false, message: '', severity: 'success' as 'success' | 'error' });
 
+  setPaymentForm({ cardHolder: '', cardNumber: '', expiryDate: '', cvv: '' });
+
+  if (selectedAbono) {
+        selectedAbono.stock -= 1;
+      }
+
   const handleExpiryDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.replace(/\D/g, ''); 
     

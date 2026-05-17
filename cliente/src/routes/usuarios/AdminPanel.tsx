@@ -23,7 +23,6 @@ export const AdminPanel = () => {
     const [listaEmpresas, setListaEmpresas] = useState<any>([]);
 
     const [loading, setLoading] = useState(true);
-    const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
     useEffect(() => {
         if (!user || user.rol !== 'ADMIN') {
@@ -71,7 +70,11 @@ export const AdminPanel = () => {
 
             fetchData();
         } catch (e) {
-            setMessage({ type: 'error', text: "Error al procesarlo" });
+            setToast({ 
+                open: true, 
+                message: `Error al verificar el perfil de empresa.`,
+                severity: 'error'
+            });
         }
     };
 
@@ -114,11 +117,6 @@ export const AdminPanel = () => {
                         Gestión de usuarios y verificación de gestoras
                     </Typography>
                 </Box>
-                {message && (
-                    <Alert severity={message.type} onClose={() => setMessage(null)} sx={{ mb: 4, borderRadius: 2 }}>
-                        {message.text}
-                    </Alert>
-                )}
 
                 <Grid container spacing={3} sx={{ mb: 6, justifyContent: 'center' }}>
                     <Grid size={{ xs: 12, sm: 4 }}>

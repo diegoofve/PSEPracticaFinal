@@ -47,7 +47,6 @@ export const GestionAbonos = () => {
     }
     fetchHistorial();
     }, [user, navigate, fetchHistorial]);
-  if (user?.rol !== 'CLIENTE') return null;
 
   if (loading) {
     return (

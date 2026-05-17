@@ -20,7 +20,6 @@ export const ModificarPerfilCliente = () => {
   const navigate = useNavigate();
   const [loadingInitial, setLoadingInitial] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
   const [userType, setUserType] = useState<'cliente' | 'empresa' | null>(null);
   const [formData, setFormData] = useState<any>({});
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -71,9 +70,10 @@ export const ModificarPerfilCliente = () => {
 
   } catch (error: any) {
     console.error("Error en fetchProfile:", error);
-    setMessage({ 
-        type: 'error', 
-        text: 'Error al cargar los datos del perfil.' 
+    setToast({ 
+        open:true,
+        message:'Error al cargar los datos del perfil',
+        severity: 'error', 
     });
   } finally {
     setLoadingInitial(false);
@@ -92,7 +92,6 @@ export const ModificarPerfilCliente = () => {
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
-    setMessage(null);
 
     try {
       let payload: any = {};
@@ -145,7 +144,7 @@ export const ModificarPerfilCliente = () => {
       await api.delete(endpointDelete);
       handleLogout();
     } catch (error: any) {
-      setMessage({ type: 'error', text: 'Error al eliminar la cuenta.' });
+      setToast({ severity: 'error', message: 'Error al eliminar la cuenta.', open:true });
       setOpenDeleteModal(false);
       setDeleting(false);
     }
@@ -181,10 +180,6 @@ export const ModificarPerfilCliente = () => {
               </Typography>
             </Box>
           </Box>
-
-          {message && (
-            <Alert severity={message.type} sx={{ mb: 3 }}>{message.text}</Alert>
-          )}
 
           <Grid container spacing={2.5}>
             {userType === 'cliente' && (

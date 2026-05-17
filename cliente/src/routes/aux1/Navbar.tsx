@@ -151,7 +151,7 @@ export const Navbar = () => {
               <MenuItem key="festival" onClick={() => { navigate('/modificar-festival'); closeMenu(); }}>
                 <EditNoteIcon sx={{ fontSize: 16 }} /> Gestionar festivales
               </MenuItem>,
-              <MenuItem key="festival" onClick={() => { navigate('/modificar-perfil-cliente'); closeMenu(); }}>
+              <MenuItem key="client" onClick={() => { navigate('/modificar-perfil-cliente'); closeMenu(); }}>
                 <EditNoteIcon sx={{ fontSize: 16 }} /> Mi perful 
               </MenuItem>
             ]}
