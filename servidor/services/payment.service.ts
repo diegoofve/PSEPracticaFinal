@@ -1,6 +1,6 @@
 import { BuyTicketDto } from "../dtos/payment.dto";
 import { prisma } from "../lib/db";
-import { ConflictError, FatalError, NotFoundError, PaymentError } from "../lib/errors";
+import { ConflictError, FatalError, ForbiddenError, NotFoundError, PaymentError } from "../lib/errors";
 import axios from "axios"
 import { logger } from "../lib/logger";
 
@@ -23,6 +23,18 @@ const makePayment = async (clienteId: number, data: BuyTicketDto) => {
 
     if(abono.stock <= 0){
         throw new ConflictError("No hay stock disponible para el abono.")
+    }
+
+    const festival = await prisma.festival.findUnique({
+        where: { id: abono.festivalId }
+    })
+
+    if(!festival){
+        throw new NotFoundError("No se ha encontrado el festival al que pertenece el abono.")
+    }
+
+    if(festival.fechaFin > new Date()){
+        throw new ForbiddenError("No puedes comprar abonos para festivales que han acabado.")
     }
 
     const total = Number(abono.precio);
