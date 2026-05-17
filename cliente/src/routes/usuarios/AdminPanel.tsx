@@ -16,7 +16,7 @@ export const AdminPanel = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
 
-    const [toastBanear, setToastBanear] = useState({ open: false, message: '', severity: 'success' as 'success' | 'error' });
+    const [toastBanear, setToast] = useState({ open: false, message: '', severity: 'success' as 'success' | 'error' });
 
     const [pendientes, setPendientes] = useState<any[]>([]);
     const [listaClientes, setListaClientes] = useState<any>([]);
@@ -63,9 +63,10 @@ export const AdminPanel = () => {
             const nuevoEstado = action === 'verificar' ? 'VERIFICADA' : 'RESTRINGIDA';
             await api.put(`/admin/empresa/${id}/estado`, { estado: nuevoEstado });
             
-            setMessage({ 
-                type: 'success', 
-                text: `Perfil de empresa ${action === 'verificar' ? 'verificado' : 'rechazado'} correctamente.` 
+            setToast({ 
+                open: true, 
+                message: `Perfil de empresa ${action === 'verificar' ? 'verificado' : 'rechazado'} correctamente.`,
+                severity: 'success'
             });
 
             fetchData();
@@ -81,14 +82,14 @@ export const AdminPanel = () => {
         ? `/admin/empresa/${id}/banear` 
         : `/admin/cliente/${id}/banear`;
         await api.put(endpoint);
-        setToastBanear({ 
+        setToast({ 
                 open: true, 
                 message: `${tipo === 'cliente' ? 'Cliente' : 'Empresa'}  baneado`, 
                 severity: 'success' 
             });
         fetchData();
     } catch (error) {
-        setToastBanear({ 
+        setToast({ 
                 open: true, 
                 message: `Error al intentar banear al ${tipo}.`, 
                 severity: 'error' 
@@ -130,7 +131,7 @@ export const AdminPanel = () => {
                     <Grid size={{ xs: 12, sm: 4 }}>
                         <Paper className="fest-admin-card" sx={{ p: 3, textAlign: 'center', borderBottom: '4px solid #A020F0' }}>
                             <BusinessIcon sx={{ color: '#A020F0', fontSize: 40, mb: 1 }} />
-                            <Typography variant="h4" sx={{ color: 'white', fontWeight: 'bold' }}>{listaEmpresas.length || 0}</Typography>
+                            <Typography variant="h4" sx={{ color: 'white', fontWeight: 'bold' }}>{listaEmpresas.length + pendientes.length || 0}</Typography>
                             <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)' }}>Empresas</Typography>
                         </Paper>
                     </Grid>

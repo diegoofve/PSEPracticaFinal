@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Box, Typography, Paper, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, Chip, Alert, Dialog, DialogTitle, DialogContent, IconButton } from '@mui/material';
+import { Box, Typography, Paper, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, Chip, Alert, Dialog, DialogTitle, DialogContent, IconButton, Snackbar } from '@mui/material';
 import QrCode2Icon from '@mui/icons-material/QrCode2';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import LayersIcon from '@mui/icons-material/Layers';
@@ -18,7 +18,14 @@ export const GestionAbonos = () => {
 
   const [compras, setCompras] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+  const [toast, setToast] = useState({ open: false, message: '', severity: 'success' as 'success' | 'error' });
+
+  const [qrModal, setQrModal] = useState<{ open: boolean, ticketData: string, festivalName: string }>({
+    open: false,
+    ticketData: '',
+    festivalName: ''
+  });
+  
 
   const fetchHistorial = useCallback(async () => {
       try {
@@ -42,12 +49,6 @@ export const GestionAbonos = () => {
     }, [user, navigate, fetchHistorial]);
   if (user?.rol !== 'CLIENTE') return null;
 
-  const [qrModal, setQrModal] = useState<{ open: boolean, ticketData: string, festivalName: string }>({
-    open: false,
-    ticketData: '',
-    festivalName: ''
-  });
-
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}>
@@ -61,9 +62,6 @@ export const GestionAbonos = () => {
       <Typography variant="h4" sx={{ mb: 4, fontFamily: 'Bebas Neue', display: 'flex', alignItems: 'center', gap: 2 }}>
         <LayersIcon sx={{ color: '#A020F0' }} /> Mi historial de abonos
       </Typography>
-
-      {message && <Alert severity={message.type} sx={{ mb: 3 }}>{message.text}</Alert>}
-
       <TableContainer component={Paper} className="fest-admin-card" sx={{ background: 'rgba(20, 20, 30, 0.8)' }}>
         <Table>
           <TableHead>
@@ -178,7 +176,23 @@ export const GestionAbonos = () => {
             Muestra este código en el acceso
           </Typography>
         </DialogContent>
-      </Dialog>     
+      </Dialog>   
+
+      <Snackbar 
+        open={toast.open} 
+        autoHideDuration={4000} 
+        onClose={() => setToast({ ...toast, open: false })}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert 
+          onClose={() => setToast({ ...toast, open: false })} 
+          severity={toast.severity} 
+          variant="filled"
+          sx={{ width: '100%', color: 'white' }}
+        >
+          {toast.message}
+        </Alert>
+      </Snackbar>  
 
     </Box>
   );
