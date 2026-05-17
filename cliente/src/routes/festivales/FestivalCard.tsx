@@ -77,20 +77,15 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
 
   return (
     <Card className="fest-admin-card" sx={{ mb: 3, position: 'relative', overflow: 'hidden' }}>
-      
 
-
-      <CardContent>
-        <Typography variant="h5" sx={{ color: 'white', fontWeight: 'bold', mb: 1 }}>
-          {festival.nombre}
-        </Typography>
-          {festival.imagen && (
-          <CardMedia
+      {festival.imagen && (
+        <CardMedia
           component="img"
-          height="220"
           image={festival.imagen}
           alt={`Cartel de ${festival.nombre}`}
           sx={{
+            width: '100%',
+            aspectRatio: '1 / 1',
             borderBottom: '1px solid rgba(255,255,255,0.1)',
             transition: 'transform 0.4s ease',
             '&:hover': { transform: 'scale(1.05)' },
@@ -98,6 +93,11 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
           }}
         />
       )}
+
+      <CardContent>
+        <Typography variant="h5" sx={{ color: 'white', fontWeight: 'bold', mb: 1 }}>
+          {festival.nombre}
+        </Typography>
         <Stack direction="row" spacing={2} sx={{ mb: 2, color: 'rgba(255,255,255,0.6)' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
             <Place fontSize="small" /> <Typography variant="body2">{festival.ubicacion}</Typography>
@@ -207,7 +207,7 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
         </DialogActions>
       </Dialog>
 
-      <Dialog open={openQR} onClose={() => {setOpenQR(false); window.location.reload()}} className="fest-payment-dialog">
+      <Dialog open={openQR} onClose={() => {setOpenQR(false)}} className="fest-payment-dialog">
         <DialogTitle sx={{ textAlign: 'center', fontWeight: 'bold', color: '#00C2FF' }}>
           ¡Entrada lista!
         </DialogTitle>
@@ -234,7 +234,7 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => {setOpenQR(false);window.location.reload()}} fullWidth sx={{ color: 'white' }}>
+          <Button onClick={() => {setOpenQR(false)}} fullWidth sx={{ color: 'white' }}>
             Cerrar
           </Button>
         </DialogActions>

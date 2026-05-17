@@ -92,9 +92,10 @@ export const GestionAbonos = () => {
                 const yaDevuelto = venta.estado === 'DEVUELTO';
 
                 const infoQR = JSON.stringify({
-                  ventaId: venta.id,
-                  cliente: user?.id,
-                  festival: nombreFestival
+                  vId: venta.id,
+                  cId: user?.id,
+                  f: nombreFestival,
+                  t: tipoAbono
                 });
 
                 return (
