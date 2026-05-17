@@ -1,11 +1,5 @@
-//eliminar cliente usuario/empresa ->modificar todo para que funcione (navbar y poco mas)
-
-
-
-//no se puede cambiar el email; email y dni tampoco se puede cambiar; arreglar el json que se envia para que cumpla la logica
 import { useState, useEffect } from 'react';
-import { Box, Typography, TextField, Button, CircularProgress, Alert, Grid, Paper, InputAdornment,
-Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar} from '@mui/material';
+import { Box, Typography, TextField, Button, CircularProgress, Alert, Grid, Paper, InputAdornment, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 import PersonIcon from '@mui/icons-material/Person';
@@ -57,7 +51,7 @@ export const ModificarPerfilCliente = () => {
     const fetchProfile = async () => {
   try {
     if (!user || !user.id) {
-        throw new Error("No se encontró el id del usuario");
+        throw new Error("No se encontró el Id del usuario");
     }
 
     const endpoint = user.rol === 'EMPRESA' 
@@ -85,7 +79,6 @@ export const ModificarPerfilCliente = () => {
     setLoadingInitial(false);
   }
 };
-
     fetchProfile();
     
   }, [user, navigate]);
@@ -149,7 +142,7 @@ export const ModificarPerfilCliente = () => {
     setDeleting(true);
     try {
       const endpointDelete = userType === 'cliente' ? '/cliente' : '/empresa';
-      await api.delete(endpointDelete); //hay que ajustar el endpoint
+      await api.delete(endpointDelete);
       handleLogout();
     } catch (error: any) {
       setMessage({ type: 'error', text: 'Error al eliminar la cuenta.' });
@@ -184,7 +177,7 @@ export const ModificarPerfilCliente = () => {
                 Mi perfil
               </Typography>
               <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' }}>
-                {userType === 'cliente' ? 'Datos del cliente' : 'Datos de Promotor'}
+                {userType === 'cliente' ? 'Datos del cliente' : 'Datos de promotor'}
               </Typography>
             </Box>
           </Box>
@@ -214,7 +207,7 @@ export const ModificarPerfilCliente = () => {
             {userType === 'empresa' && (
               <>
                 <Grid size={{ xs: 12 }}>
-                  <TextField className="fest-field" label="Razón Social" name="razonSocial" value={formData.razonSocial || ''} onChange={handleChange} fullWidth slotProps={{ input: { startAdornment: <InputAdornment position="start"><BusinessIcon /></InputAdornment> } }} />
+                  <TextField className="fest-field" label="Razón social" name="razonSocial" value={formData.razonSocial || ''} onChange={handleChange} fullWidth slotProps={{ input: { startAdornment: <InputAdornment position="start"><BusinessIcon /></InputAdornment> } }} />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <TextField className="fest-field" label="CIF" name="cif" value={formData.cif || ''} onChange={handleChange} fullWidth disabled slotProps={{ input: { startAdornment: <InputAdornment position="start"><BadgeIcon /></InputAdornment> } }} helperText="El CIF no se puede modificar" />
@@ -223,10 +216,10 @@ export const ModificarPerfilCliente = () => {
                   <TextField className="fest-field" label="Teléfono" name="telefonoContacto" value={formData.telefonoContacto || ''} onChange={handleChange} fullWidth slotProps={{ input: { startAdornment: <InputAdornment position="start"><PhoneIcon /></InputAdornment> } }} />
                 </Grid>
                 <Grid size={{ xs: 12 }}>
-                  <TextField className="fest-field" label="Domicilio Fiscal" name="domicilioSocial" value={formData.domicilioSocial || ''} onChange={handleChange} fullWidth slotProps={{ input: { startAdornment: <InputAdornment position="start"><HomeIcon /></InputAdornment> } }} />
+                  <TextField className="fest-field" label="Domicilio fiscal" name="domicilioSocial" value={formData.domicilioSocial || ''} onChange={handleChange} fullWidth slotProps={{ input: { startAdornment: <InputAdornment position="start"><HomeIcon /></InputAdornment> } }} />
                 </Grid>
                 <Grid size={{ xs: 12 }}>
-                  <TextField className="fest-field" label="Nombre Contacto" name="nombreContacto" value={formData.nombreContacto || ''} onChange={handleChange} fullWidth slotProps={{ input: { startAdornment: <InputAdornment position="start"><PersonIcon /></InputAdornment> } }} />
+                  <TextField className="fest-field" label="Nombre contacto" name="nombreContacto" value={formData.nombreContacto || ''} onChange={handleChange} fullWidth slotProps={{ input: { startAdornment: <InputAdornment position="start"><PersonIcon /></InputAdornment> } }} />
                 </Grid>
               </>
             )}
@@ -266,7 +259,7 @@ export const ModificarPerfilCliente = () => {
         <DialogTitle sx={{ color: '#FF6B6B' }}>¿Estás seguro?</DialogTitle>
         <DialogContent>
           <DialogContentText sx={{ color: 'rgba(255,255,255,0.7)' }}>
-            Esta acción eliminará permanentemente tu cuenta y te inhabilitara de poder iniciar sesión más veces.
+            Esta acción eliminará permanentemente tu cuenta.
           </DialogContentText>
         </DialogContent>
         <DialogActions sx={{ p: 2, pt: 0 }}>

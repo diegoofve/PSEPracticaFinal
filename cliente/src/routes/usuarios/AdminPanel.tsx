@@ -1,23 +1,5 @@
-/*
-todos los usuarios/festivales??? xd
-aceptar festivales (usuarios empresa) -> verificarlo sino, no operan
-*/
-
 import { useState, useEffect } from 'react';
-import { 
-  Box, 
-  Typography, 
-  Paper, 
-  Button, 
-  Stack, 
-  Alert, 
-  CircularProgress, 
-  Container, 
-  Divider, 
-  Grid,
-  Table,
-  TableBody, TableCell, TableContainer, TableHead, TableRow, Chip
-} from '@mui/material';
+import { Box, Typography, Paper, Button, Stack, Alert, CircularProgress, Container, Divider, Grid,Table,TableBody, TableCell, TableContainer, TableHead, TableRow, Chip} from '@mui/material';
 
 import BlockIcon from '@mui/icons-material/Block';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -61,11 +43,8 @@ export const AdminPanel = () => {
             const resStatsEmpresa = await api.get('/empresas'); 
             const empresasData = resStatsEmpresa.data || [];
             setListaEmpresas(empresasData);
-
-            //const empresasPendientes = empresasData.filter((emp: any) => emp.estado === 'PENDIENTE');
             setPendientes(empresasData.filter((emp: any) => emp.estado === 'PENDIENTE'));
             setListaEmpresas(empresasData.filter((emp: any) => emp.estado !== 'PENDIENTE'));
-            
             const resStatsCliente = await api.get('/clientes'); 
             setListaClientes(resStatsCliente.data || []);
         } catch (e) {
@@ -82,7 +61,7 @@ export const AdminPanel = () => {
     const handleAction = async (id: number, action: 'verificar' | 'anular') => {
         try {
             const nuevoEstado = action === 'verificar' ? 'VERIFICADA' : 'RESTRINGIDA';
-            await api.put(`/admin/empresa/${id}/estado`, { estado: nuevoEstado });//endpoint para verificar la empresa
+            await api.put(`/admin/empresa/${id}/estado`, { estado: nuevoEstado });
             
             setMessage({ 
                 type: 'success', 
@@ -91,7 +70,7 @@ export const AdminPanel = () => {
             
             setPendientes(prev => prev.filter(emp => emp.id !== id));
         } catch (e) {
-            setMessage({ type: 'error', text: "Error al procesar la acción" });
+            setMessage({ type: 'error', text: "Error al procesarlo" });
         }
     };
 
@@ -104,7 +83,7 @@ export const AdminPanel = () => {
         await api.put(endpoint);
         setToastBanear({ 
                 open: true, 
-                message: `${tipo === 'cliente' ? 'Cliente' : 'Empresa'} baneado con éxito.`, 
+                message: `${tipo === 'cliente' ? 'Cliente' : 'Empresa'}  baneado`, 
                 severity: 'success' 
             });
         fetchData();

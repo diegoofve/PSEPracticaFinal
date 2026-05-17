@@ -106,10 +106,10 @@ export const Login = () => {
         </Box>
         <Box>
           <Typography className="fest-title" component="h1">
-            Festivals
+            Fest.io
           </Typography>
           <Typography className="fest-subtitle">
-            2026-2027
+            Temporada 2026-2027
           </Typography>
         </Box>
       </Box>

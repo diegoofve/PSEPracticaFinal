@@ -1,16 +1,5 @@
 import { useEffect, useState } from 'react';
-import { 
-  Box, 
-  Typography, 
-  Paper, 
-  CircularProgress, 
-  Grid, 
-  Divider, 
-  Stack, 
-  Chip,
-  Container,
-  Button // ✅ Añadido el import de Button que faltaba
-} from '@mui/material';
+import { Box, Typography, Paper, CircularProgress, Grid, Divider, Stack, Chip,Container,Button} from '@mui/material';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import FestivalIcon from '@mui/icons-material/Festival';
 import { api } from '../../lib/api';
@@ -100,7 +89,7 @@ export const DatosEmpresa = () => {
             >
               <TrendingUpIcon sx={{ color: '#00C2FF', fontSize: 50, mb: 2 }} />
               <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: 1 }}>
-                Beneficio
+                Ganancias
               </Typography>
               <Typography variant="h2" sx={{ color: 'white', fontWeight: 'bold', fontFamily: 'Bebas Neue' }}>
                 {data?.totalGanado?.toLocaleString('es-ES')} €
@@ -123,7 +112,7 @@ export const DatosEmpresa = () => {
         <Divider sx={{ bgcolor: 'rgba(255,255,255,0.1)', mb: 4 }} />
 
         <Typography variant="h4" sx={{ color: 'white', mb: 4, fontFamily: 'Bebas Neue', display: 'flex', alignItems: 'center', gap: 2 }}>
-          <FestivalIcon sx={{ color: '#A020F0' }} /> Mis Festivales
+          <FestivalIcon sx={{ color: '#A020F0' }} /> Mis festivales
         </Typography>
 
         <Grid container spacing={3}>

@@ -1,8 +1,3 @@
-/*
-servicio de integración de API spotify?? --> servicio externo, no obligatorio
-    verificar que el stock es suficiente
-*/
-
 import { useEffect, useState } from 'react';
 import { Box, Container, Typography, CircularProgress, Grid } from '@mui/material';
 import { api } from "../../lib/api";
@@ -59,7 +54,7 @@ export const FestivalesList = () => {
       
       <Container maxWidth="md" sx={{ position: 'relative', zIndex: 10 }}>
         <Typography variant="h3" sx={{ color: 'white', fontWeight: 'bold', mb: 4, textAlign: 'center', fontFamily: 'Bebas Neue' }}>
-          Festivales Disponibles
+          Festivales disponibles
         </Typography>
 
         {loadingData ? (

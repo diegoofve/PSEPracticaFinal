@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import { Navbar } from './Navbar.tsx';
 import "./Layout.css";
 
@@ -31,7 +31,7 @@ export const Layout = ({ children }: LayoutProps) => {
             <div className="fest-dot d3" />
           </div>
           <span className="layout-footer-text">
-            © {new Date().getFullYear()} Fest.io. Todos los derechos reservados.
+            © {new Date().getFullYear()} Fest.io.
           </span>
         </div>
       </footer>

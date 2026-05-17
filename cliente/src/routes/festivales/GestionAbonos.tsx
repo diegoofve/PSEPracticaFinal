@@ -1,9 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { 
-  Box, Typography, Paper, CircularProgress, 
-  Table, TableBody, TableCell, TableContainer, 
-  TableHead, TableRow, Button, Chip, Alert, Container 
-} from '@mui/material';
+import { Box, Typography, Paper, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, Chip, Alert } from '@mui/material';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import LayersIcon from '@mui/icons-material/Layers';
 import { useNavigate } from 'react-router-dom';
@@ -47,24 +43,10 @@ export const GestionAbonos = () => {
     );
   }
 
-  /*
-  const handleSolicitarDevolucion = async (ventaId: number) => {
-    try {
-      await api.post(`/payments/devolucion/${Id}`);//ruta de mentira (esta no es y se tiene que implementar)
-      setMessage({ type: 'success', text: 'Solicitud de devolución enviada con éxito.' });
-      fetchHistorial(); // Refrescamos para ver cambios de estado
-    } catch (error: any) {
-      setMessage({ 
-        type: 'error', 
-        text: error.response?.data?.message || 'No se pudo procesar la devolución.' 
-      });
-    }
-  };*/
-
   return (
     <Box sx={{ p: { xs: 2, md: 4 }, color: 'white' }}>
       <Typography variant="h4" sx={{ mb: 4, fontFamily: 'Bebas Neue', display: 'flex', alignItems: 'center', gap: 2 }}>
-        <LayersIcon sx={{ color: '#A020F0' }} /> Mi Historial de Abonos
+        <LayersIcon sx={{ color: '#A020F0' }} /> Mi historial de abonos
       </Typography>
 
       {message && <Alert severity={message.type} sx={{ mb: 3 }}>{message.text}</Alert>}
@@ -91,8 +73,8 @@ export const GestionAbonos = () => {
               compras.map((venta) => {
                 const abonoComprado = venta.abonos?.[0];
                 
-                const nombreFestival = abonoComprado?.festival || 'Festival Desconocido';
-                const tipoAbono = abonoComprado?.nombre || 'Abono Desconocido';
+                const nombreFestival = abonoComprado?.festival || 'Festival desconocido';
+                const tipoAbono = abonoComprado?.nombre || 'Abono desconocido';
                 
                 const esCancelado = abonoComprado?.festivalActivo === false; 
                 
@@ -117,11 +99,10 @@ export const GestionAbonos = () => {
                           variant="contained" 
                           color="warning" 
                           startIcon={<AccountBalanceWalletIcon />}
-                          // onClick={() => handleSolicitarDevolucion(venta.id)}
                           disabled 
                           sx={{ textTransform: 'none', fontWeight: 'bold' }}
                         >
-                          Solicitar Devolución
+                          Solicitar devolución
                         </Button>
                       ) : yaDevuelto ? (
                         <Typography variant="body2" sx={{ color: '#00C2FF', fontWeight: 'bold' }}>Reembolsado</Typography>

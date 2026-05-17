@@ -21,6 +21,9 @@ comprobación festivales antes de 3 dias para poder modificarlo
 
 ## FRONT
 
+comprobar que en el historico de festivales se vea el QR generado
+toast en gestionAbonos y modificarFestival y AdminPanel y los de mas abajo
+refactorizar el css en todo
 
 ## GENERAL
 - [x] Registro de usuarios ruta api

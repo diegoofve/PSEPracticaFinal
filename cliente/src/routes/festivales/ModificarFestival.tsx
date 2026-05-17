@@ -1,8 +1,5 @@
 import { useState, useEffect } from 'react';
-import { 
-  Box, Typography, TextField, Button, CircularProgress, Alert, Grid, Paper, 
-  InputAdornment, IconButton, Chip, Stack, Dialog,DialogTitle,DialogActions, Divider, Snackbar
-} from '@mui/material';
+import { Box, Typography, TextField, Button, CircularProgress, Alert, Grid, Paper, InputAdornment, IconButton, Chip, Stack, Dialog,DialogTitle,DialogActions, Divider, Snackbar} from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import FestivalIcon from '@mui/icons-material/Festival';
@@ -17,7 +14,6 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { api } from '../../lib/api.ts';
 import './ModificarFestival.css';
 import { useAuth } from '../../context/AuthContext';
-import { LegendToggleRounded } from '@mui/icons-material';
 
 export const ModificarFestival = () => {
 
@@ -25,13 +21,13 @@ export const ModificarFestival = () => {
   const todayStr = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}-${String(hoy.getDate()).padStart(2, '0')}`;//calculamos la fecha en el formato indicado de hoy
 
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const [deleting, setDeleting] = useState(false);//esto??
+  const [deleting, setDeleting] = useState(false);
   const [isCancelled, setIsCancelled] = useState(false);
 
   const {user} = useAuth();
-  const { id } = useParams(); // Si hay id modificamos, sino creamos.
+  const { id } = useParams();
   const navigate = useNavigate();
-  const isEdit = Boolean(id); //pillas el id del fesstival a cambiar
+  const isEdit = Boolean(id);
 
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(isEdit);

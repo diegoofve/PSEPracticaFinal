@@ -5,12 +5,7 @@ import {
   Grid, Divider, Chip, Stack, Alert, Snackbar 
 } from '@mui/material';
 
-import { 
-  ExpandMore as ExpandMoreIcon, 
-  Place, 
-  CalendarMonth, 
-  CreditCard, 
-  ConfirmationNumber 
+import { ExpandMore as ExpandMoreIcon, Place, CalendarMonth, CreditCard, ConfirmationNumber 
 } from '@mui/icons-material';
 
 import {QRCodeSVG} from 'qrcode.react';
@@ -18,7 +13,7 @@ import { styled } from '@mui/material/styles';
 import { api } from "../../lib/api";
 import './FestivalCard.css'
 
-const ExpandMore = styled((props: any) => { //esto expande para mostrar los abonos (como son todos iguales debería ser todo bien estructurado)
+const ExpandMore = styled((props: any) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
 })(({ theme, expand }) => ({
@@ -43,9 +38,9 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
   
   });
 
-  const [toast, setToast] = useState({ open: false, message: '', severity: 'success' as 'success' | 'error' });//para mostrar mensajes error/exito al comprar el abono
+  const [toast, setToast] = useState({ open: false, message: '', severity: 'success' as 'success' | 'error' });
 
-const handleExpiryDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleExpiryDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.replace(/\D/g, ''); 
     
     if (value.length >= 3) {
@@ -63,19 +58,17 @@ const handleExpiryDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
       const payload = {
         abonoId: selectedAbono.id,
-        cardHolder: paymentForm.cardHolder,// nombre de la persona sin codificar
-        cardNumber: btoa(paymentForm.cardNumber),// en base64
-        expiryDate: btoa(paymentForm.expiryDate),// en base64
-        cvv: btoa(paymentForm.cvv)// en basee 64
+        cardHolder: paymentForm.cardHolder,
+        cardNumber: btoa(paymentForm.cardNumber),
+        expiryDate: btoa(paymentForm.expiryDate),
+        cvv: btoa(paymentForm.cvv)
       };
 
-      const {data} = await api.post('/payment', payload);//falta el endpoint de compra de abono
+      const {data} = await api.post('/payment', payload);
       setToast({ open: true, message: 'Abono comprado', severity: 'success' });
-
       setDatosVenta(data);
       setOpenPayment(false);
       setOpenQR(true);
-
       setOpenPayment(false);
     } catch (error) {
       setToast({ open: true, message: 'Error al procesar el pago.', severity: 'error' });
@@ -106,7 +99,7 @@ const handleExpiryDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         </Typography>
 
         <Typography variant="subtitle2" sx={{ color: '#00C2FF', mb: 1 }}>Line-up:</Typography>
-        <Stack direction="row" spacing={1} /*flexWrap="wrap" me da error ns porque */ useFlexGap sx={{ flexWrap: 'wrap', mb: 1 }}>
+        <Stack direction="row" spacing={1}  useFlexGap sx={{ flexWrap: 'wrap', mb: 1 }}>
           {festival.artistas?.map((art: string) => (
             <Chip key={art} label={art} size="small" sx={{ bgcolor: 'rgba(255,255,255,0.1)', color: 'white' }} />
           ))}
@@ -138,7 +131,7 @@ const handleExpiryDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                       {abono.nombre} - {abono.precio}€
                     </Typography>
                     <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)' }}>
-                      {abono.descripcion || `Acceso al festival`} (Stock: {abono.stock})
+                      {abono.descripcion || 'Acceso al festival'} (Stock: {abono.stock})
                     </Typography>
                   </Box>
                   <Button 
@@ -159,7 +152,7 @@ const handleExpiryDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       </Collapse>
 
       <Dialog open={openPayment} onClose={() => setOpenPayment(false)} 
-       sx={{ '& .MuiDialog-paper': { //esto lo quiero incluir en el css
+       sx={{ '& .MuiDialog-paper': {
             p: 2, 
             maxWidth: 450,
             bgcolor: 'rgba(20, 20, 30, 0.95)',
@@ -169,7 +162,7 @@ const handleExpiryDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             color: 'white'} 
         }}>
         <DialogTitle sx={{ color: 'white', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 1 }}>
-          <CreditCard sx={{ color: '#FF3C78' }} /> Detalle del Pago
+          <CreditCard sx={{ color: '#FF3C78' }} /> Detalle del pago
         </DialogTitle>
         <DialogContent>
           <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.6)', mb: 3 }}>
@@ -204,7 +197,7 @@ const handleExpiryDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         </DialogTitle>
         <DialogContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Typography variant="body2" sx={{ mb: 3, color: 'rgba(255,255,255,0.7)', textAlign: 'center' }}>
-            Presenta este código en el control de acceso del festival.
+            Presenta este código en el acceso al festival.
           </Typography>
 
           <Box sx={{ p: 2, bgcolor: 'white', borderRadius: 2, display: 'inline-block' }}>
