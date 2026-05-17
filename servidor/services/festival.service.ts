@@ -88,13 +88,19 @@ const updateFestival = async (empresaId: number, festivalId: number, data: Updat
         throw new ForbiddenError("El festival ha sido cancelado.")
     }
 
-
+    
     const fechaIni = data.fechaInicio ? data.fechaInicio : festival.fechaInicio
     const fechaFin = data.fechaFin ? data.fechaFin : festival.fechaFin
-    if(fechaIni <= fechaFin) {
-        throw new BadRequestError("La fecha de fin no puede ser mayor que la de inicio.")
+    if(fechaIni >= fechaFin) {
+        throw new BadRequestError("La fecha de inicio no puede ser mayor que la de fin.")
     }
 
+    const tresDiasAntes = new Date()
+    tresDiasAntes.setDate(tresDiasAntes.getDate() + 3)
+    if(festival.fechaInicio <= tresDiasAntes){
+        throw new ForbiddenError("No puedes editar festivales con menos de 3 dias de antelacion.")
+    }
+    
     const empresa = await prisma.empresa.findUnique({
         where: { id: empresaId }
     })
