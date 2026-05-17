@@ -72,7 +72,7 @@ export const ModificarFestival = () => {
     if (isEdit) {
     const fetchFestival = async () => {
         try {
-          const response = await api.get(`/festivales/${id}`);
+          const response = await api.get(`/festival/${id}`);
           const data = response.data;
           setFormData({
             nombre: data.nombre || '',

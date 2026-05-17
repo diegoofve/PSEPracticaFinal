@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { 
   Box, Typography, Card, CardContent, CardActions, Collapse, IconButton, 
   Button, TextField, Dialog, DialogTitle, DialogContent, DialogActions, 
@@ -39,12 +39,7 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
   });
 
   const [toast, setToast] = useState({ open: false, message: '', severity: 'success' as 'success' | 'error' });
-
-  setPaymentForm({ cardHolder: '', cardNumber: '', expiryDate: '', cvv: '' });
-
-  if (selectedAbono) {
-        selectedAbono.stock -= 1;
-      }
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleExpiryDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.replace(/\D/g, ''); 
@@ -61,6 +56,10 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
       setToast({ open: true, message: 'Completa todos los campos de pago.', severity: 'error' });
       return;
     }
+
+    if (isProcessing) return;
+    setIsProcessing(true);
+
     try {
       const payload = {
         abonoId: selectedAbono.id,
@@ -72,6 +71,9 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
 
       const {data} = await api.post('/payment', payload);
       setToast({ open: true, message: 'Abono comprado', severity: 'success' });
+
+      selectedAbono.stock -= 1
+
       setDatosVenta(data);
       setOpenPayment(false);
       setOpenQR(true);
@@ -161,7 +163,11 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
                     size="small"
                     startIcon={<ConfirmationNumber />}
                     disabled={abono.stock <= 0}
-                    onClick={() => { setSelectedAbono(abono); setOpenPayment(true); }}
+                    onClick={() => { 
+                                    setSelectedAbono(abono); 
+                                    setPaymentForm({ cardHolder: '', cardNumber: '', expiryDate: '', cvv: '' });
+                                    setOpenPayment(true); 
+                                  }}
                     sx={{ background: 'linear-gradient(90deg, #FF3C78, #A020F0)', textTransform: 'none' }}
                   >
                     {abono.stock > 0 ? 'Comprar' : 'Agotado'}
@@ -207,7 +213,7 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
         </DialogContent>
         <DialogActions sx={{ p: 3 }}>
           <Button onClick={() => setOpenPayment(false)} sx={{ color: 'rgba(255,255,255,0.5)' }}>Cancelar</Button>
-          <Button onClick={handleConfirmPayment} variant="contained" sx={{ background: 'linear-gradient(90deg, #00C2FF, #A020F0)', fontWeight: 'bold' }}>
+          <Button onClick={handleConfirmPayment} variant="contained" disabled={!openPayment} sx={{ background: 'linear-gradient(90deg, #00C2FF, #A020F0)', fontWeight: 'bold' }}>
             Confirmar Pago
           </Button>
         </DialogActions>
