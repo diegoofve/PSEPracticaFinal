@@ -45,7 +45,7 @@ export const UpdateFestivalSchema = z.object({
     fechaInicio: z.coerce.date().refine(isValidDate, "La fecha de inicio no puede ser pasada.").optional().openapi({ example: "2025-05-01" }),
     fechaFin: z.coerce.date().optional().openapi({ example: "2025-05-02"}),
     imagen: z.url("La url no es válida.").optional().openapi({ example: "https://ejemplo.com/primavera.jpg" }),
-}).openapi("UpdateFestivalDto")
+}).strict().openapi("UpdateFestivalDto")
 
 export type NewFestivalDto = z.infer<typeof NewFestivalSchema>;
 export type FestivalDto = z.infer<typeof FestivalSchema>;

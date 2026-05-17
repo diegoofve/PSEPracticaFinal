@@ -6,12 +6,11 @@ revisar bien la documentacion del swagger
 
 ## FRONT
 al cerrar el qr tras una compra se recarga la pagina
-al aprobar una empresa no se actualiza automaticamente para aparecer abajo con el resto
-hacer algo al modificar un festival que se queda como si nada
-loggeado no se deberia poder acceder al register
+cuadrar bien las fotos en las cards de festivales en cliente
 mensajes de error
+el qr de compra no coincide con el qr de historico abonos
 
-comprobar que en el historico de festivales se vea el QR generado
+
 toast en gestionAbonos y modificarFestival y AdminPanel y los de mas abajo
 refactorizar el css en todo
 

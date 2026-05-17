@@ -67,12 +67,8 @@ export const ModificarFestival = () => {
       navigate('/festivales-list');
     } else if (user.rol === 'ADMIN') {
       navigate('/admin-panel');
-    } else if (user.rol === 'EMPRESA' && (user as any) !== 'VERIFICADA') {
-      navigate('/login'); 
-    }
+    } 
   }, [user, navigate]);
-
-    if (!user || user.rol !== 'EMPRESA' || (user as any) !== 'VERIFICADA') return null;
 
   useEffect(() => {
     if (isEdit) {
@@ -192,6 +188,7 @@ const intentarEliminar = () => {
         aforo: Number(formData.aforo) || 0,
         cantidad: Number(formData.cantidad) || 0,
         precioAbono: Number(formData.precioAbono) || 0,
+        descripcion: formData.descripcion.trim() === '' ? undefined : formData.descripcion,
         artistas: artistas.length > 0 ? artistas : undefined,
         imagen: formData.imagen.trim() === '' ? undefined : formData.imagen
       };
@@ -288,7 +285,7 @@ const intentarEliminar = () => {
               </Grid>
 
               <Grid size={{ xs: 12 }}>
-                <TextField className="fest-field" label="Descripción" name="descripcion" value={formData.descripcion} onChange={handleChange} fullWidth required={!isEdit} multiline rows={3} slotProps={{ input: { startAdornment: <InputAdornment position="start"><DescriptionIcon sx={{ color: 'rgba(255,255,255,0.3)' }} /></InputAdornment> } }} />
+                <TextField className="fest-field" label="Descripción" name="descripcion" value={formData.descripcion} onChange={handleChange} fullWidth multiline rows={3} slotProps={{ input: { startAdornment: <InputAdornment position="start"><DescriptionIcon sx={{ color: 'rgba(255,255,255,0.3)' }} /></InputAdornment> } }} />
               </Grid>
 
               <Grid size={{ xs: 12, sm: 6 }}>
@@ -319,10 +316,6 @@ const intentarEliminar = () => {
                   </Grid>
                 </>
               )}
-
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <TextField className="fest-field" label="Precio del Abono (€)" name="precioAbono" type="number" value={formData.precioAbono} onChange={handleChange} fullWidth required={!isEdit} slotProps={{ inputLabel: { shrink: true }, input: { startAdornment: <InputAdornment position="start">€</InputAdornment> } }} />
-              </Grid>
 
               <Grid size={{ xs: 12 }}>
                 <Typography sx={{ color: 'rgba(255,255,255,0.7)', mb: 1, fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: 1 }}>
