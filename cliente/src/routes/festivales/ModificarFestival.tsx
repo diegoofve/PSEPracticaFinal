@@ -10,6 +10,7 @@ import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
 
 import { api } from '../../lib/api.ts';
 import './ModificarFestival.css';
@@ -42,11 +43,12 @@ export const ModificarFestival = () => {
   const [formData, setFormData] = useState({
     nombre: '',
     ubicacion: '',
-    aforo: '' as string | number ,
+    aforo: '' as string | number,
+    cantidad: '' as string | number,
     descripcion: '',
     fechaInicio: '',
     fechaFin: '',
-    precioAbono: '' as string | number ,
+    precioAbono: '' as string | number,
     imagen: '',
     empresaId: undefined as number | undefined
   });
@@ -76,16 +78,17 @@ export const ModificarFestival = () => {
     if (isEdit) {
     const fetchFestival = async () => {
         try {
-          const response = await api.get(`/festivales/${id}`);//endpoint de donde pillamos el festival
+          const response = await api.get(`/festivales/${id}`);
           const data = response.data;
           setFormData({
             nombre: data.nombre || '',
             ubicacion: data.ubicacion || '',
             aforo: data.aforo || '',
+            cantidad: '',
             descripcion: data.descripcion || '',
             fechaInicio: data.fechaInicio ? data.fechaInicio.split('T')[0] : '',
             fechaFin: data.fechaFin ? data.fechaFin.split('T')[0] : '',
-            precioAbono: data.precioAbono || '',
+            precioAbono: '',
             imagen: data.imagen || '',
             empresaId: data.empresaId
           });
@@ -153,8 +156,8 @@ const intentarEliminar = () => {
     const { name, value } = e.target;
     setFormData({ 
       ...formData, 
-      [name]: name === 'aforo' || name === 'precioAbono' 
-            ? (value === ''?'': Number(value)) || 0 
+      [name]: name === 'aforo' || name === 'precioAbono' || name === 'cantidad'
+            ? (value === '' ? '' : Number(value)) || 0 
             : value 
     });
   };
@@ -187,6 +190,7 @@ const intentarEliminar = () => {
       payload = {
         ...formData,
         aforo: Number(formData.aforo) || 0,
+        cantidad: Number(formData.cantidad) || 0,
         precioAbono: Number(formData.precioAbono) || 0,
         artistas: artistas.length > 0 ? artistas : undefined,
         imagen: formData.imagen.trim() === '' ? undefined : formData.imagen
@@ -203,11 +207,12 @@ const intentarEliminar = () => {
         setFormData({
           nombre: '',
           ubicacion: '',
-          aforo: '' as string | number ,
+          aforo: '',
+          cantidad: '',
           descripcion: '',
           fechaInicio: '',
           fechaFin: '',
-          precioAbono: '' as string | number ,
+          precioAbono: '',
           imagen: '',
           empresaId: undefined
         });
@@ -303,6 +308,17 @@ const intentarEliminar = () => {
                     htmlInput: { min: formData.fechaInicio || todayStr, max: '2100-12-31' } 
                   }} />
               </Grid>
+
+              {!isEdit && (
+                <>
+                  <Grid size={{ xs: 12, sm: 6 }}>
+                    <TextField className="fest-field" label="Cantidad abonos a la venta" name="cantidad" type="number" value={formData.cantidad} onChange={handleChange} fullWidth required slotProps={{ inputLabel: { shrink: true }, input: { startAdornment: <InputAdornment position="start"><ConfirmationNumberIcon sx={{ color: 'rgba(255,255,255,0.3)' }} /></InputAdornment> } }} />
+                  </Grid>
+                  <Grid size={{ xs: 12, sm: 6 }}>
+                    <TextField className="fest-field" label="Precio del Abono (€)" name="precioAbono" type="number" value={formData.precioAbono} onChange={handleChange} fullWidth required slotProps={{ inputLabel: { shrink: true }, input: { startAdornment: <InputAdornment position="start">€</InputAdornment> } }} />
+                  </Grid>
+                </>
+              )}
 
               <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField className="fest-field" label="Precio del Abono (€)" name="precioAbono" type="number" value={formData.precioAbono} onChange={handleChange} fullWidth required={!isEdit} slotProps={{ inputLabel: { shrink: true }, input: { startAdornment: <InputAdornment position="start">€</InputAdornment> } }} />
