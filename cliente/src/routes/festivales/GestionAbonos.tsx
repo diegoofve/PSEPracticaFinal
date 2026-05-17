@@ -1,9 +1,14 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Box, Typography, Paper, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, Chip, Alert } from '@mui/material';
+import { Box, Typography, Paper, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, Chip, Alert, Dialog, DialogTitle, DialogContent, IconButton } from '@mui/material';
+import QrCode2Icon from '@mui/icons-material/QrCode2';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import LayersIcon from '@mui/icons-material/Layers';
+import CloseIcon from '@mui/icons-material/Close';
+
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { QRCodeSVG } from 'qrcode.react';
+
 import { api } from '../../lib/api';
 import './GestionAbonos.css';
 
@@ -26,6 +31,8 @@ export const GestionAbonos = () => {
       }
     }, []);
 
+    const closeQrModal = () => setQrModal(prev => ({ ...prev, open: false }));
+
   useEffect(() => {
     if (!user || user.rol !== 'CLIENTE') {
       navigate(user?.rol === 'EMPRESA' ? '/modificar-festival' : '/login');
@@ -34,6 +41,12 @@ export const GestionAbonos = () => {
     fetchHistorial();
     }, [user, navigate, fetchHistorial]);
   if (user?.rol !== 'CLIENTE') return null;
+
+  const [qrModal, setQrModal] = useState<{ open: boolean, ticketData: string, festivalName: string }>({
+    open: false,
+    ticketData: '',
+    festivalName: ''
+  });
 
   if (loading) {
     return (
@@ -80,6 +93,12 @@ export const GestionAbonos = () => {
                 
                 const yaDevuelto = venta.estado === 'DEVUELTO';
 
+                const infoQR = JSON.stringify({
+                  ventaId: venta.id,
+                  cliente: user?.id,
+                  festival: nombreFestival
+                });
+
                 return (
                   <TableRow key={venta.id}>
                     <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>{nombreFestival}</TableCell>
@@ -107,7 +126,15 @@ export const GestionAbonos = () => {
                       ) : yaDevuelto ? (
                         <Typography variant="body2" sx={{ color: '#00C2FF', fontWeight: 'bold' }}>Reembolsado</Typography>
                       ) : (
-                        <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.4)' }}>Sin acciones</Typography>
+                        <Button 
+                          variant="outlined" 
+                          color="info" 
+                          startIcon={<QrCode2Icon />}
+                          sx={{ textTransform: 'none', fontWeight: 'bold', borderColor: '#00C2FF', color: '#00C2FF' }}
+                          onClick={() => setQrModal({ open: true, ticketData: infoQR, festivalName: nombreFestival })}
+                        >
+                          Ver Entrada
+                        </Button>
                       )}
                     </TableCell>
                   </TableRow>
@@ -117,6 +144,42 @@ export const GestionAbonos = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
+       <Dialog 
+        open={qrModal.open} 
+        onClose={closeQrModal}
+        sx={{
+          '& .MuiDialog-paper': {
+            background: 'rgba(20, 20, 30, 0.95)',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid #00C2FF',
+            borderRadius: 3,
+            minWidth: '300px',
+            textAlign: 'center'
+          }
+        }}
+      >
+        <DialogTitle sx={{ color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Typography variant="h6">Entrada Digital</Typography>
+          <IconButton onClick={closeQrModal} sx={{ color: 'white' }}>
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', pb: 4 }}>
+          <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.7)', mb: 3 }}>
+            {qrModal.festivalName}
+          </Typography>
+          
+          <Box sx={{ background: 'white', p: 2, borderRadius: 2 }}>
+            <QRCodeSVG value={qrModal.ticketData} size={200} level="H" />
+          </Box>
+          
+          <Typography variant="caption" sx={{ color: '#00C2FF', mt: 3, display: 'block' }}>
+            Muestra este código en el acceso
+          </Typography>
+        </DialogContent>
+      </Dialog>     
+
     </Box>
   );
 };

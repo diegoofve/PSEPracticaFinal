@@ -73,4 +73,4 @@ export const FestivalesList = () => {
       </Container>
     </Box>
   );
-};
+};//habria que hacer algo para que los gestores puedan ver como quedan los festivales en la festivaleslist
