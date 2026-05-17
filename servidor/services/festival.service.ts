@@ -5,7 +5,8 @@ import { BadRequestError, ConflictError, ForbiddenError, NotFoundError } from ".
 const getFestivales = async (): Promise<FestivalDto[]> => {
     const result = await prisma.festival.findMany({
         where: { activo: true },
-        include: { abonos: true }
+        include: { abonos: true },
+        orderBy: { fechaInicio: "asc" }
     })
 
     return ListaFestivalSchema.parse(result);

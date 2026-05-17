@@ -80,6 +80,7 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
       setOpenPayment(false);
     } catch (error) {
       setToast({ open: true, message: 'Error al procesar el pago.', severity: 'error' });
+      setIsProcessing(false)
     }
   };
 
@@ -213,7 +214,7 @@ export const FestivalCard = ({ festival }: { festival: any }) => {
         </DialogContent>
         <DialogActions sx={{ p: 3 }}>
           <Button onClick={() => setOpenPayment(false)} sx={{ color: 'rgba(255,255,255,0.5)' }}>Cancelar</Button>
-          <Button onClick={handleConfirmPayment} variant="contained" disabled={!openPayment} sx={{ background: 'linear-gradient(90deg, #00C2FF, #A020F0)', fontWeight: 'bold' }}>
+          <Button onClick={handleConfirmPayment} variant="contained" disabled={isProcessing} sx={{ background: 'linear-gradient(90deg, #00C2FF, #A020F0)', fontWeight: 'bold' }}>
             Confirmar Pago
           </Button>
         </DialogActions>

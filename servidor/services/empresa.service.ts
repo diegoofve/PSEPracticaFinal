@@ -18,7 +18,8 @@ const getEmpresas = async (): Promise<EmpresaDto[]> => {
     const result = await prisma.empresa.findMany({
         where: {
             fechaBaja: null
-        }
+        },
+        orderBy: { creadoEn: "asc" }
     })
 
     return ListaEmpresaSchema.parse(result);

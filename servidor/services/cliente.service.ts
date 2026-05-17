@@ -18,7 +18,8 @@ const getClientes = async (): Promise<ClienteDto[]> => {
     const result = await prisma.cliente.findMany({
         where: {
             fechaBaja: null
-        }
+        },
+        orderBy: { creadoEn: "asc" }
     })
 
     return ListaClienteSchema.parse(result);

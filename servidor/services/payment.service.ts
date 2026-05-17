@@ -33,7 +33,7 @@ const makePayment = async (clienteId: number, data: BuyTicketDto) => {
         throw new NotFoundError("No se ha encontrado el festival al que pertenece el abono.")
     }
 
-    if(festival.fechaFin > new Date()){
+    if(festival.fechaFin < new Date()){
         throw new ForbiddenError("No puedes comprar abonos para festivales que han acabado.")
     }
 
